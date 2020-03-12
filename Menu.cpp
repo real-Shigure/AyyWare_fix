@@ -64,7 +64,7 @@ void AyyWareWindow::Setup()
 	LoadButton.SetText("Load Configuration");
 	LoadButton.SetCallback(LoadCallbk);
 	LoadButton.SetPosition(203, Client.bottom - 42);
-
+	
 	UnloadButton.SetText("Complete Unload");
 	UnloadButton.SetCallback(UnLoadCallbk);
 	UnloadButton.SetPosition(396, Client.bottom - 42);
@@ -122,7 +122,7 @@ void CLegitBotTab::Setup()
 
 	AimbotKeyBind.SetFileId("aim_key");
 	AimbotGroup.PlaceLabledControl("Key Bind", this, &AimbotKeyBind);
-
+	
 	AimbotAutoPistol.SetFileId("aim_apistol");
 	AimbotGroup.PlaceLabledControl("Auto Pistol", this, &AimbotAutoPistol);
 
@@ -155,7 +155,7 @@ void CLegitBotTab::Setup()
 	RegisterControl(&WeaponMainGroup);
 
 	WeaponMainSpeed.SetFileId("main_speed");
-	WeaponMainSpeed.SetBoundaries(0.1f, 2.f);
+	WeaponMainSpeed.SetBoundaries(0.1f, 2.f); 
 	WeaponMainSpeed.SetValue(1.0f);
 	WeaponMainGroup.PlaceLabledControl("Max Speed", this, &WeaponMainSpeed);
 
@@ -341,7 +341,7 @@ void CRageBotTab::Setup()
 	TargetPointscale.SetBoundaries(0.f, 10.f);
 	TargetPointscale.SetValue(5.f);
 	TargetGroup.PlaceLabledControl("Aim Height", this, &TargetPointscale);
-#pragma endregion Targetting controls
+#pragma endregion Targetting controls 
 
 #pragma region Accuracy
 	AccuracyGroup.SetPosition(408, 48);
@@ -482,7 +482,7 @@ void CVisualTab::Setup()
 
 	OptionsAimSpot.SetFileId("opt_aimspot");
 	OptionsGroup.PlaceLabledControl("Head Cross", this, &OptionsAimSpot);
-
+	
 	OptionsCompRank.SetFileId("opt_comprank");
 	OptionsGroup.PlaceLabledControl("Player Ranks", this, &OptionsCompRank);
 
@@ -687,21 +687,21 @@ void CMiscTab::Setup()
 
 #pragma endregion
 
-	/*#pragma region OverideFov
-		FOVGroup.SetPosition(16, 365);
-		FOVGroup.SetSize(360, 75);
-		FOVGroup.SetText("FOV Changer");
-		RegisterControl(&FOVGroup);
+/*#pragma region OverideFov
+	FOVGroup.SetPosition(16, 365);
+	FOVGroup.SetSize(360, 75);
+	FOVGroup.SetText("FOV Changer");
+	RegisterControl(&FOVGroup);
 
-		FOVEnable.SetFileId("fov_enable");
-		FOVGroup.PlaceLabledControl("Enable", this, &FOVEnable);
+	FOVEnable.SetFileId("fov_enable");
+	FOVGroup.PlaceLabledControl("Enable", this, &FOVEnable);
 
-		FOVSlider.SetFileId("fov_slider");
-		FOVSlider.SetBoundaries(0, 200);
-		FOVSlider.SetValue(0);
-		FOVGroup.PlaceLabledControl("FOV Amount", this, &FOVSlider);
+	FOVSlider.SetFileId("fov_slider");
+	FOVSlider.SetBoundaries(0, 200);
+	FOVSlider.SetValue(0);
+	FOVGroup.PlaceLabledControl("FOV Amount", this, &FOVSlider);
 
-	#pragma endregion*/
+#pragma endregion*/
 }
 
 /*void CPlayersTab::Setup()
@@ -724,7 +724,7 @@ void CMiscTab::Setup()
 #pragma endregion
 
 #pragma region Options
-
+	
 	OptionsGroup.SetPosition(16, 257);
 	OptionsGroup.SetSize(450, 120);
 	OptionsGroup.SetText("Player Options");
@@ -827,7 +827,9 @@ void UpdatePlayerList()
 				char nameBuffer[512];
 				sprintf_s(nameBuffer, "%-24s %-10s %-10s [%d HP] [Last Seen At %s]", pinfo.name, IsFriendly(i) ? "Friend" : " ", IsAimPrio(i) ? "AimPrio" : " ", HP, Location);
 				Menu::Window.Playerlist.pListPlayers.AddItem(nameBuffer, i);
+
 			}
+
 		}
 
 		DWORD meme = GetPlayerListIndex(Menu::Window.Playerlist.pListPlayers.GetValue());
@@ -841,12 +843,14 @@ void UpdatePlayerList()
 				Menu::Window.Playerlist.OptionsFriendly.SetState(PlayerList[meme].Friendly);
 				Menu::Window.Playerlist.OptionsAimPrio.SetState(PlayerList[meme].AimPrio);
 				Menu::Window.Playerlist.OptionsCalloutSpam.SetState(PlayerList[meme].Callout);
+
 			}
 			else
 			{
 				Menu::Window.Playerlist.OptionsFriendly.SetState(false);
 				Menu::Window.Playerlist.OptionsAimPrio.SetState(false);
 				Menu::Window.Playerlist.OptionsCalloutSpam.SetState(false);
+
 			}
 		}
 		PrevSelectedPlayer = Menu::Window.Playerlist.pListPlayers.GetValue();
@@ -880,4 +884,8 @@ void Menu::DoUIFrame()
 
 	GUI.Update();
 	GUI.Draw();
+
+	
 }
+
+

@@ -116,10 +116,10 @@ class player_info_t
 {
 public:
 	char pad_0x0000[0x10]; //0x0000
-	char name[64]; //0x0010
+	char name[64]; //0x0010 
 	char pad_0x0050[0x40]; //0x0050
-	__int32 userID; //0x0090
-	char guid[32]; //0x0094
+	__int32 userID; //0x0090 
+	char guid[32]; //0x0094 
 	char pad_0x00B4[0x180]; //0x00B4
 };
 
@@ -267,7 +267,7 @@ enum MaterialVarFlags_t
 #define	FL_NOTARGET				(1<<15)
 #define	FL_AIMTARGET			(1<<16)	// set if the crosshair needs to aim onto the entity
 #define	FL_PARTIALGROUND		(1<<17)	// not all corners are valid
-#define FL_STATICPROP			(1<<18)	// Eetsa static prop!
+#define FL_STATICPROP			(1<<18)	// Eetsa static prop!		
 #define FL_GRAPHED				(1<<19) // worldgraph has this ent listed as something that blocks a connection
 #define FL_GRENADE				(1<<20)
 #define FL_STEPMOVEMENT			(1<<21)	// Changes the SV_Movestep() behavior to not do any processing
@@ -302,7 +302,7 @@ enum ClientFrameStage_t
 };
 
 // ConVar flags
-#define FCVAR_NONE				0
+#define FCVAR_NONE				0 
 
 #define FCVAR_UNREGISTERED		(1<<0)
 #define FCVAR_DEVELOPMENTONLY	(1<<1)

@@ -17,11 +17,12 @@ Vector LastAngleAA;
 typedef void(__thiscall* DrawModelEx_)(void*, void*, void*, const ModelRenderInfo_t&, matrix3x4*);
 typedef void(__thiscall* PaintTraverse_)(PVOID, unsigned int, bool, bool);
 typedef bool(__thiscall* InPrediction_)(PVOID);
-typedef void(__stdcall* FrameStageNotifyFn)(ClientFrameStage_t);
+typedef void(__stdcall *FrameStageNotifyFn)(ClientFrameStage_t);
 typedef void(__thiscall* RenderViewFn)(void*, CViewSetup&, CViewSetup&, int, int);
 
 using OverrideViewFn = void(__fastcall*)(void*, void*, CViewSetup*);
-typedef float(__stdcall* oGetViewModelFOV)();
+typedef float(__stdcall *oGetViewModelFOV)();
+
 
 // Function Pointers to the originals
 PaintTraverse_ oPaintTraverse;
@@ -33,12 +34,12 @@ RenderViewFn oRenderView;
 // Hook function prototypes
 void __fastcall PaintTraverse_Hooked(PVOID pPanels, int edx, unsigned int vguiPanel, bool forceRepaint, bool allowForce);
 bool __stdcall Hooked_InPrediction();
-void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void* state, const ModelRenderInfo_t& pInfo, matrix3x4* pCustomBoneToWorld);
+void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void* state, const ModelRenderInfo_t &pInfo, matrix3x4 *pCustomBoneToWorld);
 bool __stdcall CreateMoveClient_Hooked(/*void* self, int edx,*/ float frametime, CUserCmd* pCmd);
 void  __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage);
 void __fastcall Hooked_OverrideView(void* ecx, void* edx, CViewSetup* pSetup);
 float __stdcall GGetViewModelFOV();
-void __fastcall Hooked_RenderView(void* ecx, void* edx, CViewSetup& setup, CViewSetup& hudViewSetup, int nClearFlags, int whatToDraw);
+void __fastcall Hooked_RenderView(void* ecx, void* edx, CViewSetup &setup, CViewSetup &hudViewSetup, int nClearFlags, int whatToDraw);
 
 // VMT Managers
 namespace Hooks
@@ -49,7 +50,7 @@ namespace Hooks
 	Utilities::Memory::VMTManager VMTClientMode; // CreateMove for functionality
 	Utilities::Memory::VMTManager VMTModelRender; // DrawModelEx for chams
 	Utilities::Memory::VMTManager VMTPrediction; // InPrediction for no vis recoil
-	Utilities::Memory::VMTManager VMTPlaySound; // Autoaccept
+	Utilities::Memory::VMTManager VMTPlaySound; // Autoaccept 
 	Utilities::Memory::VMTManager VMTRenderView;
 };
 
@@ -61,6 +62,7 @@ void Hooks::UndoHooks()
 	VMTModelRender.RestoreOriginal();
 	VMTClientMode.RestoreOriginal();
 }
+
 
 // Initialise all our hooks
 void Hooks::Initialise()
@@ -90,10 +92,12 @@ void Hooks::Initialise()
 	// Setup client hooks
 	VMTClient.Initialise((DWORD*)Interfaces::Client);
 	oFrameStageNotify = (FrameStageNotifyFn)VMTClient.HookMethod((DWORD)&Hooked_FrameStageNotify, 37);
+
 }
 
 void MovementCorrection(CUserCmd* pCmd)
 {
+
 }
 
 //---------------------------------------------------------------------------------------------------------
@@ -117,7 +121,7 @@ void ClanTag()
 	switch (Menu::Window.MiscTab.OtherClantag.GetIndex())
 	{
 	case 0:
-		// No
+		// No 
 		break;
 	case 1:
 	{
@@ -200,6 +204,7 @@ bool __stdcall CreateMoveClient_Hooked(/*void* self, int edx,*/ float frametime,
 
 	if (Interfaces::Engine->IsConnected() && Interfaces::Engine->IsInGame())
 	{
+
 		PVOID pebp;
 		__asm mov pebp, ebp;
 		bool* pbSendPacket = (bool*)(*(DWORD*)pebp - 0x1C);
@@ -211,6 +216,7 @@ bool __stdcall CreateMoveClient_Hooked(/*void* self, int edx,*/ float frametime,
 		//	CUserCmd* cmdlist = *(CUserCmd**)((DWORD)Interfaces::pInput + 0xEC);
 		//	CUserCmd* pCmd = &cmdlist[sequence_number % 150];
 
+
 		// Backup for safety
 		Vector origView = pCmd->viewangles;
 		Vector viewforward, viewright, viewup, aimforward, aimright, aimup;
@@ -219,7 +225,7 @@ bool __stdcall CreateMoveClient_Hooked(/*void* self, int edx,*/ float frametime,
 		AngleVectors(qAimAngles, &viewforward, &viewright, &viewup);
 
 		// Do da hacks
-		IClientEntity* pLocal = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+		IClientEntity *pLocal = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 		if (Interfaces::Engine->IsConnected() && Interfaces::Engine->IsInGame() && pLocal && pLocal->IsAlive())
 			Hacks::MoveHacks(pCmd, bSendPacket);
 
@@ -298,7 +304,7 @@ void __fastcall PaintTraverse_Hooked(PVOID pPanels, int edx, unsigned int vguiPa
 
 	static int previousWidth = 0;
 	static int previousHeight = 0;
-
+	
 	int width, height;
 	Interfaces::Engine->GetScreenSize(width, height);
 	if (width != previousWidth || height != previousHeight)
@@ -327,7 +333,7 @@ void __fastcall PaintTraverse_Hooked(PVOID pPanels, int edx, unsigned int vguiPa
 		// Update and draw the menu
 		Menu::DoUIFrame();
 	}
-
+	
 	Interfaces::Panels->SetMouseInputEnabled(vguiPanel, m_bIsOpen);
 }
 
@@ -336,7 +342,7 @@ bool __stdcall Hooked_InPrediction()
 {
 	bool result;
 	static InPrediction_ origFunc = (InPrediction_)Hooks::VMTPrediction.GetOriginalFunction(14);
-	static DWORD* ecxVal = Interfaces::Prediction;
+	static DWORD *ecxVal = Interfaces::Prediction;
 	result = origFunc(ecxVal);
 
 	// If we are in the right place where the player view is calculated
@@ -366,7 +372,7 @@ bool __stdcall Hooked_InPrediction()
 }
 
 // DrawModelExec for chams and shit
-void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void* state, const ModelRenderInfo_t& pInfo, matrix3x4* pCustomBoneToWorld)
+void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void* state, const ModelRenderInfo_t &pInfo, matrix3x4 *pCustomBoneToWorld)
 {
 	Color color;
 	float flColor[3] = { 0.f };
@@ -389,13 +395,13 @@ void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void*
 		{
 			if (pLocal/* && (!Menu::Window.VisualsTab.FiltersEnemiesOnly.GetState() || pModelEntity->GetTeamNum() != pLocal->GetTeamNum())*/)
 			{
-				IMaterial* covered = ChamsStyle == 1 ? CoveredLit : CoveredFlat;
-				IMaterial* open = ChamsStyle == 1 ? OpenLit : OpenFlat;
+				IMaterial *covered = ChamsStyle == 1 ? CoveredLit : CoveredFlat;
+				IMaterial *open = ChamsStyle == 1 ? OpenLit : OpenFlat;
 
 				IClientEntity* pModelEntity = (IClientEntity*)Interfaces::EntList->GetClientEntity(pInfo.entity_index);
 				if (pModelEntity)
 				{
-					IClientEntity* local = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+					IClientEntity *local = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 					if (local)
 					{
 						if (pModelEntity->IsAlive() && pModelEntity->GetHealth() > 0 /*&& pModelEntity->GetTeamNum() != local->GetTeamNum()*/)
@@ -461,8 +467,8 @@ void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void*
 			}
 			else if (HandsStyle == 3)
 			{
-				IMaterial* covered = ChamsStyle == 1 ? CoveredLit : CoveredFlat;
-				IMaterial* open = ChamsStyle == 1 ? OpenLit : OpenFlat;
+				IMaterial *covered = ChamsStyle == 1 ? CoveredLit : CoveredFlat;
+				IMaterial *open = ChamsStyle == 1 ? OpenLit : OpenFlat;
 				if (pLocal)
 				{
 					if (pLocal->IsAlive())
@@ -517,7 +523,7 @@ void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void*
 		}
 		else if (ChamsStyle != 0 && Menu::Window.VisualsTab.FiltersWeapons.GetState() && strstr(ModelName, "_dropped.mdl"))
 		{
-			IMaterial* covered = ChamsStyle == 1 ? CoveredLit : CoveredFlat;
+			IMaterial *covered = ChamsStyle == 1 ? CoveredLit : CoveredFlat;
 			color.SetColor(255, 255, 255, 255);
 			ForceMaterial(color, covered);
 		}
@@ -528,14 +534,16 @@ void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void*
 	Interfaces::ModelRender->ForcedMaterialOverride(NULL);
 }
 
+
 // Hooked FrameStageNotify for removing visual recoil
 void  __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage)
 {
 	DWORD eyeangles = NetVar.GetNetVar(0xBFEA4E7B);
-	IClientEntity* pLocal = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+	IClientEntity *pLocal = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 
 	if (Interfaces::Engine->IsConnected() && Interfaces::Engine->IsInGame() && curStage == FRAME_RENDER_START)
 	{
+
 		if (pLocal->IsAlive())
 		{
 			if (*(bool*)((DWORD)Interfaces::pInput + 0xA5))
@@ -613,19 +621,19 @@ void  __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage)
 
 	if (Interfaces::Engine->IsConnected() && Interfaces::Engine->IsInGame() && curStage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
 	{
-		IClientEntity* pLocal = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+		IClientEntity *pLocal = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 
-		/*	for (int i = 1; i < 65; i++)
-			{
-				IClientEntity* pEnt = Interfaces::EntList->GetClientEntity(i);
-				if (!pEnt) continue;
-				if (pEnt->IsDormant()) continue;
-				if (pEnt->GetHealth() < 1) continue;
-				if (pEnt->GetLifeState() != 0) continue;
+	/*	for (int i = 1; i < 65; i++)
+		{
+			IClientEntity* pEnt = Interfaces::EntList->GetClientEntity(i);
+			if (!pEnt) continue;
+			if (pEnt->IsDormant()) continue;
+			if (pEnt->GetHealth() < 1) continue;
+			if (pEnt->GetLifeState() != 0) continue;
 
-				*(float*)((DWORD)pEnt + eyeangles) = pEnt->GetTargetYaw();
-				//Msg("%f\n", *(float*)((DWORD)pEnt + m_angEyeAnglesYaw));
-			} */
+			*(float*)((DWORD)pEnt + eyeangles) = pEnt->GetTargetYaw();
+			//Msg("%f\n", *(float*)((DWORD)pEnt + m_angEyeAnglesYaw));
+		} */
 
 		if (Menu::Window.MiscTab.KnifeEnable.GetState() && pLocal)
 		{
@@ -711,6 +719,7 @@ void __fastcall Hooked_OverrideView(void* ecx, void* edx, CViewSetup* pSetup)
 
 		oOverrideView(ecx, edx, pSetup);
 	}
+
 }
 
 void GetViewModelFOV(float& fov)
@@ -723,7 +732,7 @@ void GetViewModelFOV(float& fov)
 			return;
 
 		if (Menu::Window.VisualsTab.Active.GetState())
-			fov += Menu::Window.VisualsTab.OtherViewmodelFOV.GetValue();
+		fov += Menu::Window.VisualsTab.OtherViewmodelFOV.GetValue();
 	}
 }
 
@@ -736,7 +745,7 @@ float __stdcall GGetViewModelFOV()
 	return fov;
 }
 
-void __fastcall Hooked_RenderView(void* ecx, void* edx, CViewSetup& setup, CViewSetup& hudViewSetup, int nClearFlags, int whatToDraw)
+void __fastcall Hooked_RenderView(void* ecx, void* edx, CViewSetup &setup, CViewSetup &hudViewSetup, int nClearFlags, int whatToDraw)
 {
 	static DWORD oRenderView = Hooks::VMTRenderView.GetOriginalFunction(6);
 

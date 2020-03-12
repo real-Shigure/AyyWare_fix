@@ -13,15 +13,15 @@ class CMiscHacks : public CHack
 public:
 	void Init();
 	void Draw();
-	void Move(CUserCmd* pCmd, bool& bSendPacket);
+	void Move(CUserCmd *pCmd, bool &bSendPacket);
 private:
-	void AutoJump(CUserCmd* pCmd);
-	void AutoJumpSMAC(CUserCmd* pCmd);
-	void EdgeJump(CUserCmd* pCmd);
-	void Walkbot(CUserCmd* pCmd);
-	void PerfectStrafe(CUserCmd* pCmd);
-	void LegitStrafe(CUserCmd* pCmd);
-	void RageStrafe(CUserCmd* pCmd);
+	void AutoJump(CUserCmd *pCmd);
+	void AutoJumpSMAC(CUserCmd *pCmd);
+	void EdgeJump(CUserCmd *pCmd);
+	void Walkbot(CUserCmd *pCmd);
+	void PerfectStrafe(CUserCmd *pCmd);
+	void LegitStrafe(CUserCmd *pCmd);
+	void RageStrafe(CUserCmd *pCmd);
 	void ChatSpamInterwebz();
 	void ChatSpamName();
 	void ChatSpamDisperseName();
@@ -31,7 +31,7 @@ private:
 	//void ChatSpamAchievement();
 	//void NameDispersion();
 	//void ChatSpamAchievement();
-	void Fakelag(CUserCmd* pCmd, bool& bSendPacket);
+	void Fakelag(CUserCmd *pCmd, bool &bSendPacket);
 
 	//std::string GetNameChange();
 
@@ -46,3 +46,6 @@ private:
 	std::string GetNameChange();
 	std::string GetNameCalloutChange();*/
 };
+
+
+

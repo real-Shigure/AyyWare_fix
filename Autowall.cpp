@@ -5,7 +5,7 @@
 #define    HITGROUP_HEAD        1
 #define    HITGROUP_CHEST        2
 #define    HITGROUP_STOMACH    3
-#define HITGROUP_LEFTARM    4
+#define HITGROUP_LEFTARM    4    
 #define HITGROUP_RIGHTARM    5
 #define HITGROUP_LEFTLEG    6
 #define HITGROUP_RIGHTLEG    7
@@ -21,7 +21,7 @@ inline bool CGameTrace::DidHitNonWorldEntity() const
 	return m_pEnt != NULL && !DidHitWorld();
 }
 
-bool HandleBulletPenetration(CSWeaponInfo* wpn_data, FireBulletData& data);
+bool HandleBulletPenetration(CSWeaponInfo *wpn_data, FireBulletData &data);
 
 float GetHitgroupDamageMult(int iHitGroup)
 {
@@ -47,12 +47,13 @@ float GetHitgroupDamageMult(int iHitGroup)
 		return 0.5f;
 	default:
 		return 1.0f;
+
 	}
 
 	return 1.0f;
 }
 
-void ScaleDamage(int hitgroup, IClientEntity* enemy, float weapon_armor_ratio, float& current_damage)
+void ScaleDamage(int hitgroup, IClientEntity *enemy, float weapon_armor_ratio, float &current_damage)
 {
 	current_damage *= GetHitgroupDamageMult(hitgroup);
 
@@ -70,11 +71,11 @@ void ScaleDamage(int hitgroup, IClientEntity* enemy, float weapon_armor_ratio, f
 	}
 }
 
-bool SimulateFireBullet(IClientEntity* local, CBaseCombatWeapon* weapon, FireBulletData& data)
+bool SimulateFireBullet(IClientEntity *local, CBaseCombatWeapon *weapon, FireBulletData &data)
 {
 	data.penetrate_count = 4; // Max Amount Of Penitration
 	data.trace_length = 0.0f; // wow what a meme
-	auto* wpn_data = weapon->GetCSWpnData(); // Get Weapon Info
+	auto *wpn_data = weapon->GetCSWpnData(); // Get Weapon Info
 	data.current_damage = (float)wpn_data->iDamage;// Set Damage Memes
 	while ((data.penetrate_count > 0) && (data.current_damage >= 1.0f))
 	{
@@ -95,9 +96,9 @@ bool SimulateFireBullet(IClientEntity* local, CBaseCombatWeapon* weapon, FireBul
 	return false;
 }
 
-bool HandleBulletPenetration(CSWeaponInfo* wpn_data, FireBulletData& data)
+bool HandleBulletPenetration(CSWeaponInfo *wpn_data, FireBulletData &data)
 {
-	surfacedata_t* enter_surface_data = Interfaces::PhysProps->GetSurfaceData(data.enter_trace.surface.surfaceProps);
+	surfacedata_t *enter_surface_data = Interfaces::PhysProps->GetSurfaceData(data.enter_trace.surface.surfaceProps);
 	int enter_material = enter_surface_data->game.material;
 	float enter_surf_penetration_mod = enter_surface_data->game.flPenetrationModifier;
 	data.trace_length += data.enter_trace.fraction * data.trace_length_remaining;
@@ -107,7 +108,7 @@ bool HandleBulletPenetration(CSWeaponInfo* wpn_data, FireBulletData& data)
 	Vector dummy;
 	trace_t trace_exit;
 	if (!TraceToExit(dummy, data.enter_trace, data.enter_trace.endpos, data.direction, &trace_exit)) return false;
-	surfacedata_t* exit_surface_data = Interfaces::PhysProps->GetSurfaceData(trace_exit.surface.surfaceProps);
+	surfacedata_t *exit_surface_data = Interfaces::PhysProps->GetSurfaceData(trace_exit.surface.surfaceProps);
 	int exit_material = exit_surface_data->game.material;
 	float exit_surf_penetration_mod = exit_surface_data->game.flPenetrationModifier;
 	float final_damage_modifier = 0.16f;
@@ -135,15 +136,16 @@ bool HandleBulletPenetration(CSWeaponInfo* wpn_data, FireBulletData& data)
 	return true;
 }
 
+
 /*
 *    CanHit() - example of how to use the code
 *     @in  point: target hitbox vector
 *     @out damage_given: amount of damage the shot would do
 */
-bool CanHit(const Vector& point, float* damage_given)
+bool CanHit(const Vector &point, float *damage_given)
 {
 	//Utils::ToLog("CANHIT");
-	auto* local = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+	auto *local = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 	auto data = FireBulletData(local->GetOrigin() + local->GetViewOffset());
 	data.filter = CTraceFilter();
 	data.filter.pSkip = local;

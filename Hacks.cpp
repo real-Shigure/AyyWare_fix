@@ -134,7 +134,7 @@ void __stdcall Hooked__PlaySoundCSGO(const char* fileName)
 // Only gets called in game, use a seperate draw UI call for menus in the hook
 void Hacks::DrawHacks()
 {
-	IClientEntity* pLocal = hackManager.pLocal();
+	IClientEntity *pLocal = hackManager.pLocal();
 
 	void Hooked__PlaySoundCSGO(const char* fileName);
 
@@ -142,7 +142,7 @@ void Hacks::DrawHacks()
 	/*if (Menu::Window.MiscTab.OtherSpectators.GetState())
 		SpecList();*/
 
-		// Check the master visuals switch, just to be sure
+	// Check the master visuals switch, just to be sure
 	if (!Menu::Window.VisualsTab.Active.GetState())
 		return;
 
@@ -153,13 +153,14 @@ void Hacks::DrawHacks()
 
 	hackManager.Draw();
 	//--------------------------------
+		
 }
 
 // Game Cmd Changes
-void Hacks::MoveHacks(CUserCmd* pCmd, bool& bSendPacket)
+void Hacks::MoveHacks(CUserCmd *pCmd,bool &bSendPacket)
 {
 	Vector origView = pCmd->viewangles;
-	IClientEntity* pLocal = hackManager.pLocal();
+	IClientEntity *pLocal = hackManager.pLocal();
 	hackManager.Move(pCmd, bSendPacket);
 	// ------------------------------
 
@@ -181,6 +182,7 @@ void Hacks::MoveHacks(CUserCmd* pCmd, bool& bSendPacket)
 			pCmd->viewangles.z = 9e+37;
 		}
 	}
+
 }
 
 //---------------------------------------------------------------------//
@@ -203,14 +205,14 @@ void HackManager::Draw()
 	pLocalInstance = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 	if (!pLocalInstance) return;
 
-	for (auto& hack : Hacks)
+	for (auto &hack : Hacks)
 	{
 		hack->Draw();
 	}
 }
 
 // Handle all the move hakes
-void HackManager::Move(CUserCmd* pCmd, bool& bSendPacket)
+void HackManager::Move(CUserCmd *pCmd,bool &bSendPacket)
 {
 	if (!IsReady)
 		return;
@@ -219,9 +221,9 @@ void HackManager::Move(CUserCmd* pCmd, bool& bSendPacket)
 	pLocalInstance = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 	if (!pLocalInstance) return;
 
-	for (auto& hack : Hacks)
+	for (auto &hack : Hacks)
 	{
-		hack->Move(pCmd, bSendPacket); //
+		hack->Move(pCmd,bSendPacket); // 
 	}
 }
 
@@ -235,7 +237,7 @@ IClientEntity* HackManager::pLocal()
 	return pLocalInstance;
 }
 
-// Makes sure none of the hacks are called in their
+// Makes sure none of the hacks are called in their 
 // hooks until they are completely ready for use
 void HackManager::Ready()
 {

@@ -22,15 +22,15 @@ namespace Interfaces
 	extern IVDebugOverlay* DebugOverlay;
 	extern IClientModeShared* ClientMode;
 
-	extern CGlobalVarsBase* Globals;
-	extern DWORD* Prediction;
+	extern CGlobalVarsBase *Globals;
+	extern DWORD *Prediction;
 	extern CMaterialSystem* MaterialSystem;
 	extern CVRenderView* RenderView;
 	extern IVModelRender* ModelRender;
 	extern CModelInfo* ModelInfo;
 	extern IEngineTrace* Trace;
 	extern IPhysicsSurfaceProps* PhysProps;
-	extern ICVar* CVar;
+	extern ICVar *CVar;
 	extern CInput* pInput;
 	extern IInputSystem* InputSystem;
 };

@@ -1,6 +1,6 @@
 //========= Copyright Valve Corporation, All rights reserved. ============//
 //
-// Purpose:
+// Purpose: 
 //
 // $Workfile:     $
 // $Date:         $
@@ -36,14 +36,14 @@
 #define ALL_VISIBLE_CONTENTS (LAST_VISIBLE_CONTENTS | (LAST_VISIBLE_CONTENTS-1))
 
 #define CONTENTS_TESTFOGVOLUME	0x100
-#define CONTENTS_UNUSED			0x200
+#define CONTENTS_UNUSED			0x200	
 
-// unused
+// unused 
 // NOTE: If it's visible, grab from the top + update LAST_VISIBLE_CONTENTS
 // if not visible, then grab from the bottom.
 #define CONTENTS_UNUSED6		0x400
 
-#define CONTENTS_TEAM1			0x800	// per team contents used to differentiate collisions
+#define CONTENTS_TEAM1			0x800	// per team contents used to differentiate collisions 
 #define CONTENTS_TEAM2			0x1000	// between players and objects on different teams
 
 // ignore CONTENTS_OPAQUE on surfaces that have SURF_NODRAW
@@ -75,6 +75,7 @@
 #define	CONTENTS_LADDER			0x20000000
 #define CONTENTS_HITBOX			0x40000000	// use accurate hitboxes on trace
 
+
 // NOTE: These are stored in a short in the engine now.  Don't use more than 16 bits
 #define	SURF_LIGHT		0x0001		// value will hold the light strength
 #define	SURF_SKY2D		0x0002		// don't draw, indicates we should skylight + draw 2d sky but not draw the 3D skybox
@@ -92,8 +93,10 @@
 #define SURF_BUMPLIGHT	0x0800	// calculate three lightmaps for the surface for bumpmapping
 #define SURF_NOSHADOWS	0x1000	// Don't receive shadows
 #define SURF_NODECALS	0x2000	// Don't receive decals
-#define SURF_NOCHOP		0x4000	// Don't subdivide patches on this surface
+#define SURF_NOCHOP		0x4000	// Don't subdivide patches on this surface 
 #define SURF_HITBOX		0x8000	// surface is part of a hitbox
+
+
 
 // -----------------------------------------------------
 // spatial content masks - used for spatial queries (traceline,etc.)

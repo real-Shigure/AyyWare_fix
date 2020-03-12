@@ -17,12 +17,12 @@ struct Vertex_t
 	Vector2D	m_TexCoord;
 
 	Vertex_t() {}
-	Vertex_t(const Vector2D& pos, const Vector2D& coord = Vector2D(0, 0))
+	Vertex_t(const Vector2D &pos, const Vector2D &coord = Vector2D(0, 0))
 	{
 		m_Position = pos;
 		m_TexCoord = coord;
 	}
-	void Init(const Vector2D& pos, const Vector2D& coord = Vector2D(0, 0))
+	void Init(const Vector2D &pos, const Vector2D &coord = Vector2D(0, 0))
 	{
 		m_Position = pos;
 		m_TexCoord = coord;
@@ -65,9 +65,9 @@ public:
 		call_vfunc< OriginalFn >(this, Offsets::VMT::Surface_DrawLine)(this, x0, y0, x1, y1);
 	}
 
-	void DrawPolyLine(int* x, int* y, int count)
+	void DrawPolyLine(int *x, int *y, int count)
 	{
-		typedef void(__thiscall* OriginalFn)(PVOID, int*, int*, int);
+		typedef void(__thiscall* OriginalFn)(PVOID, int *, int *, int);
 		call_vfunc< OriginalFn >(this, Offsets::VMT::Surface_DrawLine + 1)(this, x, y, count);
 	}
 
@@ -119,7 +119,7 @@ public:
 		return call_vfunc< oDrawSetTextColor >(this, Offsets::VMT::Surface_CreateNewTextureID)(this, procedural);
 	}
 
-	void DrawTexturedPolygon(int vtxCount, FontVertex_t* vtx, bool bClipVertices = true)
+	void DrawTexturedPolygon(int vtxCount, FontVertex_t *vtx, bool bClipVertices = true)
 	{
 		typedef void(__thiscall* oDrawSetTextColor)(PVOID, int, FontVertex_t*, bool);
 		return call_vfunc< oDrawSetTextColor >(this, Offsets::VMT::Surface_DrawTexturedPolygon)(this, vtxCount, vtx, bClipVertices);
@@ -149,7 +149,7 @@ public:
 		return call_vfunc< oDrawOutlinedCircle >(this, Offsets::VMT::Surface_DrawOutlinedCircle)(this, x, y, r, seg);
 	}
 
-	void SurfaceGetCursorPos(int& x, int& y)
+	void SurfaceGetCursorPos(int &x, int &y)
 	{
 		typedef void(__thiscall* oSurfaceGetCursorPos)(PVOID, int&, int&);
 		return call_vfunc< oSurfaceGetCursorPos >(this, Offsets::VMT::Surface_SurfaceGetCursorPos)(this, x, y);

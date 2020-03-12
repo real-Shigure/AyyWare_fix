@@ -31,15 +31,15 @@ namespace Utilities
 	// Debug console controls
 	void OpenConsole(std::string Title);
 	void CloseConsole();
-	void Log(const char* fmt, ...);
+	void Log(const char *fmt, ...);
 
 	void EnableLogFile(std::string filename);
 
-	void SetConsoleColor(WORD color);
+	void SetConsoleColor(WORD color);  
 
 	// Misc Shizz
 	std::string GetTimeString();
-
+	
 	// Memory utils
 	// Purpose: Provides memeory related functionality (pattern scanning ect)
 	namespace Memory
@@ -60,13 +60,13 @@ namespace Utilities
 		class VMTManager
 		{
 		private:
-			DWORD* CustomTable;
+			DWORD	*CustomTable;
 			bool	initComplete;
-			DWORD* OriginalTable;
-			DWORD* Instance;
+			DWORD	*OriginalTable;
+			DWORD	*Instance;
 
 			int		MethodCount(DWORD* InstancePointer);
-
+			
 		public:
 			bool	Initialise(DWORD* InstancePointer); // Pass a &class
 

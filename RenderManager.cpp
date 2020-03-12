@@ -44,8 +44,8 @@ enum EFontFlags
 // Initialises the rendering system, setting up fonts etc
 void Render::Initialise()
 {
-	Fonts::Default = 0x1D; // MainMenu Font from vgui_spew_fonts
-	Fonts::Menu = Interfaces::Surface->FontCreate();
+	Fonts::Default  = 0x1D; // MainMenu Font from vgui_spew_fonts 
+	Fonts::Menu     = Interfaces::Surface->FontCreate();
 	Fonts::MenuBold = Interfaces::Surface->FontCreate();
 	Fonts::ESP = Interfaces::Surface->FontCreate();
 	Fonts::MenuText = Interfaces::Surface->FontCreate();
@@ -87,13 +87,13 @@ void Render::Line(int x, int y, int x2, int y2, Color color)
 	Interfaces::Surface->DrawLine(x, y, x2, y2);
 }
 
-void Render::PolyLine(int* x, int* y, int count, Color color)
+void Render::PolyLine(int *x, int *y, int count, Color color)
 {
 	Interfaces::Surface->DrawSetColor(color);
 	Interfaces::Surface->DrawPolyLine(x, y, count);
 }
 
-bool Render::WorldToScreen(Vector& in, Vector& out)
+bool Render::WorldToScreen(Vector &in, Vector &out)
 {
 	const matrix3x4& worldToScreen = Interfaces::Engine->WorldToScreenMatrix(); //Grab the world to screen matrix from CEngineClient::WorldToScreenMatrix
 
@@ -141,7 +141,7 @@ void Render::Textf(int x, int y, Color color, DWORD font, const char* fmt, ...)
 	if (!fmt) return; //if the passed string is null return
 	if (strlen(fmt) < 2) return;
 
-	//Set up va_list and buffer to hold the params
+	//Set up va_list and buffer to hold the params 
 	va_list va_alist;
 	char logBuf[256] = { 0 };
 

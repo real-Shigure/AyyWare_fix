@@ -92,12 +92,12 @@ unsigned int uiCRC32_Table[256] = {
 	0xB40BBE37L, 0xC30C8EA1L, 0x5A05DF1BL,
 	0x2D02EF8DL };
 
-unsigned int CRC32(void* pData, size_t iLen)
+unsigned int CRC32(void *pData, size_t iLen)
 {
 	unsigned int uiCRC32 = 0xFFFFFFFF;
-	unsigned char* pszData = (unsigned char*)pData;
+	unsigned char *pszData = (unsigned char*)pData;
 
-	for (size_t i = 0; i < iLen; ++i)
+	for (size_t i = 0; i<iLen; ++i)
 		uiCRC32 = ((uiCRC32 >> 8) & 0x00FFFFFF) ^ uiCRC32_Table[(uiCRC32 ^ (unsigned int)*pszData++) & 0xFF];
 
 	return (uiCRC32 ^ 0xFFFFFFFF);

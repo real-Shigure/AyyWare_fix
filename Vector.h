@@ -12,7 +12,7 @@
 #include <emmintrin.h>
 #include <xmmintrin.h>
 
-inline void SinCosX(const float rad, float& sin, float& cos)
+inline void SinCosX(const float rad, float &sin, float &cos)
 {
 	const __m128 _ps_fopi = _mm_set_ss(1.27323954473516f);
 
@@ -35,8 +35,9 @@ inline void SinCosX(const float rad, float& sin, float& cos)
 	const __m128i _pi32_2 = _mm_set1_epi32(2);
 	const __m128i _pi32_4 = _mm_set1_epi32(4);
 
-	const __m128 _mask_sign_raw = *(__m128*) & _mm_set1_epi32(0x80000000);
-	const __m128 _mask_sign_inv = *(__m128*) & _mm_set1_epi32(~0x80000000);
+	const __m128 _mask_sign_raw = *(__m128*)&_mm_set1_epi32(0x80000000);
+	const __m128 _mask_sign_inv = *(__m128*)&_mm_set1_epi32(~0x80000000);
+
 
 	__m128  xmm3 = _mm_setzero_ps();
 	__m128i emm0, emm2, emm4;
@@ -149,7 +150,7 @@ public:
 	void Invalidate();
 
 	vec_t   operator[](int i) const;
-	vec_t& operator[](int i);
+	vec_t&  operator[](int i);
 
 	vec_t* Base();
 	vec_t const* Base() const;
@@ -168,7 +169,7 @@ public:
 	FORCEINLINE Vector& operator/=(float s);
 	FORCEINLINE Vector& operator+=(float fl);
 	FORCEINLINE Vector& operator-=(float fl);
-	inline float Long() { return sqrt2(x * x + y * y + z * z); }
+	inline float Long() { return sqrt2(x*x + y*y + z*z); }
 
 	void Negate();
 
@@ -188,7 +189,7 @@ public:
 			roll = deg(atan2f(left.z, (left.y * x) - (left.x * y)));
 		}
 
-		return Vector(deg(atan2f(-z, sqrtf(x * x + y * y))), deg(atan2f(y, x)), roll);
+		return Vector(deg(atan2f(-z, sqrtf(x*x + y*y))), deg(atan2f(y, x)), roll);
 	}
 
 	inline Vector Forward()
@@ -198,7 +199,7 @@ public:
 		SinCosX(rad(x), sp, cp);
 		SinCosX(rad(y), sy, cy);
 
-		return Vector(cp * cy, cp * sy, -sp);
+		return Vector(cp*cy, cp*sy, -sp);
 	}
 
 	FORCEINLINE vec_t LengthSqr(void) const
@@ -208,8 +209,8 @@ public:
 
 	bool IsZero(float tolerance = 0.01f) const
 	{
-		return (x > -tolerance && x < tolerance&&
-			y > -tolerance && y < tolerance&&
+		return (x > -tolerance && x < tolerance &&
+			y > -tolerance && y < tolerance &&
 			z > -tolerance && z < tolerance);
 	}
 
@@ -218,13 +219,14 @@ public:
 		return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 	}
 
+
 	vec_t NormalizeInPlace();
 	Vector Normalized() const;
 
 	bool IsLengthGreaterThan(float val) const;
 	bool IsLengthLessThan(float val) const;
 
-	FORCEINLINE bool WithinAABox(Vector const& boxmin, Vector const& boxmax);
+	FORCEINLINE bool WithinAABox(Vector const &boxmin, Vector const &boxmax);
 
 	vec_t DistTo(const Vector& vOther) const;
 
@@ -272,6 +274,7 @@ FORCEINLINE Vector ReplicateToVector(float x)
 
 inline Vector::Vector(void)
 {
+
 }
 
 inline Vector::Vector(vec_t X, vec_t Y, vec_t Z)
@@ -314,6 +317,8 @@ inline vec_t Vector::operator[](int i) const
 {
 	return ((vec_t*)this)[i];
 }
+
+
 
 inline vec_t* Vector::Base()
 {
@@ -533,16 +538,16 @@ inline vec_t VectorNormalize(Vector& v)
 	return l;
 }
 
-FORCEINLINE float VectorNormalizer(float* v)
+FORCEINLINE float VectorNormalizer(float * v)
 {
-	return VectorNormalize(*(reinterpret_cast<Vector*>(v)));
+	return VectorNormalize(*(reinterpret_cast<Vector *>(v)));
 }
 inline vec_t Vector::NormalizeInPlace()
 {
 	return VectorNormalize(*this);
 }
 
-bool Vector::WithinAABox(Vector const& boxmin, Vector const& boxmax)
+bool Vector::WithinAABox(Vector const &boxmin, Vector const &boxmax)
 {
 	return (
 		(x >= boxmin.x) && (x <= boxmax.x) &&
@@ -660,6 +665,7 @@ inline void VectorMax(const Vector& a, const Vector& b, Vector& result)
 	result.z = max(a.z, b.z);
 }
 
+
 class VectorAligned : public Vector
 {
 public:
@@ -675,5 +681,7 @@ public:
 
 	float w;
 };
+
+
 
 #endif // VECTOR_H

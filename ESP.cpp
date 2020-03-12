@@ -10,14 +10,15 @@ void CEsp::Init()
 }
 
 // Yeah dude we're defo gunna do some sick moves for the esp yeah
-void CEsp::Move(CUserCmd* pCmd, bool& bSendPacket)
+void CEsp::Move(CUserCmd *pCmd,bool &bSendPacket) 
 {
+
 }
 
 // Main ESP Drawing loop
 void CEsp::Draw()
 {
-	IClientEntity* pLocal = hackManager.pLocal();
+	IClientEntity *pLocal = hackManager.pLocal();
 
 	if (Menu::Window.MiscTab.OtherSpectators.GetState())
 	{
@@ -28,17 +29,17 @@ void CEsp::Draw()
 	for (int i = 0; i < Interfaces::EntList->GetHighestEntityIndex(); i++)
 	{
 		// Get the entity
-		IClientEntity* pEntity = Interfaces::EntList->GetClientEntity(i);
+		IClientEntity *pEntity = Interfaces::EntList->GetClientEntity(i);
 		player_info_t pinfo;
 
 		// The entity isn't some laggy peice of shit or something
-		if (pEntity && pEntity != pLocal && !pEntity->IsDormant())
+		if (pEntity &&  pEntity != pLocal && !pEntity->IsDormant())
 		{
 			// Radar
 			if (Menu::Window.VisualsTab.OtherRadar.GetState())
 			{
 				DWORD m_bSpotted = NetVar.GetNetVar(0x839EB159);
-				*(char*)((DWORD)(pEntity)+m_bSpotted) = 1;
+				*(char*)((DWORD)(pEntity) + m_bSpotted) = 1;
 			}
 
 			// Is it a player?!
@@ -85,7 +86,7 @@ void CEsp::Draw()
 
 void CEsp::SpecList()
 {
-	IClientEntity* pLocal = hackManager.pLocal();
+	IClientEntity *pLocal = hackManager.pLocal();
 
 	RECT scrn = Render::GetViewport();
 	int ayy = 0;
@@ -94,11 +95,11 @@ void CEsp::SpecList()
 	for (int i = 0; i < Interfaces::EntList->GetHighestEntityIndex(); i++)
 	{
 		// Get the entity
-		IClientEntity* pEntity = Interfaces::EntList->GetClientEntity(i);
+		IClientEntity *pEntity = Interfaces::EntList->GetClientEntity(i);
 		player_info_t pinfo;
 
 		// The entity isn't some laggy peice of shit or something
-		if (pEntity && pEntity != pLocal)
+		if (pEntity &&  pEntity != pLocal)
 		{
 			if (Interfaces::Engine->GetPlayerInfo(i, &pinfo) && !pEntity->IsAlive() && !pEntity->IsDormant())
 			{
@@ -106,7 +107,7 @@ void CEsp::SpecList()
 
 				if (obs)
 				{
-					IClientEntity* pTarget = Interfaces::EntList->GetClientEntityFromHandle(obs);
+					IClientEntity *pTarget = Interfaces::EntList->GetClientEntityFromHandle(obs);
 					player_info_t pinfo2;
 					if (pTarget)
 					{
@@ -217,7 +218,7 @@ void CEsp::DrawGlow(IClientEntity *pEntity, int r, int g, int b, int a)
 
 // Gets the 2D bounding box for the entity
 // Returns false on failure nigga don't fail me
-bool CEsp::GetBox(IClientEntity* pEntity, CEsp::ESPBox& result)
+bool CEsp::GetBox(IClientEntity* pEntity, CEsp::ESPBox &result)
 {
 	// Variables
 	Vector  vOrigin, min, max, sMin, sMax, sOrigin,
@@ -300,6 +301,7 @@ Color CEsp::GetPlayerColor(IClientEntity* pEntity)
 			color = Color(15, 110, 220, 255);
 	}
 
+
 	return color;
 }
 
@@ -310,7 +312,7 @@ void CEsp::DrawBox(CEsp::ESPBox size, Color color)
 	//{
 		// Full Box
 	//Render::Clear(size.x, size.y, size.w, size.h, color);
-	//Render::Clear(size.x - 1, size.y - 1, size.w + 2, size.h + 2, Color(10, 10, 10, 150));
+	//Render::Clear(size.x - 1, size.y - 1, size.w + 2, size.h + 2, Color(10, 10, 10, 150)); 
 	//Render::Clear(size.x + 1, size.y + 1, size.w - 2, size.h - 2, Color(10, 10, 10, 150));
 	//}
 	//else
@@ -341,12 +343,13 @@ void CEsp::DrawBox(CEsp::ESPBox size, Color color)
 	}
 }
 
+
 // Unicode Conversions
 static wchar_t* CharToWideChar(const char* text)
 {
 	size_t size = strlen(text) + 1;
 	wchar_t* wa = new wchar_t[size];
-	mbstowcs_s(NULL, wa, size / 4, text, size);
+	mbstowcs_s(NULL, wa, size/4, text, size);
 	return wa;
 }
 
@@ -395,6 +398,7 @@ void CEsp::DrawHealth(IClientEntity* pEntity, CEsp::ESPBox size)
 	Verts2[3].Init(Vector2D(HealthBar.x - 2, HealthBar.y + 2));
 
 	Render::Polygon(4, Verts2, Color(255, 255, 255, 40));
+
 }
 
 // Cleans the internal class name up to something human readable and nice
@@ -440,7 +444,7 @@ void CEsp::DrawInfo(IClientEntity* pEntity, CEsp::ESPBox size)
 	int i = 0;
 	for (auto Text : Info)
 	{
-		Render::Text(size.x + size.w + 3, size.y + (i * (Size.bottom + 2)), Color(255, 255, 255, 255), Render::Fonts::ESP, Text.c_str());
+		Render::Text(size.x + size.w + 3, size.y + (i*(Size.bottom + 2)), Color(255, 255, 255, 255), Render::Fonts::ESP, Text.c_str());
 		i++;
 	}
 }
@@ -491,7 +495,7 @@ void CEsp::DrawChicken(IClientEntity* pEntity, ClientClass* cClass)
 	{
 		player_info_t pinfo; strcpy_s(pinfo.name, "Chicken");
 		if (Menu::Window.VisualsTab.OptionsBox.GetState())
-			DrawBox(Box, Color(255, 255, 255, 255));
+			DrawBox(Box, Color(255,255,255,255));
 
 		if (Menu::Window.VisualsTab.OptionsName.GetState())
 			DrawName(pinfo, Box);
@@ -499,7 +503,7 @@ void CEsp::DrawChicken(IClientEntity* pEntity, ClientClass* cClass)
 }
 
 // Draw the planted bomb and timer
-void CEsp::DrawBombPlanted(IClientEntity* pEntity, ClientClass* cClass)
+void CEsp::DrawBombPlanted(IClientEntity* pEntity, ClientClass* cClass) 
 {
 	// Null it out incase bomb has been dropped or planted
 	BombCarrier = nullptr;
@@ -518,12 +522,12 @@ void CEsp::DrawBombPlanted(IClientEntity* pEntity, ClientClass* cClass)
 	}
 }
 
-// Draw the bomb if it's dropped, or store the player who's carrying
+// Draw the bomb if it's dropped, or store the player who's carrying 
 void CEsp::DrawBomb(IClientEntity* pEntity, ClientClass* cClass)
 {
 	// Null it out incase bomb has been dropped or planted
 	BombCarrier = nullptr;
-	CBaseCombatWeapon* BombWeapon = (CBaseCombatWeapon*)pEntity;
+	CBaseCombatWeapon *BombWeapon = (CBaseCombatWeapon *)pEntity;
 	Vector vOrig; Vector vScreen;
 	vOrig = pEntity->GetOrigin();
 	bool adopted = true;
@@ -557,7 +561,7 @@ void DrawBoneArray(int* boneNumbers, int amount, IClientEntity* pEntity, Color c
 
 		if (Render::WorldToScreen(Bone, BoneScreen))
 		{
-			if (i > 0)
+			if (i>0)
 			{
 				Render::Line(LastBoneScreen.x, LastBoneScreen.y, BoneScreen.x, BoneScreen.y, color);
 			}
@@ -566,7 +570,7 @@ void DrawBoneArray(int* boneNumbers, int amount, IClientEntity* pEntity, Color c
 	}
 }
 
-void DrawBoneTest(IClientEntity* pEntity)
+void DrawBoneTest(IClientEntity *pEntity)
 {
 	for (int i = 0; i < 127; i++)
 	{
@@ -601,7 +605,7 @@ void CEsp::DrawSkeleton(IClientEntity* pEntity)
 
 			if (Render::WorldToScreen(vParent, sParent) && Render::WorldToScreen(vChild, sChild))
 			{
-				Render::Line(sParent[0], sParent[1], sChild[0], sChild[1], Color(255, 255, 255, 255));
+				Render::Line(sParent[0], sParent[1], sChild[0], sChild[1], Color(255,255,255,255));
 			}
 		}
 	}

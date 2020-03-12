@@ -11,11 +11,11 @@ class CEsp : public CHack
 public:
 	void Init();
 	void Draw();
-	void Move(CUserCmd* pCmd, bool& bSendPacket);
+	void Move(CUserCmd *pCmd, bool &bSendPacket);
 private:
 
 	// Other shit
-	IClientEntity* BombCarrier;
+	IClientEntity *BombCarrier;
 
 	struct ESPBox
 	{
@@ -27,11 +27,11 @@ private:
 
 	// Get player info
 	Color GetPlayerColor(IClientEntity* pEntity);
-	bool GetBox(IClientEntity* pEntity, ESPBox& result);
+	bool GetBox(IClientEntity* pEntity, ESPBox &result);
 
 	// Draw shit about player
 	void SpecList();
-	void DrawGlow(IClientEntity* pEntity, int r, int g, int b, int a);
+	void DrawGlow(IClientEntity *pEntity, int r, int g, int b, int a);
 	void DrawBox(ESPBox size, Color color);
 	void DrawName(player_info_t pinfo, ESPBox size);
 	void DrawHealth(IClientEntity* pEntity, ESPBox size);
@@ -44,3 +44,4 @@ private:
 	void DrawBombPlanted(IClientEntity* pEntity, ClientClass* cClass);
 	void DrawBomb(IClientEntity* pEntity, ClientClass* cClass);
 };
+

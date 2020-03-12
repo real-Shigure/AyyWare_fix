@@ -12,7 +12,7 @@ Syn's AyyWare Framework
 bool FileLog = false;
 std::ofstream logFile;
 
-#define INRANGE(x,a,b)    (x >= a && x <= b)
+#define INRANGE(x,a,b)    (x >= a && x <= b) 
 #define getBits( x )    (INRANGE((x&(~0x20)),'A','F') ? ((x&(~0x20)) - 'A' + 0xa) : (INRANGE(x,'0','9') ? x - '0' : 0))
 #define getByte( x )    (getBits(x[0]) << 4 | getBits(x[1]))
 
@@ -35,12 +35,12 @@ void Utilities::CloseConsole()
 }
 
 // Outputs text to the console
-void Utilities::Log(const char* fmt, ...)
+void Utilities::Log(const char *fmt, ...)
 {
 	if (!fmt) return; //if the passed string is null return
 	if (strlen(fmt) < 2) return;
 
-	//Set up va_list and buffer to hold the params
+	//Set up va_list and buffer to hold the params 
 	va_list va_alist;
 	char logBuf[256] = { 0 };
 
@@ -69,7 +69,7 @@ std::string Utilities::GetTimeString()
 {
 	//Time related variables
 	time_t current_time;
-	struct tm* time_info;
+	struct tm *time_info;
 	static char timeString[10];
 
 	//Get current time
@@ -94,6 +94,7 @@ void Utilities::EnableLogFile(std::string filename)
 	if (logFile.is_open())
 		FileLog = true;
 }
+
 
 // --------         Utilities Memory           ------------ //
 
@@ -219,7 +220,7 @@ bool	Utilities::Memory::VMTManager::Initialise(DWORD* InstancePointer)
 
 int		Utilities::Memory::VMTManager::MethodCount(DWORD* InstancePointer)
 {
-	DWORD* VMT = (DWORD*)*InstancePointer;
+	DWORD *VMT = (DWORD*)*InstancePointer;
 	int Index = 0;
 	int Amount = 0;
 	while (!IsBadCodePtr((FARPROC)VMT[Index]))

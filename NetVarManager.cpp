@@ -50,6 +50,7 @@ public:
 	Iter find(const string& key) { return m_Tables.find(key); }
 	Iter begin() { return m_Tables.begin(); }
 	Iter end() { return m_Tables.end(); }
+
 };
 
 #pragma endregion
@@ -61,10 +62,12 @@ NetvarManager* NetvarManager::instance = nullptr;
 
 NetvarManager::NetvarManager()
 {
+
 }
 
 NetvarManager::~NetvarManager()
 {
+
 }
 
 void NetvarManager::CreateDatabase()
@@ -121,10 +124,11 @@ unique_ptr<NetvarTable> NetvarManager::InternalLoadTable(RecvTable* pRecvTable, 
 		//We dont care about the base class
 		if (strcmp(pProp->m_pVarName, "baseclass") == 0) continue;
 
+
 		//If this prop is a table
 		if (pProp->m_RecvType == (int)SourceEngine::SendPropType::DPT_DataTable &&
 			pProp->m_pDataTable != NULL &&                                   //The DataTable isnt null AND
-			pProp->m_pDataTable->m_pNetTableName[0] == 'D') {                //The Table name starts with D (this is because there are some shitty nested
+			pProp->m_pDataTable->m_pNetTableName[0] == 'D') {                //The Table name starts with D (this is because there are some shitty nested 
 																			 //tables that we want to skip, and those dont start with D)
 
 																			 //Load the table pointed by pProp->m_pDataTable and insert it
@@ -157,6 +161,7 @@ void NetvarManager::Dump(std::ostream& output, NetvarTable& table, int level)
 		}
 		sprintf(line, fmt, prop.first.c_str(), prop.second + table.m_uOffset);
 		output << line;
+
 	}
 	for (auto& child : table.m_ChildTables) {
 		for (int i = 0; i < level; i++) {

@@ -19,6 +19,7 @@ void CRageBot::Init()
 
 void CRageBot::Draw()
 {
+
 }
 
 bool IsAbleToShoot(IClientEntity* pLocal)
@@ -47,6 +48,7 @@ float hitchance(IClientEntity* pLocal, CBaseCombatWeapon* pWeapon)
 		if (inaccuracy == 0) inaccuracy = 0.0000001;
 		inaccuracy = 1 / inaccuracy;
 		hitchance = inaccuracy;
+
 	}
 	return hitchance;
 }
@@ -69,7 +71,7 @@ bool CanOpenFire() // Creds to untrusted guy
 	return !(flNextPrimaryAttack > flServerTime);
 }
 
-void CRageBot::Move(CUserCmd* pCmd, bool& bSendPacket)
+void CRageBot::Move(CUserCmd *pCmd, bool &bSendPacket)
 {
 	IClientEntity* pLocalEntity = (IClientEntity*)Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 	if (!pLocalEntity)
@@ -79,7 +81,7 @@ void CRageBot::Move(CUserCmd* pCmd, bool& bSendPacket)
 	if (!Menu::Window.RageBotTab.Active.GetState())
 		return;
 
-	// Anti Aim
+	// Anti Aim 
 	if (Menu::Window.RageBotTab.AntiAimEnable.GetState())
 	{
 		static int ChokedPackets = -1;
@@ -130,7 +132,7 @@ void CRageBot::Move(CUserCmd* pCmd, bool& bSendPacket)
 	LastAngle = pCmd->viewangles;
 }
 
-Vector BestPoint(IClientEntity* targetPlayer, Vector & final)
+Vector BestPoint(IClientEntity *targetPlayer, Vector &final)
 {
 	IClientEntity* pLocal = hackManager.pLocal();
 
@@ -147,7 +149,7 @@ Vector BestPoint(IClientEntity* targetPlayer, Vector & final)
 }
 
 // Functionality
-void CRageBot::DoAimbot(CUserCmd* pCmd, bool& bSendPacket) // Creds to encore1337 for getting it to work
+void CRageBot::DoAimbot(CUserCmd *pCmd,bool &bSendPacket) // Creds to encore1337 for getting it to work
 {
 	IClientEntity* pTarget = nullptr;
 	IClientEntity* pLocal = hackManager.pLocal();
@@ -176,13 +178,13 @@ void CRageBot::DoAimbot(CUserCmd* pCmd, bool& bSendPacket) // Creds to encore133
 	if (IsLocked && TargetID >= 0 && HitBox >= 0)
 	{
 		pTarget = Interfaces::EntList->GetClientEntity(TargetID);
-		if (pTarget && TargetMeetsRequirements(pTarget))
+		if (pTarget  && TargetMeetsRequirements(pTarget))
 		{
 			HitBox = HitScan(pTarget);
 			if (HitBox >= 0)
 			{
 				Vector ViewOffset = pLocal->GetOrigin() + pLocal->GetViewOffset();
-				Vector View;
+				Vector View; 
 				Interfaces::Engine->GetViewAngles(View);
 				float FoV = FovToPlayer(ViewOffset, View, pTarget, HitBox);
 				if (FoV < Menu::Window.RageBotTab.AimbotFov.GetValue())
@@ -222,7 +224,7 @@ void CRageBot::DoAimbot(CUserCmd* pCmd, bool& bSendPacket) // Creds to encore133
 			pTarget = nullptr;
 			HitBox = -1;
 		}
-	}
+	} 
 
 	Globals::Target = pTarget;
 	Globals::TargetID = TargetID;
@@ -323,7 +325,7 @@ void CRageBot::DoAimbot(CUserCmd* pCmd, bool& bSendPacket) // Creds to encore133
 		{
 			static bool WasFiring = false;
 			WasFiring = !WasFiring;
-
+			
 			if (WasFiring)
 			{
 				pCmd->buttons &= ~IN_ATTACK;
@@ -338,7 +340,7 @@ bool CRageBot::TargetMeetsRequirements(IClientEntity* pEntity)
 	if (pEntity && pEntity->IsDormant() == false && pEntity->IsAlive() && pEntity->GetIndex() != hackManager.pLocal()->GetIndex())
 	{
 		// Entity Type checks
-		ClientClass* pClientClass = pEntity->GetClientClass();
+		ClientClass *pClientClass = pEntity->GetClientClass();
 		player_info_t pinfo;
 		if (pClientClass->m_ClassID == (int)CSGOClassID::CCSPlayer && Interfaces::Engine->GetPlayerInfo(pEntity->GetIndex(), &pinfo))
 		{
@@ -403,7 +405,7 @@ int CRageBot::GetTargetCrosshair()
 
 	for (int i = 0; i < Interfaces::EntList->GetMaxEntities(); i++) //GetHighestEntityIndex()
 	{
-		IClientEntity* pEntity = Interfaces::EntList->GetClientEntity(i);
+		IClientEntity *pEntity = Interfaces::EntList->GetClientEntity(i);
 		if (TargetMeetsRequirements(pEntity))
 		{
 			int NewHitBox = HitScan(pEntity);
@@ -434,7 +436,7 @@ int CRageBot::GetTargetDistance()
 
 	for (int i = 0; i < Interfaces::EntList->GetMaxEntities(); i++)
 	{
-		IClientEntity* pEntity = Interfaces::EntList->GetClientEntity(i);
+		IClientEntity *pEntity = Interfaces::EntList->GetClientEntity(i);
 		if (TargetMeetsRequirements(pEntity))
 		{
 			int NewHitBox = HitScan(pEntity);
@@ -467,7 +469,7 @@ int CRageBot::GetTargetHealth()
 
 	for (int i = 0; i < Interfaces::EntList->GetMaxEntities(); i++)
 	{
-		IClientEntity* pEntity = Interfaces::EntList->GetClientEntity(i);
+		IClientEntity *pEntity = Interfaces::EntList->GetClientEntity(i);
 		if (TargetMeetsRequirements(pEntity))
 		{
 			int NewHitBox = HitScan(pEntity);
@@ -690,7 +692,7 @@ void CRageBot::PositionAdjustment(CUserCmd* pCmd)
 	}
 }
 
-void CRageBot::DoNoRecoil(CUserCmd* pCmd)
+void CRageBot::DoNoRecoil(CUserCmd *pCmd)
 {
 	// Ghetto rcs shit, implement properly later
 	IClientEntity* pLocal = hackManager.pLocal();
@@ -705,7 +707,7 @@ void CRageBot::DoNoRecoil(CUserCmd* pCmd)
 	}
 }
 
-bool CRageBot::AimAtPoint(IClientEntity* pLocal, Vector point, CUserCmd* pCmd, bool& bSendPacket)
+bool CRageBot::AimAtPoint(IClientEntity* pLocal, Vector point, CUserCmd *pCmd, bool &bSendPacket)
 {
 	bool ReturnValue = false;
 	// Get the full angles
@@ -721,6 +723,7 @@ bool CRageBot::AimAtPoint(IClientEntity* pLocal, Vector point, CUserCmd* pCmd, b
 	{
 		return ReturnValue;
 	}
+
 
 	IsLocked = true;
 	//-----------------------------------------------
@@ -758,7 +761,7 @@ bool CRageBot::AimAtPoint(IClientEntity* pLocal, Vector point, CUserCmd* pCmd, b
 		Interfaces::Engine->SetViewAngles(angles);
 	}
 
-	// pSilent Aim
+	// pSilent Aim 
 	Vector Oldview = pCmd->viewangles;
 
 	if (Menu::Window.RageBotTab.AimbotPerfectSilentAim.GetState())
@@ -778,7 +781,7 @@ bool CRageBot::AimAtPoint(IClientEntity* pLocal, Vector point, CUserCmd* pCmd, b
 			ChokedPackets = -1;
 			ReturnValue = false;
 		}
-
+		
 		//pCmd->viewangles.z = 0;
 	}
 
@@ -789,7 +792,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 {
 	// Pitches
 
-	void JitterPitch(CUserCmd* pCmd)
+	void JitterPitch(CUserCmd *pCmd)
 	{
 		static bool up = true;
 		if (up)
@@ -804,8 +807,8 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void FakePitch(CUserCmd* pCmd, bool& bSendPacket)
-	{
+	void FakePitch(CUserCmd *pCmd, bool &bSendPacket)
+	{	
 		static int ChokedPackets = -1;
 		ChokedPackets++;
 		if (ChokedPackets < 1)
@@ -821,7 +824,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void StaticJitter(CUserCmd* pCmd)
+	void StaticJitter(CUserCmd *pCmd)
 	{
 		static bool down = true;
 		if (down)
@@ -838,7 +841,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 
 	// Yaws
 
-	void FastSpin(CUserCmd* pCmd)
+	void FastSpin(CUserCmd *pCmd)
 	{
 		static int y2 = -179;
 		int spinBotSpeedFast = 100;
@@ -851,10 +854,10 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		pCmd->viewangles.y = y2;
 	}
 
-	void FakeEdge(CUserCmd* pCmd, bool& bSendPacket)
+	void FakeEdge(CUserCmd *pCmd, bool &bSendPacket)
 	{
 		IClientEntity* pLocal = hackManager.pLocal();
-
+		
 		Vector vEyePos = pLocal->GetOrigin() + pLocal->GetViewOffset();
 
 		CTraceFilter filter;
@@ -952,8 +955,8 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 		pCmd->viewangles.y += 360.0f;
 	}
-
-	void BackJitter(CUserCmd* pCmd)
+	
+	void BackJitter(CUserCmd *pCmd)
 	{
 		int random = rand() % 100;
 
@@ -975,7 +978,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void FakeSideways(CUserCmd* pCmd, bool& bSendPacket)
+	void FakeSideways(CUserCmd *pCmd, bool &bSendPacket)
 	{
 		static int ChokedPackets = -1;
 		ChokedPackets++;
@@ -992,7 +995,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void Jitter(CUserCmd* pCmd)
+	void Jitter(CUserCmd *pCmd)
 	{
 		static int jitterangle = 0;
 
@@ -1006,6 +1009,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 
 		int re = rand() % 4 + 1;
+
 
 		if (jitterangle <= 1)
 		{
@@ -1025,7 +1029,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void FakeStatic(CUserCmd* pCmd, bool& bSendPacket)
+	void FakeStatic(CUserCmd *pCmd, bool &bSendPacket)
 	{
 		static int ChokedPackets = -1;
 		ChokedPackets++;
@@ -1050,7 +1054,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void TJitter(CUserCmd* pCmd)
+	void TJitter(CUserCmd *pCmd)
 	{
 		static bool Turbo = true;
 		if (Turbo)
@@ -1065,7 +1069,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void TFake(CUserCmd* pCmd, bool& bSendPacket)
+	void TFake(CUserCmd *pCmd, bool &bSendPacket)
 	{
 		static int ChokedPackets = -1;
 		ChokedPackets++;
@@ -1082,7 +1086,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void FakeJitter(CUserCmd* pCmd, bool& bSendPacket)
+	void FakeJitter(CUserCmd* pCmd, bool &bSendPacket)
 	{
 		static int jitterangle = 0;
 
@@ -1122,7 +1126,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void Static(CUserCmd* pCmd)
+	void Static(CUserCmd *pCmd)
 	{
 		static bool aa1 = false;
 		aa1 = !aa1;
@@ -1145,7 +1149,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void fakelowerbody(CUserCmd* pCmd, bool& bSendPacket)
+	void fakelowerbody(CUserCmd *pCmd, bool &bSendPacket)
 	{
 		static bool f_flip = true;
 		f_flip = !f_flip;
@@ -1162,7 +1166,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void AimAtTarget(CUserCmd* pCmd)
+	void AimAtTarget(CUserCmd *pCmd)
 	{
 		IClientEntity* pLocal = hackManager.pLocal();
 
@@ -1197,7 +1201,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 		}
 	}
 
-	void EdgeDetect(CUserCmd* pCmd, bool& bSendPacket)
+	void EdgeDetect(CUserCmd* pCmd, bool &bSendPacket)
 	{
 		//Ray_t ray;
 		//trace_t tr;
@@ -1260,7 +1264,7 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 				}
 				else if ((leftTrace.fraction != 1.f) && (rightTrace.fraction == 1.f))
 				{
-					vecDummy.y += 45; // right
+					vecDummy.y += 45; // right     
 				}
 
 				angle.y = vecDummy.y;
@@ -1288,13 +1292,13 @@ namespace AntiAims // CanOpenFire checks for fake anti aims?
 }
 
 // AntiAim
-void CRageBot::DoAntiAim(CUserCmd* pCmd, bool& bSendPacket) // pCmd->viewangles.y = 0xFFFFF INT_MAX or idk
+void CRageBot::DoAntiAim(CUserCmd *pCmd, bool &bSendPacket) // pCmd->viewangles.y = 0xFFFFF INT_MAX or idk
 {
 	IClientEntity* pLocal = hackManager.pLocal();
 
 	if ((pCmd->buttons & IN_USE) || pLocal->GetMoveType() == MOVETYPE_LADDER)
 		return;
-
+	
 	// If the aimbot is doing something don't do anything
 	if ((IsAimStepping || pCmd->buttons & IN_ATTACK) && !Menu::Window.RageBotTab.AimbotPerfectSilentAim.GetState())
 		return;
@@ -1401,7 +1405,7 @@ void CRageBot::DoAntiAim(CUserCmd* pCmd, bool& bSendPacket) // pCmd->viewangles.
 	case 8:
 		// Back Jitter
 		AntiAims::BackJitter(pCmd);
-		break;
+		break; 
 	case 9:
 		// T Inverse
 		pCmd->viewangles.y -= 180;
@@ -1418,3 +1422,4 @@ void CRageBot::DoAntiAim(CUserCmd* pCmd, bool& bSendPacket) // pCmd->viewangles.
 	// Angle offset
 	pCmd->viewangles.y += Menu::Window.RageBotTab.AntiAimOffset.GetValue();
 }
+

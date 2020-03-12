@@ -8,7 +8,7 @@
 
 struct FireBulletData
 {
-	FireBulletData(const Vector& eye_pos)
+	FireBulletData(const Vector &eye_pos)
 		: src(eye_pos)
 	{
 	}
@@ -23,4 +23,4 @@ struct FireBulletData
 	int             penetrate_count;
 };
 
-bool CanHit(const Vector& point, float* damage_given);
+bool CanHit(const Vector &point, float *damage_given);

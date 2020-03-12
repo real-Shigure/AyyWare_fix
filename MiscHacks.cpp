@@ -38,7 +38,7 @@ void CMiscHacks::Init()
 
 void CMiscHacks::Draw()
 {
-	// Any drawing
+	// Any drawing	
 	// Spams
 	switch (Menu::Window.MiscTab.OtherChatSpam.GetIndex())
 	{
@@ -64,10 +64,10 @@ void CMiscHacks::Draw()
 	}
 }
 
-void CMiscHacks::Move(CUserCmd* pCmd, bool& bSendPacket)
+void CMiscHacks::Move(CUserCmd *pCmd, bool &bSendPacket)
 {
 	// Any Move Stuff
-
+	
 	// Bhop
 	switch (Menu::Window.MiscTab.OtherAutoJump.GetIndex())
 	{
@@ -100,24 +100,24 @@ void CMiscHacks::Move(CUserCmd* pCmd, bool& bSendPacket)
 
 static __declspec(naked) void __cdecl Invoke_NET_SetConVar(void* pfn, const char* cvar, const char* value)
 {
-	__asm
+	__asm 
 	{
 		push    ebp
-		mov     ebp, esp
-		and esp, 0FFFFFFF8h
-		sub     esp, 44h
-		push    ebx
-		push    esi
-		push    edi
-		mov     edi, cvar
-		mov     esi, value
-		jmp     pfn
+			mov     ebp, esp
+			and     esp, 0FFFFFFF8h
+			sub     esp, 44h
+			push    ebx
+			push    esi
+			push    edi
+			mov     edi, cvar
+			mov     esi, value
+			jmp     pfn
 	}
 }
 void DECLSPEC_NOINLINE NET_SetConVar(const char* value, const char* cvar)
 {
 	static DWORD setaddr = Utilities::Memory::FindPattern("engine.dll", (PBYTE)"\x8D\x4C\x24\x1C\xE8\x00\x00\x00\x00\x56", "xxxxx????x");
-	if (setaddr != 0)
+	if (setaddr != 0) 
 	{
 		void* pvSetConVar = (char*)setaddr;
 		Invoke_NET_SetConVar(pvSetConVar, cvar, value);
@@ -130,7 +130,7 @@ void change_name(const char* name)
 		NET_SetConVar(name, "name");
 }
 
-void CMiscHacks::AutoJump(CUserCmd* pCmd)
+void CMiscHacks::AutoJump(CUserCmd *pCmd)
 {
 	if (pCmd->buttons & IN_JUMP && GUI.GetKeyState(VK_SPACE))
 	{
@@ -145,7 +145,7 @@ void CMiscHacks::AutoJump(CUserCmd* pCmd)
 	}
 }
 
-void CMiscHacks::LegitStrafe(CUserCmd* pCmd)
+void CMiscHacks::LegitStrafe(CUserCmd *pCmd)
 {
 	IClientEntity* pLocal = hackManager.pLocal();
 	if (!(pLocal->GetFlags() & FL_ONGROUND))
@@ -163,7 +163,7 @@ void CMiscHacks::LegitStrafe(CUserCmd* pCmd)
 	}
 }
 
-void CMiscHacks::RageStrafe(CUserCmd* pCmd)
+void CMiscHacks::RageStrafe(CUserCmd *pCmd)
 {
 	IClientEntity* pLocal = hackManager.pLocal();
 
@@ -183,33 +183,35 @@ void CMiscHacks::RageStrafe(CUserCmd* pCmd)
 		}
 	}
 
-	/*	IClientEntity* pLocal = hackManager.pLocal();
-		static bool bDirection = true;
+/*	IClientEntity* pLocal = hackManager.pLocal();
+	static bool bDirection = true;
 
-		static float move = 450; //400.f; // move = max(move, (abs(cmd->move.x) + abs(cmd->move.y)) * 0.5f);
-		float s_move = move * 0.5065f;
 
-		if ((pCmd->buttons & IN_JUMP) || !(pLocal->GetFlags() & FL_ONGROUND))
-		{
-			pCmd->forwardmove = move * 0.015f;
-			pCmd->sidemove += (float)(((pCmd->tick_count % 2) * 2) - 1) * s_move;
+	static float move = 450; //400.f; // move = max(move, (abs(cmd->move.x) + abs(cmd->move.y)) * 0.5f);
+	float s_move = move * 0.5065f;
 
-			if (pCmd->mousedx)
-				pCmd->sidemove = (float)clamp(pCmd->mousedx, -1, 1) * s_move;
 
-			static float strafe = pCmd->viewangles.y;
+	if ((pCmd->buttons & IN_JUMP) || !(pLocal->GetFlags() & FL_ONGROUND))
+	{
+		pCmd->forwardmove = move * 0.015f;
+		pCmd->sidemove += (float)(((pCmd->tick_count % 2) * 2) - 1) * s_move;
 
-			float rt = pCmd->viewangles.y, rotation;
-			rotation = strafe - rt;
+		if (pCmd->mousedx)
+			pCmd->sidemove = (float)clamp(pCmd->mousedx, -1, 1) * s_move;
 
-			if (rotation < FloatNegate(Interfaces::Globals->interval_per_tick))
-				pCmd->sidemove = -s_move;
+		static float strafe = pCmd->viewangles.y;
 
-			if (rotation > Interfaces::Globals->interval_per_tick)
-				pCmd->sidemove = s_move;
+		float rt = pCmd->viewangles.y, rotation;
+		rotation = strafe - rt;
 
-			strafe = rt;
-		} */
+		if (rotation < FloatNegate(Interfaces::Globals->interval_per_tick))
+			pCmd->sidemove = -s_move;
+
+		if (rotation > Interfaces::Globals->interval_per_tick)
+			pCmd->sidemove = s_move;
+
+		strafe = rt;
+	} */
 }
 
 Vector GetAutostrafeView()
@@ -233,7 +235,7 @@ void CMiscHacks::ChatSpamInterwebz()
 		static bool useSpace = true;
 		if (useSpace)
 		{
-			change_name("INTERWEBZ-");
+			change_name ("INTERWEBZ-");
 			useSpace = !useSpace;
 		}
 		else
@@ -276,7 +278,7 @@ void CMiscHacks::ChatSpamName()
 	for (int i = 0; i < Interfaces::EntList->GetHighestEntityIndex(); i++)
 	{
 		// Get the entity
-		IClientEntity* entity = Interfaces::EntList->GetClientEntity(i);
+		IClientEntity *entity = Interfaces::EntList->GetClientEntity(i);
 
 		player_info_t pInfo;
 		// If it's a valid entity and isn't the player
@@ -309,7 +311,7 @@ void CMiscHacks::ChatSpamName()
 	}
 	else
 	{
-		change_name("p$i 1337");
+		change_name ("p$i 1337");
 	}
 
 	start_t = clock();
@@ -338,7 +340,7 @@ void CMiscHacks::ChatSpamRegular()
 	start_t = clock();
 }
 
-void CMiscHacks::Fakelag(CUserCmd* pCmd, bool& bSendPacket)
+void CMiscHacks::Fakelag(CUserCmd *pCmd, bool &bSendPacket)
 {
 	int iChoke = Menu::Window.MiscTab.FakeLagChoke.GetValue();
 

@@ -42,7 +42,7 @@ class CControl
 public:
 	void SetPosition(int x, int y);
 	void SetSize(int w, int h);
-	void GetSize(int& w, int& h);
+	void GetSize(int &w, int &h);
 	void SetFileId(std::string fid);
 
 	bool Flag(int f);
@@ -110,6 +110,7 @@ private:
 	int m_y;
 	int m_iWidth;
 	int m_iHeight;
+
 };
 extern bool m_bIsOpen;
 // User interface manager
@@ -118,7 +119,7 @@ class CGUI
 public:
 	CGUI();
 
-	// Draws all windows
+	// Draws all windows 
 	void Draw();
 
 	// Handle all input etc
@@ -163,4 +164,5 @@ private:
 
 	// KeyBinds -> Windows Map
 	std::map<int, CWindow*> WindowBinds;
+
 };

@@ -18,7 +18,7 @@ void CControl::SetSize(int w, int h)
 	m_iHeight = h;
 }
 
-void CControl::GetSize(int& w, int& h)
+void CControl::GetSize(int &w, int &h)
 {
 	w = m_iWidth;
 	h = m_iHeight;
@@ -156,7 +156,7 @@ void CGroupBox::SetText(std::string text)
 	Text = text;
 }
 
-void CGroupBox::PlaceLabledControl(std::string Label, CTab* Tab, CControl* control)
+void CGroupBox::PlaceLabledControl(std::string Label, CTab *Tab, CControl* control)
 {
 	int x = m_x + 16;
 	int y = m_y + Items * 24;
@@ -195,7 +195,7 @@ void CSlider::Draw(bool hover)
 	Render::Clear(a.x, a.y + 5, m_iWidth, 2, Color(161, 161, 161, 255));
 
 	float Ratio = Value / (Max - Min);
-	float Location = Ratio * m_iWidth;
+	float Location = Ratio*m_iWidth;
 
 	Render::Clear(a.x + Location, a.y + 1, 4, 9, Color(255, 0, 0, 255));
 	Render::Outline(a.x + Location, a.y + 1, 4, 9, Color(20, 20, 20, 80));
@@ -221,7 +221,7 @@ void CSlider::OnUpdate() {
 			if (NewX < 0) NewX = 0;
 			if (NewX > m_iWidth) NewX = m_iWidth;
 			Ratio = NewX / float(m_iWidth);
-			Value = Min + (Max - Min) * Ratio;
+			Value = Min + (Max - Min)*Ratio;
 		}
 		else
 		{
@@ -320,6 +320,7 @@ void CKeyBind::Draw(bool hover)
 			KeyName = "No Key Bound";
 		}
 	}
+
 
 	Render::Text(a.x + 2, a.y + 2, Color(255, 255, 255, 255), Render::Fonts::MenuBold, KeyName);
 }
@@ -480,6 +481,7 @@ void CComboBox::OnUpdate()
 	{
 		m_iHeight = 16;
 	}
+
 }
 
 void CComboBox::OnClick()

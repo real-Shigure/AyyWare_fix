@@ -28,7 +28,7 @@ HINSTANCE HThisModule;
 bool DoUnload;
 
 // Our thread we use to setup everything we need
-// Everything appart from code in hooks get's called from inside
+// Everything appart from code in hooks get's called from inside 
 // here.
 
 int InitialThread()
@@ -82,7 +82,7 @@ BOOL WINAPI DllMain(
 	{
 	case DLL_QUERY_HMODULE:
 		if (lpvReserved != NULL)
-			*(HMODULE*)lpvReserved = hAppInstance;
+			*(HMODULE *)lpvReserved = hAppInstance;
 		break;
 	case DLL_PROCESS_ATTACH:
 		HThisModule = hinstDLL;
