@@ -10,7 +10,6 @@ Syn's AyyWare Framework 2015
 
 void Quad();
 
-
 namespace Render
 {
 	void Initialise();
@@ -19,7 +18,7 @@ namespace Render
 	void Clear(int x, int y, int w, int h, Color color);
 	void Outline(int x, int y, int w, int h, Color color);
 	void Line(int x, int y, int x2, int y2, Color color);
-	void PolyLine(int *x, int *y, int count, Color color);
+	void PolyLine(int* x, int* y, int count, Color color);
 	void Polygon(int count, Vertex_t* Vertexs, Color color);
 	void PolygonOutline(int count, Vertex_t* Vertexs, Color color, Color colorLine);
 	void PolyLine(int count, Vertex_t* Vertexs, Color colorLine);
@@ -44,7 +43,6 @@ namespace Render
 	RECT GetTextSize(DWORD font, const char* text);
 
 	// Other rendering functions
-	bool WorldToScreen(Vector &in, Vector &out);
+	bool WorldToScreen(Vector& in, Vector& out);
 	RECT GetViewport();
 };
-

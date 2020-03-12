@@ -5,7 +5,7 @@ Syn's AyyWare Framework 2015
 #include "MathFunctions.h"
 #include "CommonIncludes.h"
 
-void AngleVectors(const Vector &angles, Vector *forward)
+void AngleVectors(const Vector& angles, Vector* forward)
 {
 	Assert(s_bMathlibInitialized);
 	Assert(forward);
@@ -18,25 +18,25 @@ void AngleVectors(const Vector &angles, Vector *forward)
 	sp = sin(DEG2RAD(angles[0]));
 	cp = cos(DEG2RAD(angles[0]));
 
-	forward->x = cp*cy;
-	forward->y = cp*sy;
+	forward->x = cp * cy;
+	forward->y = cp * sy;
 	forward->z = -sp;
 }
 
-void VectorTransform(const Vector in1, float in2[3][4], Vector &out)
+void VectorTransform(const Vector in1, float in2[3][4], Vector& out)
 {
 	out[0] = DotProduct(in1, Vector(in2[0][0], in2[0][1], in2[0][2])) + in2[0][3];
 	out[1] = DotProduct(in1, Vector(in2[1][0], in2[1][1], in2[1][2])) + in2[1][3];
 	out[2] = DotProduct(in1, Vector(in2[2][0], in2[2][1], in2[2][2])) + in2[2][3];
 }
 
-void SinCos(float a, float* s, float*c)
+void SinCos(float a, float* s, float* c)
 {
 	*s = sin(a);
 	*c = cos(a);
 }
 
-void VectorAngles(Vector forward, Vector &angles)
+void VectorAngles(Vector forward, Vector& angles)
 {
 	float tmp, yaw, pitch;
 
@@ -88,7 +88,7 @@ void VectorAngles(Vector forward, Vector &angles)
 	angles[2] = 0;
 }
 
-void AngleVectors(const Vector &angles, Vector *forward, Vector *right, Vector *up)
+void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up)
 {
 	float sr, sp, sy, cr, cp, cy;
 
@@ -98,30 +98,30 @@ void AngleVectors(const Vector &angles, Vector *forward, Vector *right, Vector *
 
 	if (forward)
 	{
-		forward->x = cp*cy;
-		forward->y = cp*sy;
+		forward->x = cp * cy;
+		forward->y = cp * sy;
 		forward->z = -sp;
 	}
 
 	if (right)
 	{
-		right->x = (-1 * sr*sp*cy + -1 * cr*-sy);
-		right->y = (-1 * sr*sp*sy + -1 * cr*cy);
-		right->z = -1 * sr*cp;
+		right->x = (-1 * sr * sp * cy + -1 * cr * -sy);
+		right->y = (-1 * sr * sp * sy + -1 * cr * cy);
+		right->z = -1 * sr * cp;
 	}
 
 	if (up)
 	{
-		up->x = (cr*sp*cy + -sr*-sy);
-		up->y = (cr*sp*sy + -sr*cy);
-		up->z = cr*cp;
+		up->x = (cr * sp * cy + -sr * -sy);
+		up->y = (cr * sp * sy + -sr * cy);
+		up->z = cr * cp;
 	}
 }
 
-void Normalize(Vector &vIn, Vector &vOut)
+void Normalize(Vector& vIn, Vector& vOut)
 {
 	float flLen = vIn.Length();
-	if (flLen == 0){
+	if (flLen == 0) {
 		vOut.Init(0, 0, 1);
 		return;
 	}
@@ -129,8 +129,7 @@ void Normalize(Vector &vIn, Vector &vOut)
 	vOut.Init(vIn.x * flLen, vIn.y * flLen, vIn.z * flLen);
 }
 
-
-void CalcAngle(Vector src, Vector dst, Vector &angles)
+void CalcAngle(Vector src, Vector dst, Vector& angles)
 {
 	Vector delta = src - dst;
 	double hyp = delta.Length2D(); //delta.Length
@@ -176,7 +175,7 @@ void NormalizeVector(Vector& vec) {
 	vec[2] = 0.f;
 }
 
-void CalcAngleYawOnly(Vector src, Vector dst, Vector &angles)
+void CalcAngleYawOnly(Vector src, Vector dst, Vector& angles)
 {
 	Vector delta = src - dst;
 	double hyp = delta.Length2D();

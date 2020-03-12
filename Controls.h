@@ -36,7 +36,7 @@ class CGroupBox : public CControl
 public:
 	CGroupBox();
 	void SetText(std::string text);
-	void PlaceLabledControl(std::string Label, CTab *Tab, CControl* control);
+	void PlaceLabledControl(std::string Label, CTab* Tab, CControl* control);
 protected:
 	int Items;
 	std::string Text;

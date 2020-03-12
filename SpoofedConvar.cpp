@@ -29,7 +29,7 @@ const char* ConVar::GetString(void) const {
 }
 
 Color ConVar::GetColor(void) const {
-	unsigned char *pColorElement = ((unsigned char *)&pParent->nValue);
+	unsigned char* pColorElement = ((unsigned char*)&pParent->nValue);
 	return Color(pColorElement[0], pColorElement[1], pColorElement[2], pColorElement[3]);
 }
 void ConVar::SetValue(Color value)
@@ -40,7 +40,7 @@ void ConVar::SetValue(Color value)
 
 char* ConVar::GetName()
 {
-	typedef char*(__thiscall* OriginalFn)(void*);
+	typedef char* (__thiscall* OriginalFn)(void*);
 	return call_vfunc<OriginalFn>(this, 5)(this);
 }
 

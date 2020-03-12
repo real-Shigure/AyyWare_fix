@@ -11,28 +11,28 @@ void InitKeyValues(KeyValues* keyValues, char* name)
 	__asm
 	{
 		push name
-			mov ecx, keyValues
-			call dwFunction
+		mov ecx, keyValues
+		call dwFunction
 	}
 }
 
-void LoadFromBuffer(KeyValues* keyValues, char const *resourceName, const char *pBuffer)
+void LoadFromBuffer(KeyValues* keyValues, char const* resourceName, const char* pBuffer)
 {
 	DWORD dwFunction = (DWORD)Offsets::Functions::KeyValues_LoadFromBuffer;
 
 	__asm
 	{
 		push 0
-			push 0
-			push 0
-			push pBuffer
-			push resourceName
-			mov ecx, keyValues
-			call dwFunction
+		push 0
+		push 0
+		push pBuffer
+		push resourceName
+		mov ecx, keyValues
+		call dwFunction
 	}
 }
 
-IMaterial *CreateMaterial(bool shouldIgnoreZ, bool isLit, bool isWireframe) //credits to ph0ne
+IMaterial* CreateMaterial(bool shouldIgnoreZ, bool isLit, bool isWireframe) //credits to ph0ne
 {
 	static int created = 0;
 
@@ -66,7 +66,7 @@ IMaterial *CreateMaterial(bool shouldIgnoreZ, bool isLit, bool isWireframe) //cr
 	InitKeyValues(keyValues, baseType);
 	LoadFromBuffer(keyValues, name, material);
 
-	IMaterial *createdMaterial = Interfaces::MaterialSystem->CreateMaterial(name, keyValues);
+	IMaterial* createdMaterial = Interfaces::MaterialSystem->CreateMaterial(name, keyValues);
 	createdMaterial->IncrementReferenceCount();
 
 	return createdMaterial;
@@ -87,7 +87,6 @@ void ForceMaterial(Color color, IMaterial* material, bool useColor, bool forceMa
 		temp[1] /= 255.f;
 		temp[2] /= 255.f;
 
-
 		float alpha = color.a();
 
 		Interfaces::RenderView->SetBlend(1.0f);
@@ -98,5 +97,4 @@ void ForceMaterial(Color color, IMaterial* material, bool useColor, bool forceMa
 		Interfaces::ModelRender->ForcedMaterialOverride(material);
 	else
 		Interfaces::ModelRender->ForcedMaterialOverride(NULL);
-
 }

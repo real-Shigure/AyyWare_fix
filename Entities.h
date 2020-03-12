@@ -39,43 +39,43 @@ class CSWeaponInfo
 public:
 	virtual ~CSWeaponInfo() {};
 	char pad_0x0000[0x4]; //0x0000
-	char* szWeaponName; //0x0004 
+	char* szWeaponName; //0x0004
 	char pad_0x0008[0xC]; //0x0008
-	__int32 iMaxClip1; //0x0014 
+	__int32 iMaxClip1; //0x0014
 	char pad_0x0018[0xC]; //0x0018
-	__int32 max_reserved_ammo; //0x0024 
+	__int32 max_reserved_ammo; //0x0024
 	char pad_0x0028[0x4]; //0x0028
-	char* m_WeaponMdlPath; //0x002C 
+	char* m_WeaponMdlPath; //0x002C
 	char pad_0x0030[0x4]; //0x0030
-	char* m_DropWeaponMdlPath; //0x0034 
+	char* m_DropWeaponMdlPath; //0x0034
 	char pad_0x0038[0x48]; //0x0038
-	char* m_BulletType; //0x0080 
+	char* m_BulletType; //0x0080
 	char pad_0x0084[0x4]; //0x0084
-	char* hud_name; //0x0088 
+	char* hud_name; //0x0088
 	char pad_0x008C[0x40]; //0x008C
-	__int32 m_WeaponType; //0x00CC 
-	__int32 m_WeaponPrice; //0x00D0 
-	__int32 m_WeaponReward; //0x00D4 
-	char* m_WeaponGroupName; //0x00D8 
+	__int32 m_WeaponType; //0x00CC
+	__int32 m_WeaponPrice; //0x00D0
+	__int32 m_WeaponReward; //0x00D4
+	char* m_WeaponGroupName; //0x00D8
 	char pad_0x00DC[0x10]; //0x00DC
-	unsigned char bFullAuto; //0x00EC 
+	unsigned char bFullAuto; //0x00EC
 	char pad_0x00ED[0x3]; //0x00ED
-	__int32 iDamage; //0x00F0 
-	float flArmorRatio; //0x00F4 
+	__int32 iDamage; //0x00F0
+	float flArmorRatio; //0x00F4
 	__int32 bullets;
 	float flPenetration; //0x00F8
 	char pad_0x00F8[0x8]; //0x00FC
-	float flRange; //0x0108 
-	float flRangeModifier; //0x010C 
+	float flRange; //0x0108
+	float flRangeModifier; //0x010C
 	char pad_0x0110[0x10]; //0x0110
-	unsigned char silencer; //0x0120 
+	unsigned char silencer; //0x0120
 	char pad_0x0121[0xF]; //0x0121
-	float flMaxPlayerSpeed; //0x0130 
-	float flMaxPlayerSpeedAlt; //0x0134 
+	float flMaxPlayerSpeed; //0x0130
+	float flMaxPlayerSpeedAlt; //0x0134
 	char pad_0x0138[0x4C]; //0x0138
-	__int32 recoil_seed; //0x0184 
+	__int32 recoil_seed; //0x0184
 	char pad_0x0188[0x68]; //0x0188
-	char* m_WeaponTracesType; //0x01F0 
+	char* m_WeaponTracesType; //0x01F0
 	char pad_0x01F4[0x638]; //0x01F4
 };
 
@@ -504,7 +504,6 @@ public:
 	CPNETVAR_FUNC(ScriptCreatedItem*, m_Item, 0x7E029CE5);
 };
 
-
 class CBaseCombatWeapon
 {
 public:
@@ -535,13 +534,13 @@ public:
 
 	float GetInnacc()
 	{
-		typedef float(__thiscall *OrigFn)(void *);
+		typedef float(__thiscall* OrigFn)(void*);
 		return call_vfunc<OrigFn>(this, 481)(this);
 	}
 
-	void UpdateAccPenalty() 
+	void UpdateAccPenalty()
 	{
-		typedef void(__thiscall *OrigFn)(void *);
+		typedef void(__thiscall* OrigFn)(void*);
 		return call_vfunc<OrigFn>(this, 482)(this);
 	}
 
@@ -554,7 +553,7 @@ public:
 	{
 		if (!this) return nullptr;
 
-		typedef CSWeaponInfo*(__thiscall* OriginalFn)(void*);
+		typedef CSWeaponInfo* (__thiscall* OriginalFn)(void*);
 		return  call_vfunc<OriginalFn>(this, 459)(this);
 	}
 };
@@ -594,20 +593,20 @@ class IClientRenderable
 {
 public:
 	//virtual void*					GetIClientUnknown() = 0;
-	virtual Vector const&			GetRenderOrigin(void) = 0;
-	virtual Vector const&			GetRenderAngles(void) = 0;
+	virtual Vector const& GetRenderOrigin(void) = 0;
+	virtual Vector const& GetRenderAngles(void) = 0;
 	virtual bool					ShouldDraw(void) = 0;
 	virtual bool					IsTransparent(void) = 0;
 	virtual bool					UsesPowerOfTwoFrameBufferTexture() = 0;
 	virtual bool					UsesFullFrameBufferTexture() = 0;
 	virtual void					GetShadowHandle() const = 0;
-	virtual void*					RenderHandle() = 0;
-	virtual const model_t*				GetModel() const = 0;
+	virtual void* RenderHandle() = 0;
+	virtual const model_t* GetModel() const = 0;
 	virtual int						DrawModel(int flags) = 0;
 	virtual int						GetBody() = 0;
 	virtual void					ComputeFxBlend() = 0;
 
-	bool SetupBones(matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime)
+	bool SetupBones(matrix3x4* pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime)
 	{
 		typedef bool(__thiscall* oSetupBones)(PVOID, matrix3x4*, int, int, float);
 		return call_vfunc< oSetupBones>(this, 13)(this, pBoneToWorldOut, nMaxBones, boneMask, currentTime);
@@ -617,9 +616,9 @@ public:
 class IClientNetworkable
 {
 public:
-	virtual IClientUnknown*	GetIClientUnknown() = 0;
+	virtual IClientUnknown* GetIClientUnknown() = 0;
 	virtual void			Release() = 0;
-	virtual ClientClass*	GetClientClass() = 0;// FOR NETVARS FIND YOURSELF ClientClass* stuffs
+	virtual ClientClass* GetClientClass() = 0;// FOR NETVARS FIND YOURSELF ClientClass* stuffs
 	virtual void			NotifyShouldTransmit( /* ShouldTransmitState_t state*/) = 0;
 	virtual void			OnPreDataChanged( /*DataUpdateType_t updateType*/) = 0;
 	virtual void			OnDataChanged( /*DataUpdateType_t updateType*/) = 0;
@@ -629,27 +628,27 @@ public:
 	virtual bool			IsDormant(void) = 0;
 	virtual int				GetIndex(void) const = 0;
 	virtual void			ReceiveMessage(int classID /*, bf_read &msg*/) = 0;
-	virtual void*			GetDataTableBasePtr() = 0;
+	virtual void* GetDataTableBasePtr() = 0;
 	virtual void			SetDestroyedOnRecreateEntities(void) = 0;
 };
 
 class IClientUnknown
 {
 public:
-	virtual void*		GetCollideable() = 0;
-	virtual IClientNetworkable*	GetClientNetworkable() = 0;
-	virtual IClientRenderable*	GetClientRenderable() = 0;
-	virtual IClientEntity*		GetIClientEntity() = 0;
-	virtual IClientEntity*		GetBaseEntity() = 0;
-	virtual IClientThinkable*	GetClientThinkable() = 0;
+	virtual void* GetCollideable() = 0;
+	virtual IClientNetworkable* GetClientNetworkable() = 0;
+	virtual IClientRenderable* GetClientRenderable() = 0;
+	virtual IClientEntity* GetIClientEntity() = 0;
+	virtual IClientEntity* GetBaseEntity() = 0;
+	virtual IClientThinkable* GetClientThinkable() = 0;
 };
 
 class IClientThinkable
 {
 public:
-	virtual IClientUnknown*		GetIClientUnknown() = 0;
+	virtual IClientUnknown* GetIClientUnknown() = 0;
 	virtual void				ClientThink() = 0;
-	virtual void*				GetThinkHandle() = 0;
+	virtual void* GetThinkHandle() = 0;
 	virtual void				SetThinkHandle(void* hThink) = 0;
 	virtual void				Release() = 0;
 };
@@ -660,8 +659,8 @@ public:
 public:
 	virtual void			Release(void) = 0;
 	virtual void			blahblahpad(void) = 0;
-	virtual Vector&	GetAbsOrigin(void) const = 0;//in broken place use GetOrigin Below
-	virtual const Vector&	GetAbsAngles(void) const = 0;
+	virtual Vector& GetAbsOrigin(void) const = 0;//in broken place use GetOrigin Below
+	virtual const Vector& GetAbsAngles(void) const = 0;
 
 	//---                 NetVars                  ---//
 
@@ -676,7 +675,7 @@ public:
 	CNETVAR_FUNC(float, GetLowerBodyYaw, 0xE6996CCF); //m_flLowerBodyYawTarget
 	CNETVAR_FUNC(int, GetFlags, 0xE456D580); //m_fFlags
 	CNETVAR_FUNC(float, GetTargetYaw, 0xE6996CCF)
-	CNETVAR_FUNC(Vector, GetOrigin, 0x1231CE10); //m_vecOrigin 0x0134
+		CNETVAR_FUNC(Vector, GetOrigin, 0x1231CE10); //m_vecOrigin 0x0134
 	CNETVAR_FUNC(Vector, GetRotation, 0x6BEA197A); //m_angRotation
 	CNETVAR_FUNC(int, GetTeamNum, 0xC08B6C6E); //m_iTeamNum
 	CNETVAR_FUNC(int, GetMaxHealth, 0xC52E1C28); //m_iMaxHealth
@@ -707,7 +706,7 @@ public:
 		return (GetLifeState() == LIFE_ALIVE && GetHealth() > 0);
 	}
 
-	int GetMoveType() 
+	int GetMoveType()
 	{
 		if (!this)
 			return 0;
@@ -770,11 +769,11 @@ public:
 			CALL DWORD PTR DS : [EAX + 0x28]
 		}
 	}
-	
+
 	Vector GetAbsAngles2() {
 		__asm {
 			MOV ECX, this;
-			MOV EAX, DWORD PTR DS : [ECX];
+			MOV EAX, DWORD PTR DS : [ECX] ;
 			CALL DWORD PTR DS : [EAX + 0x2C]
 		}
 	}
@@ -784,21 +783,21 @@ public:
 		Vector View = *(Vector*)((DWORD)this + 0x108);
 		return(Origin + View);
 	}
-	
+
 	Vector GetAimPunch() {
 		return *(Vector*)((DWORD)this + 0x302C);
 	}
-	
+
 	bool IsImmune() {
 		return *(bool*)((DWORD)this + 0x392C);
 	}
-	
-	ClientClass *GetClientClass2() {
+
+	ClientClass* GetClientClass2() {
 		PVOID Networkable = (PVOID)((DWORD)(this) + 0x8);
-		using Original = ClientClass*(__thiscall*)(PVOID);
+		using Original = ClientClass * (__thiscall*)(PVOID);
 		return call_vfunc<Original>(Networkable, 2)(Networkable);
 	}
-	
+
 	HANDLE GetWeaponHandle() {
 		return *(HANDLE*)((DWORD)this + 0x2EF8);
 	}

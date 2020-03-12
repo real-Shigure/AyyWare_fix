@@ -158,8 +158,8 @@ public:
 	CCheckBox OtherHitmarker;
 	CCheckBox OtherRadar;
 	CCheckBox OtherNoVisualRecoil;
-	CCheckBox OtherNoSky; 
-	CCheckBox OtherNoFlash; 
+	CCheckBox OtherNoSky;
+	CCheckBox OtherNoFlash;
 	CCheckBox OtherNoSmoke;
 	CCheckBox OtherAsusWalls;
 	CComboBox OtherNoHands;

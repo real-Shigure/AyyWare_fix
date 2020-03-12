@@ -12,10 +12,9 @@ void CLegitBot::Init()
 
 void CLegitBot::Draw()
 {
-	
 }
 
-void CLegitBot::Move(CUserCmd *pCmd, bool &bSendPacket)
+void CLegitBot::Move(CUserCmd* pCmd, bool& bSendPacket)
 {
 	// Master switch
 	if (!Menu::Window.LegitBotTab.Active.GetState())
@@ -114,7 +113,7 @@ void CLegitBot::SyncWeaponSettings()
 }
 
 // Functionality
-void CLegitBot::DoAimbot(CUserCmd *pCmd, bool &bSendPacket)
+void CLegitBot::DoAimbot(CUserCmd* pCmd, bool& bSendPacket)
 {
 	IClientEntity* pTarget = nullptr;
 	IClientEntity* pLocal = hackManager.pLocal();
@@ -133,7 +132,6 @@ void CLegitBot::DoAimbot(CUserCmd *pCmd, bool &bSendPacket)
 			return;
 		}
 		SyncWeaponSettings();
-		
 	}
 	else
 		return;
@@ -142,7 +140,7 @@ void CLegitBot::DoAimbot(CUserCmd *pCmd, bool &bSendPacket)
 	if (IsLocked && TargetID >= 0 && HitBox >= 0)
 	{
 		pTarget = Interfaces::EntList->GetClientEntity(TargetID);
-		if (pTarget  && TargetMeetsRequirements(pTarget))
+		if (pTarget && TargetMeetsRequirements(pTarget))
 		{
 			SyncWeaponSettings();
 			if (HitBox >= 0)
@@ -234,7 +232,7 @@ bool TargetMeetsTriggerRequirements(IClientEntity* pEntity)
 	if (pEntity && pEntity->IsDormant() == false && pEntity->IsAlive() && pEntity->GetIndex() != hackManager.pLocal()->GetIndex())
 	{
 		// Entity Type checks
-		ClientClass *pClientClass = pEntity->GetClientClass();
+		ClientClass* pClientClass = pEntity->GetClientClass();
 		player_info_t pinfo;
 		if (pClientClass->m_ClassID == (int)CSGOClassID::CCSPlayer && Interfaces::Engine->GetPlayerInfo(pEntity->GetIndex(), &pinfo))
 		{
@@ -254,7 +252,7 @@ bool TargetMeetsTriggerRequirements(IClientEntity* pEntity)
 	return false;
 }
 
-void CLegitBot::DoTrigger(CUserCmd *pCmd)
+void CLegitBot::DoTrigger(CUserCmd* pCmd)
 {
 	IClientEntity* pLocal = hackManager.pLocal();
 
@@ -330,7 +328,7 @@ bool CLegitBot::TargetMeetsRequirements(IClientEntity* pEntity)
 	if (pEntity && pEntity->IsDormant() == false && pEntity->IsAlive() && pEntity->GetIndex() != hackManager.pLocal()->GetIndex())
 	{
 		// Entity Type checks
-		ClientClass *pClientClass = pEntity->GetClientClass();
+		ClientClass* pClientClass = pEntity->GetClientClass();
 		player_info_t pinfo;
 		if (pClientClass->m_ClassID == (int)CSGOClassID::CCSPlayer && Interfaces::Engine->GetPlayerInfo(pEntity->GetIndex(), &pinfo))
 		{
@@ -400,7 +398,7 @@ int CLegitBot::GetTargetCrosshair()
 
 	for (int i = 0; i < Interfaces::EntList->GetHighestEntityIndex(); i++)
 	{
-		IClientEntity *pEntity = Interfaces::EntList->GetClientEntity(i);
+		IClientEntity* pEntity = Interfaces::EntList->GetClientEntity(i);
 		if (TargetMeetsRequirements(pEntity))
 		{
 			int NewHitBox = HitBox;
@@ -435,7 +433,7 @@ bool ShouldFire()
 	return !(flNextPrimaryAttack > flServerTime);
 }
 
-bool CLegitBot::AimAtPoint(IClientEntity* pLocal, Vector point, CUserCmd *pCmd, bool &bSendPacket)
+bool CLegitBot::AimAtPoint(IClientEntity* pLocal, Vector point, CUserCmd* pCmd, bool& bSendPacket)
 {
 	// Get the full angles
 	if (point.Length() == 0) return false;
@@ -451,7 +449,7 @@ bool CLegitBot::AimAtPoint(IClientEntity* pLocal, Vector point, CUserCmd *pCmd, 
 		Inaccuracy *= Inacc;
 		start_t = clock();
 	}
-	
+
 	point += Inaccuracy;
 	Vector angles;
 	Vector src = pLocal->GetOrigin() + pLocal->GetViewOffset();

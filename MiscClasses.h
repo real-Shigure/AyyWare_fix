@@ -67,7 +67,7 @@ struct CViewSetup
 class IPanel
 {
 public:
-	const char *GetName(unsigned int vguiPanel)
+	const char* GetName(unsigned int vguiPanel)
 	{
 		typedef const char* (__thiscall* OriginalFn)(PVOID, unsigned int);
 		return call_vfunc<OriginalFn>(this, Offsets::VMT::Panel_GetName)(this, vguiPanel);
@@ -85,7 +85,7 @@ public:
 	// constructors
 	Color()
 	{
-		*((int *)this) = 0;
+		*((int*)this) = 0;
 	}
 	Color(int r, int g, int b)
 	{
@@ -103,7 +103,7 @@ public:
 		_color[3] = (unsigned char)a;
 	}
 
-	void GetColor(int &r, int &g, int &b, int &a) const
+	void GetColor(int& r, int& g, int& b, int& a) const
 	{
 		r = _color[0];
 		g = _color[1];
@@ -113,44 +113,43 @@ public:
 
 	void SetRawColor(int color32)
 	{
-		*((int *)this) = color32;
+		*((int*)this) = color32;
 	}
 
 	int GetRawColor() const
 	{
-		return *((int *)this);
+		return *((int*)this);
 	}
 
-	inline int r() const	{ return _color[0]; }
-	inline int g() const	{ return _color[1]; }
-	inline int b() const	{ return _color[2]; }
-	inline int a() const	{ return _color[3]; }
+	inline int r() const { return _color[0]; }
+	inline int g() const { return _color[1]; }
+	inline int b() const { return _color[2]; }
+	inline int a() const { return _color[3]; }
 
 	void SetAlpha(int a) { _color[0] = (unsigned char)a; }
 	int  GetAlpha() { return _color[0]; }
 
-
-	unsigned char &operator[](int index)
+	unsigned char& operator[](int index)
 	{
 		return _color[index];
 	}
 
-	const unsigned char &operator[](int index) const
+	const unsigned char& operator[](int index) const
 	{
 		return _color[index];
 	}
 
-	bool operator == (const Color &rhs) const
+	bool operator == (const Color& rhs) const
 	{
-		return (*((int *)this) == *((int *)&rhs));
+		return (*((int*)this) == *((int*)&rhs));
 	}
 
-	bool operator != (const Color &rhs) const
+	bool operator != (const Color& rhs) const
 	{
 		return !(operator==(rhs));
 	}
 
-	Color &operator=(const Color &rhs)
+	Color& operator=(const Color& rhs)
 	{
 		SetRawColor(rhs.GetRawColor());
 		return *this;
@@ -164,28 +163,28 @@ private:
 class IVDebugOverlay
 {
 public:
-	virtual void AddEntityTextOverlay(int ent_index, int line_offset, float duration, int r, int g, int b, int a, const char *format, ...) = 0;
+	virtual void AddEntityTextOverlay(int ent_index, int line_offset, float duration, int r, int g, int b, int a, const char* format, ...) = 0;
 	virtual void AddBoxOverlay(const Vector& origin, const Vector& mins, const Vector& max, Vector const& orientation, int r, int g, int b, int a, float duration) = 0;
 	virtual void AddSphereOverlay(const Vector& vOrigin, float flRadius, int nTheta, int nPhi, int r, int g, int b, int a, float flDuration) = 0;
 	virtual void AddTriangleOverlay(const Vector& p1, const Vector& p2, const Vector& p3, int r, int g, int b, int a, bool noDepthTest, float duration) = 0;
 	virtual void AddLineOverlay(const Vector& origin, const Vector& dest, int r, int g, int b, bool noDepthTest, float duration) = 0;
-	virtual void AddTextOverlay(const Vector& origin, float duration, const char *format, ...) = 0;
-	virtual void AddTextOverlay(const Vector& origin, int line_offset, float duration, const char *format, ...) = 0;
-	virtual void AddScreenTextOverlay(float flXPos, float flYPos, float flDuration, int r, int g, int b, int a, const char *text) = 0;
-	virtual void AddSweptBoxOverlay(const Vector& start, const Vector& end, const Vector& mins, const Vector& max, const Vector & angles, int r, int g, int b, int a, float flDuration) = 0;
+	virtual void AddTextOverlay(const Vector& origin, float duration, const char* format, ...) = 0;
+	virtual void AddTextOverlay(const Vector& origin, int line_offset, float duration, const char* format, ...) = 0;
+	virtual void AddScreenTextOverlay(float flXPos, float flYPos, float flDuration, int r, int g, int b, int a, const char* text) = 0;
+	virtual void AddSweptBoxOverlay(const Vector& start, const Vector& end, const Vector& mins, const Vector& max, const Vector& angles, int r, int g, int b, int a, float flDuration) = 0;
 	virtual void AddGridOverlay(const Vector& origin) = 0;
 	virtual void AddCoordFrameOverlay(const matrix3x4& frame, float flScale, int vColorTable[3][3] = NULL) = 0;
 
 	virtual int ScreenPosition(const Vector& point, Vector& screen) = 0;
 	virtual int ScreenPosition(float flXPos, float flYPos, Vector& screen) = 0;
 
-	virtual void *GetFirst(void) = 0;
-	virtual void *GetNext(void *current) = 0;
+	virtual void* GetFirst(void) = 0;
+	virtual void* GetNext(void* current) = 0;
 	virtual void ClearDeadOverlays(void) = 0;
 	virtual void ClearAllOverlays() = 0;
 
-	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, float r, float g, float b, float alpha, const char *format, ...) = 0;
-	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, int r, int g, int b, int a, const char *format, ...) = 0;
+	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, float r, float g, float b, float alpha, const char* format, ...) = 0;
+	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, int r, int g, int b, int a, const char* format, ...) = 0;
 
 	virtual void AddLineOverlayAlpha(const Vector& origin, const Vector& dest, int r, int g, int b, int a, bool noDepthTest, float duration) = 0;
 	virtual void AddBoxOverlay2(const Vector& origin, const Vector& mins, const Vector& max, Vector const& orientation, const Color& faceColor, const Color& edgeColor, float duration) = 0;
@@ -254,7 +253,6 @@ public:
 		*this = src;
 	}
 
-
 	int        command_number;
 	int        tick_count;
 	Vector  viewangles;
@@ -295,12 +293,12 @@ public:
 
 typedef unsigned long CRC32_t;
 
-void CRC32_Init(CRC32_t *pulCRC);
-void CRC32_ProcessBuffer(CRC32_t *pulCRC, const void *p, int len);
-void CRC32_Final(CRC32_t *pulCRC);
+void CRC32_Init(CRC32_t* pulCRC);
+void CRC32_ProcessBuffer(CRC32_t* pulCRC, const void* p, int len);
+void CRC32_Final(CRC32_t* pulCRC);
 CRC32_t	CRC32_GetTableEntry(unsigned int slot);
 
-inline CRC32_t CRC32_ProcessSingleBuffer(const void *p, int len)
+inline CRC32_t CRC32_ProcessSingleBuffer(const void* p, int len)
 {
 	CRC32_t crc;
 
@@ -316,13 +314,13 @@ inline CRC32_t CRC32_ProcessSingleBuffer(const void *p, int len)
 class CInput
 {
 public:
-	void*               pvftable;                     //0x00
+	void* pvftable;                     //0x00
 	bool                m_fTrackIRAvailable;          //0x04
 	bool                m_fMouseInitialized;          //0x05
 	bool                m_fMouseActive;               //0x06
 	bool                m_fJoystickAdvancedInit;      //0x07
 	char                pad_0x08[0x2C];               //0x08
-	void*               m_pKeys;                      //0x34
+	void* m_pKeys;                      //0x34
 	char                pad_0x38[0x64];               //0x38
 	int					pad_0x41;
 	int					pad_0x42;
@@ -341,7 +339,7 @@ public:
 	float               m_flLastForwardMove;          //0xDC
 	int                 m_nClearInputState;           //0xE0
 	char                pad_0xE4[0x8];                //0xE4
-	CUserCmd*           m_pCommands;                  //0xEC
+	CUserCmd* m_pCommands;                  //0xEC
 													  //CVerifiedUserCmd*   m_pVerifiedCommands;          //0xF0
 	class CUserCmd
 	{
@@ -414,7 +412,7 @@ public:
 	float    interpolation_amount;
 	int      simTicksThisFrame;
 	int      network_protocol;
-	void*    pSaveData;
+	void* pSaveData;
 	bool     m_bClient;
 	int      nTimestampNetworkingBase;
 	int      nTimestampRandomizeWindow;
@@ -470,7 +468,7 @@ public:
 
 struct csurface_t
 {
-	const char*             name;
+	const char* name;
 	short                   surfaceProps;
 	unsigned short  flags;
 };
@@ -488,7 +486,7 @@ public:
 	int                             hitgroup;
 	short                   physicsbone;
 	unsigned short  worldSurfaceIndex;
-	IClientEntity*               m_pEnt;
+	IClientEntity* m_pEnt;
 	int                             hitbox;
 	char shit[0x24];
 };
@@ -534,20 +532,20 @@ public:
 class IEngineTrace
 {
 public:
-	int	GetPointContents(const Vector &vecAbsPosition, int contentsMask = MASK_ALL, IClientEntity** ppEntity = NULL)
+	int	GetPointContents(const Vector& vecAbsPosition, int contentsMask = MASK_ALL, IClientEntity** ppEntity = NULL)
 	{
 		typedef int(__thiscall* fnGetPointContents)(void*, const Vector&, int, IClientEntity**);
 		return call_vfunc<fnGetPointContents>(this, 0)(this, vecAbsPosition, contentsMask, ppEntity);
 	}
 
-	void TraceRay(const Ray_t &ray, unsigned int fMask, ITraceFilter* pTraceFilter, trace_t* pTrace)
+	void TraceRay(const Ray_t& ray, unsigned int fMask, ITraceFilter* pTraceFilter, trace_t* pTrace)
 	{
 		typedef void(__thiscall* fnTraceRay)(void*, const Ray_t&, unsigned int, ITraceFilter*, trace_t*);
 		call_vfunc<fnTraceRay>(this, 5)(this, ray, fMask, pTraceFilter, pTrace);
 	}
-	void EdgeTraceRay(Ray_t &ray, CTraceFilter &filt, CGameTrace &trace, bool wall = false) 
+	void EdgeTraceRay(Ray_t& ray, CTraceFilter& filt, CGameTrace& trace, bool wall = false)
 	{
-		typedef void(__thiscall *OrigFn)(void *, Ray_t &, unsigned int, CTraceFilter &, CGameTrace &);
+		typedef void(__thiscall* OrigFn)(void*, Ray_t&, unsigned int, CTraceFilter&, CGameTrace&);
 		call_vfunc<OrigFn>(this, 5)(this, ray, wall ? 0x200400B : 0x46004003, filt, trace);				// 0x46004003 0x4600400B
 	}
 };
@@ -576,12 +574,12 @@ struct mstudiohitboxset_t
 	inline char* const              GetName(void) const { return ((char*)this) + sznameindex; }
 	int                                             numhitboxes;
 	int                                             hitboxindex;
-	inline mstudiobbox_t*   GetHitbox(int i) const { return (mstudiobbox_t*)(((byte*)this) + hitboxindex) + i; };
+	inline mstudiobbox_t* GetHitbox(int i) const { return (mstudiobbox_t*)(((byte*)this) + hitboxindex) + i; };
 };
 struct mstudiobone_t
 {
 	int                                     sznameindex;
-	inline char * const GetName(void) const { return ((char *)this) + sznameindex; }
+	inline char* const GetName(void) const { return ((char*)this) + sznameindex; }
 	int                                     parent;
 	int                                     bonecontroller[6];
 
@@ -597,9 +595,9 @@ struct mstudiobone_t
 	int                                     proctype;
 	int                                     procindex;              // procedural rule
 	mutable int                     physicsbone;    // index into physically simulated bone
-	inline void *           GetProcedure() const { if (procindex == 0) return NULL; else return  (void *)(((byte *)this) + procindex); };
+	inline void* GetProcedure() const { if (procindex == 0) return NULL; else return  (void*)(((byte*)this) + procindex); };
 	int                                     surfacepropidx; // index into string tablefor property name
-	inline char * const GetSurfaceProps(void) const { return ((char *)this) + surfacepropidx; }
+	inline char* const GetSurfaceProps(void) const { return ((char*)this) + surfacepropidx; }
 	int                                     contents;               // See BSPFlags.h for the contents flags
 
 	int                                     unused[8];              // remove as appropriate
@@ -613,7 +611,6 @@ struct studiohdr_t
 
 	char                            name[64];
 	int                                     length;
-
 
 	Vector                          eyeposition;
 
@@ -630,7 +627,7 @@ struct studiohdr_t
 	int                                     numbones;
 	int                                     boneindex;
 
-	inline mstudiobone_t *GetBone(int i) const { return (mstudiobone_t *)(((byte *)this) + boneindex) + i; };
+	inline mstudiobone_t* GetBone(int i) const { return (mstudiobone_t*)(((byte*)this) + boneindex) + i; };
 	//	inline mstudiobone_t *pBone(int i) const { Assert(i >= 0 && i < numbones); return (mstudiobone_t *)(((byte *)this) + boneindex) + i; };
 
 	int                                     numbonecontrollers;
@@ -716,7 +713,6 @@ struct studiohdr_t
 	int                                     keyvalueindex;
 	int                                     keyvaluesize;
 
-
 	int                                     numlocalikautoplaylocks;
 	int                                     localikautoplaylockindex;
 
@@ -726,18 +722,18 @@ struct studiohdr_t
 	int                                     numincludemodels;
 	int                                     includemodelindex;
 
-	mutable void            *virtualModel;
+	mutable void* virtualModel;
 
 	int                                     szanimblocknameindex;
 	int                                     numanimblocks;
 	int                                     animblockindex;
 
-	mutable void            *animblockModel;
+	mutable void* animblockModel;
 
 	int                                     bonetablebynameindex;
 
-	void                            *pVertexBase;
-	void                            *pIndexBase;
+	void* pVertexBase;
+	void* pIndexBase;
 
 	byte                            constdirectionallightdot;
 
@@ -770,10 +766,10 @@ struct surfaceaudioparams_t
 {
 	float    reflectivity;            // like elasticity, but how much sound should be reflected by this surface
 	float    hardnessFactor;            // like elasticity, but only affects impact sound choices
-	float    roughnessFactor;        // like friction, but only affects scrape sound choices   
+	float    roughnessFactor;        // like friction, but only affects scrape sound choices
 	float    roughThreshold;            // surface roughness > this causes "rough" scrapes, < this causes "smooth" scrapes
 	float    hardThreshold;            // surface hardness > this causes "hard" impacts, < this causes "soft" impacts
-	float    hardVelocityThreshold;    // collision velocity > this causes "hard" impacts, < this causes "soft" impacts   
+	float    hardVelocityThreshold;    // collision velocity > this causes "hard" impacts, < this causes "soft" impacts
 };
 
 struct surfacesoundnames_t
@@ -800,7 +796,6 @@ public:
 	float    flDamageModifier; //0x0010
 	unsigned short    material; //0x0014
 	char    pad01[0x3];
-
 };//Size=0x0019
 
 struct surfacedata_t
@@ -815,9 +810,9 @@ class IPhysicsSurfaceProps
 {
 public:
 
-	surfacedata_t	*GetSurfaceData(int surfaceDataIndex)
+	surfacedata_t* GetSurfaceData(int surfaceDataIndex)
 	{
-		typedef surfacedata_t*(__thiscall* fnGetSurfaceData)(void*, int);
+		typedef surfacedata_t* (__thiscall* fnGetSurfaceData)(void*, int);
 		return call_vfunc<fnGetSurfaceData>(this, 5)(this, surfaceDataIndex);
 	}
 };
@@ -825,7 +820,7 @@ public:
 class ConVar
 {
 public:
-	void SetValue(const char *value);
+	void SetValue(const char* value);
 	void SetValue(float value);
 	void SetValue(int value);
 	void SetValue(Color value);
@@ -835,27 +830,26 @@ public:
 	float						GetFloat(void) const;
 	int						GetInt(void) const;
 	Color							GetColor(void) const;
-	const char*						GetString(void) const;
+	const char* GetString(void) const;
 
 	char pad_0x0000[0x4]; //0x0000
-	ConVar* pNext; //0x0004 
-	__int32 bRegistered; //0x0008 
-	char* pszName; //0x000C 
-	char* pszHelpString; //0x0010 
-	__int32 nFlags; //0x0014 
+	ConVar* pNext; //0x0004
+	__int32 bRegistered; //0x0008
+	char* pszName; //0x000C
+	char* pszHelpString; //0x0010
+	__int32 nFlags; //0x0014
 	char pad_0x0018[0x4]; //0x0018
-	ConVar* pParent; //0x001C 
-	char* pszDefaultValue; //0x0020 
-	char* strString; //0x0024 
-	__int32 StringLength; //0x0028 
-	float fValue; //0x002C 
-	__int32 nValue; //0x0030 
-	__int32 bHasMin; //0x0034 
-	float fMinVal; //0x0038 
-	__int32 bHasMax; //0x003C 
-	float fMaxVal; //0x0040 
-	void* fnChangeCallback; //0x0044 
-
+	ConVar* pParent; //0x001C
+	char* pszDefaultValue; //0x0020
+	char* strString; //0x0024
+	__int32 StringLength; //0x0028
+	float fValue; //0x002C
+	__int32 nValue; //0x0030
+	__int32 bHasMin; //0x0034
+	float fMinVal; //0x0038
+	__int32 bHasMax; //0x003C
+	float fMaxVal; //0x0040
+	void* fnChangeCallback; //0x0044
 };//Size=0x0048
 
 class SpoofedConvar {
@@ -937,10 +931,10 @@ class ICVar : public IAppSystem
 {
 public:
 	virtual void			func10() = 0;
-	virtual void			RegisterConCommand(ConVar *pCommandBase) = 0;
-	virtual void			UnregisterConCommand(ConVar *pCommandBase) = 0;
+	virtual void			RegisterConCommand(ConVar* pCommandBase) = 0;
+	virtual void			UnregisterConCommand(ConVar* pCommandBase) = 0;
 	virtual void			func13() = 0;
-	virtual ConVar			*FindVar(const char *var_name) = 0;
+	virtual ConVar* FindVar(const char* var_name) = 0;
 	//	virtual void            ConsoleColorPrintf(const Color& clr, const char *pFormat, ...) const = 0;
 	virtual void			func15() = 0;
 	virtual void			func16() = 0;
@@ -949,9 +943,9 @@ public:
 	virtual void			func19() = 0;
 	virtual void			func20() = 0;
 
-	void const ConsoleColorPrintf(const Color& clr, const char *pFormat, ...)
+	void const ConsoleColorPrintf(const Color& clr, const char* pFormat, ...)
 	{
-		typedef void(__cdecl *OriginalFn)(void*, const Color&, const char *, ...);
+		typedef void(__cdecl* OriginalFn)(void*, const Color&, const char*, ...);
 
 		if (pFormat == nullptr)
 			return;
@@ -972,7 +966,7 @@ class CTraceFilterNoPlayer : public CTraceFilter
 {
 public:
 	CTraceFilterNoPlayer() {}
-	virtual bool ShouldHitEntity(IClientEntity *pServerEntity, int contentsMask)
+	virtual bool ShouldHitEntity(IClientEntity* pServerEntity, int contentsMask)
 	{
 		if (pServerEntity)
 			return !pServerEntity->IsPlayer();
@@ -1106,7 +1100,7 @@ enum ButtonCode_t
 	MOUSE_MIDDLE,
 	MOUSE_4,
 	MOUSE_5,
-	MOUSE_WHEEL_UP,		// A fake button which is 'pressed' and 'released' when the wheel is moved up 
+	MOUSE_WHEEL_UP,		// A fake button which is 'pressed' and 'released' when the wheel is moved up
 	MOUSE_WHEEL_DOWN,	// A fake button which is 'pressed' and 'released' when the wheel is moved down
 
 	MOUSE_LAST = MOUSE_WHEEL_DOWN,
@@ -1126,36 +1120,36 @@ public:
 
 inline void IInputSystem::EnableInput(bool bEnable)
 {
-	typedef void(__thiscall * OriginalFn)(void*, bool);
+	typedef void(__thiscall* OriginalFn)(void*, bool);
 	return call_vfunc<OriginalFn>(this, 11)(this, bEnable);
 }
 
 inline void IInputSystem::ResetInputState()
 {
-	typedef void(__thiscall * OriginalFn)(void*);
+	typedef void(__thiscall* OriginalFn)(void*);
 	return call_vfunc<OriginalFn>(this, 39)(this);
 }
 
 inline bool IInputSystem::IsButtonDown(ButtonCode_t code)
 {
-	typedef bool(__thiscall * OriginalFn)(void*, ButtonCode_t);
+	typedef bool(__thiscall* OriginalFn)(void*, ButtonCode_t);
 	return call_vfunc<OriginalFn>(this, 15)(this, code);
 }
 
 inline void IInputSystem::GetCursorPosition(int* m_pX, int* m_pY)
 {
-	typedef void(__thiscall * OriginalFn)(void*, int*, int*);
+	typedef void(__thiscall* OriginalFn)(void*, int*, int*);
 	return call_vfunc<OriginalFn>(this, 56)(this, m_pX, m_pY);
 }
 
 inline ButtonCode_t IInputSystem::VirtualKeyToButtonCode(int nVirtualKey)
 {
-	typedef ButtonCode_t(__thiscall * OriginalFn)(void*, int);
+	typedef ButtonCode_t(__thiscall* OriginalFn)(void*, int);
 	return call_vfunc<OriginalFn>(this, 44)(this, nVirtualKey);
 }
 
 inline int IInputSystem::ButtonCodeToVirtualKey(ButtonCode_t code)
 {
-	typedef int(__thiscall * OriginalFn)(void*, ButtonCode_t);
+	typedef int(__thiscall* OriginalFn)(void*, ButtonCode_t);
 	return call_vfunc<OriginalFn>(this, 45)(this, code);
 }

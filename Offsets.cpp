@@ -183,5 +183,4 @@ namespace Offsets
 		DWORD dwGetPlayerCompRank;
 		DWORD dwIsReady;
 	};
-
 };

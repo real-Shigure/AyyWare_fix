@@ -11,7 +11,7 @@ void CVisuals::Init()
 }
 
 // Don't really need to do anything in here
-void CVisuals::Move(CUserCmd *pCmd, bool &bSendPacket) {}
+void CVisuals::Move(CUserCmd* pCmd, bool& bSendPacket) {}
 
 // Main ESP Drawing loop
 void CVisuals::Draw()
@@ -23,8 +23,6 @@ void CVisuals::Draw()
 	// Recoil Crosshair
 	if (Menu::Window.VisualsTab.OtherRecoilCrosshair.GetIndex())
 		DrawRecoilCrosshair();
-
-	
 }
 
 // Draw a basic crosshair
@@ -46,7 +44,7 @@ void CVisuals::DrawRecoilCrosshair()
 	if (Menu::Window.RageBotTab.AccuracyRecoil.GetState())
 		return;
 
-	IClientEntity *pLocal = hackManager.pLocal();
+	IClientEntity* pLocal = hackManager.pLocal();
 
 	// Get the view with the recoil
 	Vector ViewAngles;
