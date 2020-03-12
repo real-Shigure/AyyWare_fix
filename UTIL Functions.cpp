@@ -48,13 +48,12 @@ DWORD GameUtils::FindPattern1(std::string moduleName, std::string pattern)
 	return NULL;
 }
 
-void UTIL_TraceLine(const Vector& vecAbsStart, const Vector& vecAbsEnd, unsigned int mask,const IClientEntity *ignore, int collisionGroup, trace_t *ptr)
+void UTIL_TraceLine(const Vector& vecAbsStart, const Vector& vecAbsEnd, unsigned int mask, const IClientEntity* ignore, int collisionGroup, trace_t* ptr)
 {
 	typedef int(__fastcall* UTIL_TraceLine_t)(const Vector&, const Vector&, unsigned int, const IClientEntity*, int, trace_t*);
 	static UTIL_TraceLine_t TraceLine = (UTIL_TraceLine_t)Utilities::Memory::FindPattern("client_panorama.dll", (PBYTE)"\x55\x8B\xEC\x83\xE4\xF0\x83\xEC\x7C\x56\x52", "xxxxxxxxxxx");
 	TraceLine(vecAbsStart, vecAbsEnd, mask, ignore, collisionGroup, ptr);
 }
-
 
 void UTIL_ClipTraceToPlayers(const Vector& vecAbsStart, const Vector& vecAbsEnd, unsigned int mask, ITraceFilter* filter, trace_t* tr)
 {
@@ -67,13 +66,13 @@ void UTIL_ClipTraceToPlayers(const Vector& vecAbsStart, const Vector& vecAbsEnd,
 	{
 		MOV		EAX, filter
 		LEA		ECX, tr
-			PUSH	ECX
-			PUSH	EAX
-			PUSH	mask
-			LEA		EDX, vecAbsEnd
-			LEA		ECX, vecAbsStart
-			CALL	dwAddress
-			ADD		ESP, 0xC
+		PUSH	ECX
+		PUSH	EAX
+		PUSH	mask
+		LEA		EDX, vecAbsEnd
+		LEA		ECX, vecAbsStart
+		CALL	dwAddress
+		ADD		ESP, 0xC
 	}
 }
 
@@ -107,7 +106,7 @@ bool TraceToExit(Vector& end, trace_t& tr, Vector start, Vector vEnd, trace_t* t
 	return pUTIL_GetAchievementEventMask();
 }*/
 
-void GameUtils::NormaliseViewAngle(Vector &angle)
+void GameUtils::NormaliseViewAngle(Vector& angle)
 {
 	if (!Menu::Window.MiscTab.OtherSafeMode.GetState())
 	{
@@ -119,7 +118,6 @@ void GameUtils::NormaliseViewAngle(Vector &angle)
 		while (angle.y > 180) angle.y -= 360;
 		while (angle.x <= -180) angle.x += 360;
 		while (angle.x > 180) angle.x -= 360;
-
 
 		if (angle.x > 89) angle.x = 89;
 		if (angle.x < -89) angle.x = -89;
@@ -150,7 +148,7 @@ bool GameUtils::IsVisible(IClientEntity* pLocal, IClientEntity* pEntity, int Bon
 	Vector start = pLocal->GetOrigin() + pLocal->GetViewOffset();
 	Vector end = GetHitboxPosition(pEntity, BoneID);//pEntity->GetBonePos(BoneID);
 	char shit3[32];
-	
+
 	//Interfaces::Trace->TraceRay(Ray,MASK_SOLID, NULL/*&filter*/, &Trace);
 	UTIL_TraceLine(start, end, MASK_SOLID, pLocal, 0, &Trace);
 
@@ -165,13 +163,12 @@ bool GameUtils::IsVisible(IClientEntity* pLocal, IClientEntity* pEntity, int Bon
 	}
 
 	return false;
-
 }
 
 bool GameUtils::IsBallisticWeapon(void* weapon)
 {
 	if (weapon == nullptr) return false;
-	CBaseCombatWeapon *pWeapon = (CBaseCombatWeapon*)weapon;
+	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)weapon;
 	int id = *pWeapon->m_AttributeManager()->m_Item()->ItemDefinitionIndex();
 	return !(id >= WEAPON_KNIFE && id <= WEAPON_KNIFE_T || id == 0 || id >= WEAPON_BAYONET);
 }
@@ -179,7 +176,7 @@ bool GameUtils::IsBallisticWeapon(void* weapon)
 bool GameUtils::IsPistol(void* weapon)
 {
 	if (weapon == nullptr) return false;
-	CBaseCombatWeapon *pWeapon = (CBaseCombatWeapon*)weapon;
+	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)weapon;
 	int id = *pWeapon->m_AttributeManager()->m_Item()->ItemDefinitionIndex();
 	static const std::vector<int> v = { WEAPON_DEAGLE,WEAPON_CZ75A,WEAPON_ELITE,WEAPON_USP_SILENCER,WEAPON_P250,WEAPON_HKP2000, WEAPON_TEC9,WEAPON_REVOLVER,WEAPON_FIVESEVEN,WEAPON_GLOCK };
 	return (std::find(v.begin(), v.end(), id) != v.end());
@@ -188,7 +185,7 @@ bool GameUtils::IsPistol(void* weapon)
 bool GameUtils::IsSniper(void* weapon)
 {
 	if (weapon == nullptr) return false;
-	CBaseCombatWeapon *pWeapon = (CBaseCombatWeapon*)weapon;
+	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)weapon;
 	int id = *pWeapon->m_AttributeManager()->m_Item()->ItemDefinitionIndex();
 	static const std::vector<int> v = { WEAPON_AWP,WEAPON_SSG08,WEAPON_G3SG1,WEAPON_SCAR20 };
 	return (std::find(v.begin(), v.end(), id) != v.end());
@@ -197,20 +194,20 @@ bool GameUtils::IsSniper(void* weapon)
 bool GameUtils::IsScopedWeapon(void* weapon)
 {
 	if (weapon == nullptr) return false;
-	CBaseCombatWeapon *pWeapon = (CBaseCombatWeapon*)weapon;
+	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)weapon;
 	int id = *pWeapon->m_AttributeManager()->m_Item()->ItemDefinitionIndex();
 	static const std::vector<int> v = { WEAPON_AWP,WEAPON_SSG08,WEAPON_G3SG1,WEAPON_SCAR20, WEAPON_AUG, WEAPON_SG556 };
 	return (std::find(v.begin(), v.end(), id) != v.end());
 }
 
-void SayInChat(const char *text)
+void SayInChat(const char* text)
 {
 	char buffer[250];
 	sprintf_s(buffer, "say \"%s\"", text);
 	Interfaces::Engine->ClientCmd_Unrestricted(buffer);
 }
 
-void SayInTeamChat(const char *text)
+void SayInTeamChat(const char* text)
 {
 	char buffer[250];
 	sprintf_s(buffer, "say_team \"%s\"", text);
@@ -234,7 +231,7 @@ Vector GetHitboxPosition(IClientEntity* pEntity, int Hitbox)
 			VectorTransform(hitbox->bbmin, matrix[hitbox->bone], vMin);
 			VectorTransform(hitbox->bbmax, matrix[hitbox->bone], vMax);
 
-			vCenter = ((vMin + vMax) *0.5f);
+			vCenter = ((vMin + vMax) * 0.5f);
 
 			return vCenter;
 		}
@@ -242,7 +239,6 @@ Vector GetHitboxPosition(IClientEntity* pEntity, int Hitbox)
 
 	return Vector(0, 0, 0);
 }
-
 
 /*bool GetBestPoint(IClientEntity* pEntity, Hitbox* hitbox, BestPoint *point)
 {
@@ -296,7 +292,7 @@ Vector GetHitboxPosition(IClientEntity* pEntity, int Hitbox)
 		mstudiobbox_t* hitbox = set->GetHitbox(Hitbox);
 
 		if (hitbox)
-		{	
+		{
 			Vector points[9] =
 			{
 				((hitbox->bbmin + hitbox->bbmax) * .5f),
@@ -384,7 +380,6 @@ Vector GetHitboxPosition(IClientEntity* pEntity, int Hitbox)
 	if (!target->SetupBones(matrix, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0))
 		return false;
 
-
 	studiohdr_t *hdr = I::ModelInfo->GetStudioModel(target->GetModel());
 
 	if (!hdr)
@@ -413,7 +408,6 @@ Vector GetHitboxPosition(IClientEntity* pEntity, int Hitbox)
 		Vector(bbmin.x, bbmin.y, bbmax.z),
 		Vector(bbmax.x, bbmin.y, bbmax.z)
 	};
-
 
 	for (int index = 0; index <= 8; ++index)
 	{
@@ -488,7 +482,7 @@ int GameUtils::GetPlayerCompRank(IClientEntity* pEntity) // 0x75671f7f is crc32 
 {
 	DWORD m_iCompetitiveRanking = NetVar.GetNetVar(0x75671F7F); //NetVar.GetNetVar(0x75671F7F);
 	DWORD GameResources = *(DWORD*)(Utilities::Memory::FindPattern("client_panorama.dll", (PBYTE)"\x8B\x3D\x00\x00\x00\x00\x85\xFF\x0F\x84\x00\x00\x00\x00\x81\xC7", "xx????xxxx????xx") + 0x2);
-	
+
 	return *(int*)((DWORD)GameResources + 0x1A44 + (int)pEntity->GetIndex() * 4);
 }
 

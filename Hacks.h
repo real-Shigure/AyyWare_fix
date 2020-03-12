@@ -15,14 +15,14 @@ namespace Hacks
 {
 	void SetupHacks();
 	void DrawHacks();
-	void MoveHacks(CUserCmd *pCmd, bool &bSendPacket);
+	void MoveHacks(CUserCmd* pCmd, bool& bSendPacket);
 }
 
 class CHack
 {
 public:
 	virtual void Draw() = 0;
-	virtual void Move(CUserCmd *pCmd, bool &bSendPacket) = 0;
+	virtual void Move(CUserCmd* pCmd, bool& bSendPacket) = 0;
 	virtual void Init() = 0;
 };
 
@@ -33,11 +33,11 @@ public:
 	void Ready();
 
 	void Draw();
-	void Move(CUserCmd *pCmd,bool &bSendPacket);
-	IClientEntity *pLocal();
+	void Move(CUserCmd* pCmd, bool& bSendPacket);
+	IClientEntity* pLocal();
 private:
 	std::vector<CHack*> Hacks;
-	IClientEntity *pLocalInstance;
+	IClientEntity* pLocalInstance;
 	bool IsReady;
 };
 

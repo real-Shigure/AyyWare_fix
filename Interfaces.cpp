@@ -7,7 +7,7 @@ Syn's AyyWare Framework 2015
 
 //SDK Specific Definitions
 typedef void* (__cdecl* CreateInterface_t)(const char*, int*);
-typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
+typedef void* (*CreateInterfaceFn)(const char* pName, int* pReturnCode);
 
 //Some globals for later
 CreateInterface_t EngineFactory = NULL; // These are used to store the individual
@@ -21,7 +21,6 @@ CreateInterface_t InputSystemPointer = NULL;
 
 void Interfaces::Initialise()
 {
-	
 	//Get function pointers to the CreateInterface function of each module
 	EngineFactory = (CreateInterface_t)GetProcAddress((HMODULE)Offsets::Modules::Engine, "CreateInterface");
 	ClientFactory = (CreateInterface_t)GetProcAddress((HMODULE)Offsets::Modules::Client, "CreateInterface");
@@ -38,7 +37,7 @@ void Interfaces::Initialise()
 	char* VGUISurfaceInterfaceName = (char*)Utilities::Memory::FindTextPattern("vguimatsurface.dll", "VGUI_Surface0");
 	char* EntityListInterfaceName = (char*)Utilities::Memory::FindTextPattern("client_panorama.dll", "VClientEntityList0");
 	char* EngineDebugThingInterface = (char*)Utilities::Memory::FindTextPattern("engine.dll", "VDebugOverlay0");
-	char* EngineClientInterfaceName = (char*)Utilities::Memory::FindTextPattern("engine.dll","VEngineClient0");
+	char* EngineClientInterfaceName = (char*)Utilities::Memory::FindTextPattern("engine.dll", "VEngineClient0");
 	char* ClientPredictionInterface = (char*)Utilities::Memory::FindTextPattern("client_panorama.dll", "VClientPrediction0");
 	char* MatSystemInterfaceName = (char*)Utilities::Memory::FindTextPattern("materialsystem.dll", "VMaterialSystem0");
 	char* EngineRenderViewInterface = (char*)Utilities::Memory::FindTextPattern("engine.dll", "VEngineRenderView0");
@@ -72,10 +71,10 @@ void Interfaces::Initialise()
 	// Search through the first entry of the Client VTable
 	// The initializer contains a pointer to the 'GlobalsVariables' Table
 
-	Globals = **(CGlobalVarsBase * **)((*(DWORD * *)Interfaces::Client)[0] + 0x1B); //psilent fix
+	Globals = **(CGlobalVarsBase***)((*(DWORD**)Interfaces::Client)[0] + 0x1B); //psilent fix
 
 	PDWORD pdwClientVMT = *(PDWORD*)Client;
-	pInput = *(CInput * *)(Utilities::Memory::FindPatternV2("client_panorama.dll", "B9 ? ? ? ? F3 0F 11 04 24 FF 50 10") + 1);
+	pInput = *(CInput**)(Utilities::Memory::FindPatternV2("client_panorama.dll", "B9 ? ? ? ? F3 0F 11 04 24 FF 50 10") + 1);
 
 	Utilities::Log("Interfaces Ready");
 }
@@ -90,16 +89,15 @@ namespace Interfaces
 	ISurface* Surface;
 	IVDebugOverlay* DebugOverlay;
 	IClientModeShared* ClientMode;
-	CGlobalVarsBase *Globals;
-	DWORD *Prediction;
+	CGlobalVarsBase* Globals;
+	DWORD* Prediction;
 	CMaterialSystem* MaterialSystem;
 	CVRenderView* RenderView;
 	IVModelRender* ModelRender;
 	CModelInfo* ModelInfo;
 	IEngineTrace* Trace;
 	IPhysicsSurfaceProps* PhysProps;
-	ICVar *CVar;
+	ICVar* CVar;
 	CInput* pInput;
 	IInputSystem* InputSystem;
-
 };

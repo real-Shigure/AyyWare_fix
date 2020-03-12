@@ -1,4 +1,3 @@
-
 #include "Dumping.h"
 
 #define DUMPIDTOFILE

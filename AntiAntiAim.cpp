@@ -6,13 +6,13 @@
 
 // Shad0ws Yaw fix
 // (FIX ME UP LATER)
-void FixY(const CRecvProxyData *pData, void *pStruct, void *pOut)
+void FixY(const CRecvProxyData* pData, void* pStruct, void* pOut)
 {
 	static Vector vLast[65];
 	static bool bShotLastTime[65];
 	static bool bJitterFix[65];
 
-	float *flPitch = (float*)((DWORD)pOut - 4);
+	float* flPitch = (float*)((DWORD)pOut - 4);
 	float flYaw = pData->m_Value.m_Float;
 	bool bHasAA;
 	bool bSpinbot;
@@ -69,7 +69,6 @@ void FixY(const CRecvProxyData *pData, void *pStruct, void *pOut)
 
 		vLast[((IClientEntity*)(pStruct))->GetIndex()].y = flYaw;
 
-
 		bool bTmp = bJitterFix[((IClientEntity*)(pStruct))->GetIndex()];
 
 		bJitterFix[((IClientEntity*)(pStruct))->GetIndex()] = (flYaw >= 180.0f && flYaw <= 360.0f);
@@ -122,14 +121,14 @@ void FixX(const CRecvProxyData* pData, void* pStruct, void* pOut) // Clamp other
 		if (pData->m_Value.m_Float > 180.0f)
 			*ang -= 360.0f;
 		else if (pData->m_Value.m_Float < -180.0f)
-			*ang += 360.0f; 
+			*ang += 360.0f;
 		break;
 	}
 }
 
 RecvVarProxyFn oRecvnModelIndex;
 
-void Hooked_RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOut)
+void Hooked_RecvProxy_Viewmodel(CRecvProxyData* pData, void* pStruct, void* pOut)
 {
 	// Get the knife view model id's
 	static int default_t = Interfaces::ModelInfo->GetModelIndex("models/weapons/v_knife_default_t.mdl");
@@ -158,16 +157,16 @@ void Hooked_RecvProxy_Viewmodel(CRecvProxyData *pData, void *pStruct, void *pOut
 
 void ApplyAAAHooks()
 {
-	ClientClass *pClass = Interfaces::Client->GetAllClasses();
+	ClientClass* pClass = Interfaces::Client->GetAllClasses();
 	while (pClass)
 	{
-		const char *pszName = pClass->m_pRecvTable->m_pNetTableName;
+		const char* pszName = pClass->m_pRecvTable->m_pNetTableName;
 		if (!strcmp(pszName, "DT_CSPlayer"))
 		{
 			for (int i = 0; i < pClass->m_pRecvTable->m_nProps; i++)
 			{
-				RecvProp *pProp = &(pClass->m_pRecvTable->m_pProps[i]);
-				const char *name = pProp->m_pVarName;
+				RecvProp* pProp = &(pClass->m_pRecvTable->m_pProps[i]);
+				const char* name = pProp->m_pVarName;
 
 				// Pitch Fix
 				if (!strcmp(name, "m_angEyeAngles[0]"))
@@ -187,8 +186,8 @@ void ApplyAAAHooks()
 		{
 			for (int i = 0; i < pClass->m_pRecvTable->m_nProps; i++)
 			{
-				RecvProp *pProp = &(pClass->m_pRecvTable->m_pProps[i]);
-				const char *name = pProp->m_pVarName;
+				RecvProp* pProp = &(pClass->m_pRecvTable->m_pProps[i]);
+				const char* name = pProp->m_pVarName;
 
 				// Knives
 				if (!strcmp(name, "m_nModelIndex"))

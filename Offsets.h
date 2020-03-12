@@ -85,7 +85,7 @@ namespace Offsets
 
 		extern DWORD ModelInfo_GetModelName;
 		extern DWORD ModelInfo_GetStudiomodel;
-		
+
 		extern DWORD RenderView_SetBlend;
 		extern DWORD RenderView_SetColorModulation;
 
@@ -102,5 +102,4 @@ namespace Offsets
 		extern DWORD dwGetPlayerCompRank;
 		extern DWORD dwIsReady;
 	};
-
 };

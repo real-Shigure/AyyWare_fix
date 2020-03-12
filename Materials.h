@@ -11,13 +11,12 @@ Syn's AyyWare Framework 2015
 #include "MiscClasses.h"
 #include "Vector2D.h"
 
-
 class IMaterial
 {
 public:
 	const char* GetName()
 	{
-		typedef const char*(__thiscall* oGetName)(PVOID);
+		typedef const char* (__thiscall* oGetName)(PVOID);
 		return call_vfunc< oGetName >(this, Offsets::VMT::Material_GetName)(this);
 	}
 
@@ -55,15 +54,15 @@ public:
 class CMaterialSystem
 {
 public:
-	IMaterial* FindMaterial(char const* pMaterialName, const char *pTextureGroupName, bool complain = true, const char *pComplainPrefix = NULL)
+	IMaterial* FindMaterial(char const* pMaterialName, const char* pTextureGroupName, bool complain = true, const char* pComplainPrefix = NULL)
 	{
-		typedef IMaterial*(__thiscall* oFindMaterial)(PVOID, char const*, char const*, bool, char const*);
+		typedef IMaterial* (__thiscall* oFindMaterial)(PVOID, char const*, char const*, bool, char const*);
 		return call_vfunc< oFindMaterial >(this, Offsets::VMT::MaterialSystem_FindMaterial)(this, pMaterialName, pTextureGroupName, complain, pComplainPrefix);
 	}
 
-	IMaterial*	CreateMaterial(const char *pMaterialName, KeyValues *pVMTKeyValues)
+	IMaterial* CreateMaterial(const char* pMaterialName, KeyValues* pVMTKeyValues)
 	{
-		typedef IMaterial* (__thiscall* oCreateMaterial)(PVOID, const char *, KeyValues*);
+		typedef IMaterial* (__thiscall* oCreateMaterial)(PVOID, const char*, KeyValues*);
 		return call_vfunc<oCreateMaterial>(this, Offsets::VMT::MaterialSystem_CreateMaterial)(this, pMaterialName, pVMTKeyValues);
 	}
 };
@@ -71,31 +70,30 @@ public:
 class IVModelRender
 {
 public:
-	void ForcedMaterialOverride(IMaterial *material, OverrideType_t type = OVERRIDE_NORMAL, int idk = NULL)
+	void ForcedMaterialOverride(IMaterial* material, OverrideType_t type = OVERRIDE_NORMAL, int idk = NULL)
 	{
 		typedef void(__thiscall* Fn)(void*, IMaterial*, OverrideType_t, int);
 		return call_vfunc<Fn>(this, Offsets::VMT::ModelRender_ForcedMaterialOverride)(this, material, type, idk);
 	}
-
 };
 
 class CModelInfo
 {
 public:
-	int	GetModelIndex(const char *name)
+	int	GetModelIndex(const char* name)
 	{
-		typedef int (__thiscall* oGetModelName)(PVOID, const char *);
+		typedef int(__thiscall* oGetModelName)(PVOID, const char*);
 		return call_vfunc< oGetModelName >(this, 2)(this, name);
 	}
-	const char *GetModelName(const model_t *mod)
+	const char* GetModelName(const model_t* mod)
 	{
-		typedef const char *(__thiscall* oGetModelName)(PVOID, const model_t*);
+		typedef const char* (__thiscall* oGetModelName)(PVOID, const model_t*);
 		return call_vfunc< oGetModelName >(this, Offsets::VMT::ModelInfo_GetModelName)(this, mod);
 	}
 
-	studiohdr_t	*GetStudiomodel(const model_t *mod)
+	studiohdr_t* GetStudiomodel(const model_t* mod)
 	{
-		typedef studiohdr_t *(__stdcall* oGetStudiomodel)(const model_t*);
+		typedef studiohdr_t* (__stdcall* oGetStudiomodel)(const model_t*);
 		return call_vfunc< oGetStudiomodel >(this, Offsets::VMT::ModelInfo_GetStudiomodel)(mod);
 	}
 };

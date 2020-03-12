@@ -19,7 +19,7 @@ CGUI::CGUI()
 {
 }
 
-// Draws all windows 
+// Draws all windows
 void CGUI::Draw()
 {
 	bool ShouldDrawCursor = false;
@@ -127,7 +127,6 @@ void CGUI::Update()
 								}
 								window->SelectedTab = window->Tabs[iTab];
 							}
-
 						}
 						else
 							bCheckWidgetClicks = true;
@@ -154,8 +153,7 @@ void CGUI::Update()
 				}
 			}
 
-
-			// Controls 
+			// Controls
 			if (window->SelectedTab != nullptr)
 			{
 				// Focused widget
@@ -215,7 +213,6 @@ void CGUI::Update()
 								window->IsFocusingControl = false;
 								window->FocusedControl = nullptr;
 							}
-
 						}
 					}
 				}
@@ -232,7 +229,7 @@ void CGUI::Update()
 	}
 }
 
-// Returns 
+// Returns
 bool CGUI::GetKeyPress(unsigned int key)
 {
 	if (keys[key] == true && oldKeys[key] == false)
@@ -285,15 +282,15 @@ bool CGUI::DrawWindow(CWindow* window)
 		int TabSize = (window->m_iWidth - 4 - 12) / TabCount;
 		for (int i = 0; i < TabCount; i++)
 		{
-			RECT TabArea = { window->m_x + 8 + (i*TabSize), window->m_y + 1 + 27, TabSize, 29 };
-			CTab *tab = window->Tabs[i];
+			RECT TabArea = { window->m_x + 8 + (i * TabSize), window->m_y + 1 + 27, TabSize, 29 };
+			CTab* tab = window->Tabs[i];
 			if (window->SelectedTab == tab)
 			{
-				Render::GradientV(window->m_x + 8 + (i*TabSize), window->m_y + 1 + 27, TabSize, 29, Color(106, 106, 106, 255), Color(49, 42, 42, 255));
+				Render::GradientV(window->m_x + 8 + (i * TabSize), window->m_y + 1 + 27, TabSize, 29, Color(106, 106, 106, 255), Color(49, 42, 42, 255));
 			}
 			else if (IsMouseInRegion(TabArea))
 			{
-				Render::GradientV(window->m_x + 8 + (i*TabSize), window->m_y + 1 + 27, TabSize, 29, Color(106, 106, 106, 255), Color(80, 80, 80, 255));
+				Render::GradientV(window->m_x + 8 + (i * TabSize), window->m_y + 1 + 27, TabSize, 29, Color(106, 106, 106, 255), Color(80, 80, 80, 255));
 			}
 			RECT TextSize = Render::GetTextSize(Render::Fonts::MenuBold, tab->Title.c_str());
 			Render::Text(TabArea.left + (TabSize / 2) - (TextSize.right / 2), TabArea.top + 8, Color(255, 0, 0, 255), Render::Fonts::MenuBold, tab->Title.c_str());
@@ -301,8 +298,7 @@ bool CGUI::DrawWindow(CWindow* window)
 		}
 	}
 
-
-	// Controls 
+	// Controls
 	if (window->SelectedTab != nullptr)
 	{
 		// Focused widget
@@ -319,7 +315,6 @@ bool CGUI::DrawWindow(CWindow* window)
 				SkipMe = window->FocusedControl;
 			}
 		}
-
 
 		// Itterate over all the other controls
 		for (auto control : window->SelectedTab->Controls)
@@ -357,9 +352,7 @@ bool CGUI::DrawWindow(CWindow* window)
 				control->Draw(hover);
 			}
 		}
-
 	}
-
 
 	return true;
 }
@@ -375,7 +368,7 @@ void CGUI::RegisterWindow(CWindow* window)
 		{
 			if (control->Flag(UIFlags::UI_RenderFirst))
 			{
-				CControl * c = control;
+				CControl* c = control;
 				tab->Controls.erase(std::remove(tab->Controls.begin(), tab->Controls.end(), control), tab->Controls.end());
 				tab->Controls.insert(tab->Controls.begin(), control);
 			}
@@ -397,7 +390,7 @@ void CGUI::SaveWindowState(CWindow* window, std::string Filename)
 	tinyxml2::XMLDocument Doc;
 
 	// Root Element is called "ayy"
-	tinyxml2::XMLElement *Root = Doc.NewElement("ayy");
+	tinyxml2::XMLElement* Root = Doc.NewElement("ayy");
 	Doc.LinkEndChild(Root);
 
 	Utilities::Log("Saving Window %s", window->Title.c_str());
@@ -408,7 +401,7 @@ void CGUI::SaveWindowState(CWindow* window, std::string Filename)
 		for (auto Tab : window->Tabs)
 		{
 			// Add a new section for this tab
-			tinyxml2::XMLElement *TabElement = Doc.NewElement(Tab->Title.c_str());
+			tinyxml2::XMLElement* TabElement = Doc.NewElement(Tab->Title.c_str());
 			Root->LinkEndChild(TabElement);
 
 			Utilities::Log("Saving Tab %s", Tab->Title.c_str());
@@ -422,7 +415,7 @@ void CGUI::SaveWindowState(CWindow* window, std::string Filename)
 					if (Control && Control->Flag(UIFlags::UI_SaveFile) && Control->FileIdentifier.length() > 1 && Control->FileControlType)
 					{
 						// Create an element for the control
-						tinyxml2::XMLElement *ControlElement = Doc.NewElement(Control->FileIdentifier.c_str());
+						tinyxml2::XMLElement* ControlElement = Doc.NewElement(Control->FileIdentifier.c_str());
 						TabElement->LinkEndChild(ControlElement);
 
 						Utilities::Log("Saving control %s", Control->FileIdentifier.c_str());
@@ -469,7 +462,6 @@ void CGUI::SaveWindowState(CWindow* window, std::string Filename)
 	{
 		MessageBox(NULL, "Failed To Save Config File!", "AyyWare", MB_OK);
 	}
-
 }
 
 void CGUI::LoadWindowState(CWindow* window, std::string Filename)
@@ -478,7 +470,7 @@ void CGUI::LoadWindowState(CWindow* window, std::string Filename)
 	tinyxml2::XMLDocument Doc;
 	if (Doc.LoadFile(Filename.c_str()) == tinyxml2::XML_NO_ERROR)
 	{
-		tinyxml2::XMLElement *Root = Doc.RootElement();
+		tinyxml2::XMLElement* Root = Doc.RootElement();
 
 		// The root "ayy" element
 		if (Root)
@@ -489,7 +481,7 @@ void CGUI::LoadWindowState(CWindow* window, std::string Filename)
 				for (auto Tab : window->Tabs)
 				{
 					// We find the corresponding element for this tab
-					tinyxml2::XMLElement *TabElement = Root->FirstChildElement(Tab->Title.c_str());
+					tinyxml2::XMLElement* TabElement = Root->FirstChildElement(Tab->Title.c_str());
 					if (TabElement)
 					{
 						// Now we itterate the controls this tab contains
@@ -501,7 +493,7 @@ void CGUI::LoadWindowState(CWindow* window, std::string Filename)
 								if (Control && Control->Flag(UIFlags::UI_SaveFile) && Control->FileIdentifier.length() > 1 && Control->FileControlType)
 								{
 									// Get the controls element
-									tinyxml2::XMLElement *ControlElement = TabElement->FirstChildElement(Control->FileIdentifier.c_str());
+									tinyxml2::XMLElement* ControlElement = TabElement->FirstChildElement(Control->FileIdentifier.c_str());
 
 									if (ControlElement)
 									{

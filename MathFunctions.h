@@ -14,15 +14,15 @@ Syn's AyyWare Framework 2015
 #define RADPI 57.295779513082f
 #define rad(a) a * 0.01745329251
 
-void AngleVectors(const Vector &angles, Vector *forward);
-void VectorTransform(const Vector in1, float in2[3][4], Vector &out);
-void SinCos(float a, float* s, float*c);
+void AngleVectors(const Vector& angles, Vector* forward);
+void VectorTransform(const Vector in1, float in2[3][4], Vector& out);
+void SinCos(float a, float* s, float* c);
 //void SinCos1(const float rad, float &sin, float &cos);
-void VectorAngles(Vector forward, Vector &angles);
-void AngleVectors(const Vector &angles, Vector *forward, Vector *right, Vector *up);
-void Normalize(Vector &vIn, Vector &vOut);
-void CalcAngle(Vector src, Vector dst, Vector &angles);
+void VectorAngles(Vector forward, Vector& angles);
+void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* up);
+void Normalize(Vector& vIn, Vector& vOut);
+void CalcAngle(Vector src, Vector dst, Vector& angles);
 bool IsVisible(IClientEntity* pLocal, IClientEntity* pEntity, int BoneID);
 bool PointVisible(IClientEntity* pLocal, IClientEntity* pEntity, int BoneID, Vector Point);
-void CalcAngleYawOnly(Vector src, Vector dst, Vector &angles);
+void CalcAngleYawOnly(Vector src, Vector dst, Vector& angles);
 void NormalizeVector(Vector& vec);

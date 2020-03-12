@@ -1,10 +1,9 @@
-
 // Credits to Valve and Shad0w
 
 #pragma once
 
 //uncomment me if you wish to dump netvars
-//#define DUMP_NETVARS_TO_FILE 
+//#define DUMP_NETVARS_TO_FILE
 
 #include "CommonIncludes.h"
 #include <memory>
@@ -28,7 +27,7 @@ class CNetVar
 {
 public:
 	void RetrieveClasses();
-	void LogNetVar(RecvTable *table, int align);
+	void LogNetVar(RecvTable* table, int align);
 	DWORD_PTR GetNetVar(DWORD_PTR dwCRC32);
 	void HookProxies();
 private:

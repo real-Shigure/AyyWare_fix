@@ -14,7 +14,6 @@ Syn's AyyWare Framework 2015
 #include "Surface.h"
 #include "Materials.h"
 
-
 // Valve
 #include "Vector.h"
 #include "Vector2D.h"
@@ -83,4 +82,3 @@ Syn's AyyWare Framework 2015
 	WEAPON_KNIFE_BUTTERFLY = 515,
 	WEAPON_KNIFE_PUSH = 516
 };*/
-

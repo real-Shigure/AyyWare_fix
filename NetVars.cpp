@@ -1,5 +1,3 @@
-
-
 // Credits to Valve and Shad0w
 
 #include "NetVars.h"
@@ -31,7 +29,7 @@ void CNetVar::RetrieveClasses()
 	U::EnableLogFile(NETVAR_FILENAME);
 #endif
 
-	ClientClass *clientClass = Interfaces::Client->GetAllClasses();
+	ClientClass* clientClass = Interfaces::Client->GetAllClasses();
 
 	if (!clientClass)
 		return;
@@ -51,7 +49,7 @@ void CNetVar::RetrieveClasses()
 	}
 }
 
-void CNetVar::LogNetVar(RecvTable *table, int align)
+void CNetVar::LogNetVar(RecvTable* table, int align)
 {
 	if (table->m_nProps < 0)
 		return;
@@ -65,7 +63,7 @@ void CNetVar::LogNetVar(RecvTable *table, int align)
 
 	for (auto i = 0; i < table->m_nProps; ++i)
 	{
-		RecvProp *prop = &table->m_pProps[i];
+		RecvProp* prop = &table->m_pProps[i];
 
 		if (!prop)
 			continue;
@@ -86,7 +84,7 @@ void CNetVar::LogNetVar(RecvTable *table, int align)
 
 		for (auto netvar = 0; netvar < (int)vars.size(); ++netvar)
 		{
-			netvar_info_s *netvars = &vars[netvar];
+			netvar_info_s* netvars = &vars[netvar];
 
 			if (netvars->dwCRC32 == dwCRC32)
 				bAddNetVar = false;
