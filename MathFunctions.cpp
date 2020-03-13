@@ -10,7 +10,7 @@ void AngleVectors(const Vector& angles, Vector* forward)
 	Assert(s_bMathlibInitialized);
 	Assert(forward);
 
-	float	sp, sy, cp, cy;
+	float sp, sy, cp, cy;
 
 	sy = sin(DEG2RAD(angles[1]));
 	cy = cos(DEG2RAD(angles[1]));
@@ -121,7 +121,8 @@ void AngleVectors(const Vector& angles, Vector* forward, Vector* right, Vector* 
 void Normalize(Vector& vIn, Vector& vOut)
 {
 	float flLen = vIn.Length();
-	if (flLen == 0) {
+	if (flLen == 0)
+	{
 		vOut.Init(0, 0, 1);
 		return;
 	}
@@ -147,7 +148,7 @@ bool IsVisible(IClientEntity* pLocal, IClientEntity* pEntity, int BoneID)
 
 	trace_t Trace;
 	Vector start = pLocal->GetOrigin() + pLocal->GetViewOffset();
-	Vector end = GetHitboxPosition(pEntity, BoneID);//pEntity->GetBonePos(BoneID);
+	Vector end = GetHitboxPosition(pEntity, BoneID); //pEntity->GetBonePos(BoneID);
 
 	UTIL_TraceLine(start, end, MASK_SOLID, pLocal, 0, &Trace);
 
@@ -164,8 +165,10 @@ bool IsVisible(IClientEntity* pLocal, IClientEntity* pEntity, int BoneID)
 	return false;
 }
 
-void NormalizeVector(Vector& vec) {
-	for (int i = 0; i < 3; ++i) {
+void NormalizeVector(Vector& vec)
+{
+	for (int i = 0; i < 3; ++i)
+	{
 		while (vec[i] > 180.f)
 			vec[i] -= 360.f;
 

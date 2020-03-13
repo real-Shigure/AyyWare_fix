@@ -17,7 +17,7 @@ void FixY(const CRecvProxyData* pData, void* pStruct, void* pOut)
 	bool bHasAA;
 	bool bSpinbot;
 	static bool last[128];
-	bool tmp = last[((IClientEntity*)(pStruct))->GetIndex()];
+	bool tmp = last[static_cast<IClientEntity*>(pStruct)->GetIndex()];
 	float yaw = pData->m_Value.m_Float;
 	yaw -= 0.087929;
 
@@ -30,12 +30,12 @@ void FixY(const CRecvProxyData* pData, void* pStruct, void* pOut)
 		// Normal Fix
 		yaw -= 0.087929;
 
-		last[((IClientEntity*)(pStruct))->GetIndex()] = (yaw >= 180 && yaw <= 360);
+		last[static_cast<IClientEntity*>(pStruct)->GetIndex()] = (yaw >= 180 && yaw <= 360);
 
 		if (tmp && (yaw >= 0 && yaw <= 180))
 			yaw += 359;
 
-		yaw -= (int)(yaw / 360) * 360;
+		yaw -= static_cast<int>(yaw / 360) * 360;
 		if (yaw < -180)
 			yaw += 360;
 		else if (yaw > 180)
@@ -47,31 +47,31 @@ void FixY(const CRecvProxyData* pData, void* pStruct, void* pOut)
 		bHasAA = ((*flPitch == 90.0f) || (*flPitch == 270.0f));
 		bSpinbot = false;
 
-		if (!bShotLastTime[((IClientEntity*)(pStruct))->GetIndex()]
-			&& (fabsf(flYaw - vLast[((IClientEntity*)(pStruct))->GetIndex()].y) > 15.0f) && !bHasAA)
+		if (!bShotLastTime[static_cast<IClientEntity*>(pStruct)->GetIndex()]
+			&& (fabsf(flYaw - vLast[static_cast<IClientEntity*>(pStruct)->GetIndex()].y) > 15.0f) && !bHasAA)
 		{
-			flYaw = vLast[((IClientEntity*)(pStruct))->GetIndex()].y;
-			bShotLastTime[((IClientEntity*)(pStruct))->GetIndex()] = true;
+			flYaw = vLast[static_cast<IClientEntity*>(pStruct)->GetIndex()].y;
+			bShotLastTime[static_cast<IClientEntity*>(pStruct)->GetIndex()] = true;
 		}
 		else
 		{
-			if (bShotLastTime[((IClientEntity*)(pStruct))->GetIndex()]
-				&& (fabsf(flYaw - vLast[((IClientEntity*)(pStruct))->GetIndex()].y) > 15.0f))
+			if (bShotLastTime[static_cast<IClientEntity*>(pStruct)->GetIndex()]
+				&& (fabsf(flYaw - vLast[static_cast<IClientEntity*>(pStruct)->GetIndex()].y) > 15.0f))
 			{
-				bShotLastTime[((IClientEntity*)(pStruct))->GetIndex()] = true;
+				bShotLastTime[static_cast<IClientEntity*>(pStruct)->GetIndex()] = true;
 				bSpinbot = true;
 			}
 			else
 			{
-				bShotLastTime[((IClientEntity*)(pStruct))->GetIndex()] = false;
+				bShotLastTime[static_cast<IClientEntity*>(pStruct)->GetIndex()] = false;
 			}
 		}
 
-		vLast[((IClientEntity*)(pStruct))->GetIndex()].y = flYaw;
+		vLast[static_cast<IClientEntity*>(pStruct)->GetIndex()].y = flYaw;
 
-		bool bTmp = bJitterFix[((IClientEntity*)(pStruct))->GetIndex()];
+		bool bTmp = bJitterFix[static_cast<IClientEntity*>(pStruct)->GetIndex()];
 
-		bJitterFix[((IClientEntity*)(pStruct))->GetIndex()] = (flYaw >= 180.0f && flYaw <= 360.0f);
+		bJitterFix[static_cast<IClientEntity*>(pStruct)->GetIndex()] = (flYaw >= 180.0f && flYaw <= 360.0f);
 
 		if (bTmp && (flYaw >= 0.0f && flYaw <= 180.0f))
 		{
@@ -80,13 +80,13 @@ void FixY(const CRecvProxyData* pData, void* pStruct, void* pOut)
 		break;
 	}
 
-	*(float*)(pOut) = flYaw;
+	*static_cast<float*>(pOut) = flYaw;
 }
 
 // Simple fix for some Fake-Downs
 void FixX(const CRecvProxyData* pData, void* pStruct, void* pOut) // Clamp other player angles to fix fakedown or lisp
 {
-	float* ang = (float*)pOut;
+	float* ang = static_cast<float*>(pOut);
 	*ang = pData->m_Value.m_Float;
 	DWORD hex = *(DWORD*)(&ang);
 
@@ -115,7 +115,7 @@ void FixX(const CRecvProxyData* pData, void* pStruct, void* pOut) // Clamp other
 			*ang = -90.f;
 		}
 
-		*(float*)(pOut) = *ang;
+		*static_cast<float*>(pOut) = *ang;
 		break;
 	case 2:
 		if (pData->m_Value.m_Float > 180.0f)
@@ -192,7 +192,7 @@ void ApplyAAAHooks()
 				// Knives
 				if (!strcmp(name, "m_nModelIndex"))
 				{
-					oRecvnModelIndex = (RecvVarProxyFn)pProp->m_ProxyFn;
+					oRecvnModelIndex = static_cast<RecvVarProxyFn>(pProp->m_ProxyFn);
 					pProp->m_ProxyFn = Hooked_RecvProxy_Viewmodel;
 				}
 			}

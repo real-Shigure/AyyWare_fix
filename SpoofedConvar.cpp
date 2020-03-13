@@ -4,7 +4,7 @@
 void ConVar::SetValue(const char* value)
 {
 	typedef void(__thiscall* OriginalFn)(void*, const char*);
-	return  call_vfunc<OriginalFn>(this, 14)(this, value);
+	return call_vfunc<OriginalFn>(this, 14)(this, value);
 }
 
 void ConVar::SetValue(float value)
@@ -18,20 +18,28 @@ void ConVar::SetValue(int value)
 	typedef void(__thiscall* OriginalFn)(void*, int);
 	return call_vfunc<OriginalFn>(this, 16)(this, value);
 }
-float ConVar::GetFloat(void) const {
+
+float ConVar::GetFloat(void) const
+{
 	return pParent->fValue;
 }
-int ConVar::GetInt(void) const {
+
+int ConVar::GetInt(void) const
+{
 	return pParent->nValue;
 }
-const char* ConVar::GetString(void) const {
+
+const char* ConVar::GetString(void) const
+{
 	return pParent->pszDefaultValue;
 }
 
-Color ConVar::GetColor(void) const {
+Color ConVar::GetColor(void) const
+{
 	unsigned char* pColorElement = ((unsigned char*)&pParent->nValue);
 	return Color(pColorElement[0], pColorElement[1], pColorElement[2], pColorElement[3]);
 }
+
 void ConVar::SetValue(Color value)
 {
 	typedef void(__thiscall* OriginalFn)(void*, Color);
@@ -49,11 +57,12 @@ char* ConVar::GetDefault()
 	return pszDefaultValue;
 }
 
-template<typename T>
-inline void MinspecCvar::SetValue(T value)
+template <typename T>
+void MinspecCvar::SetValue(T value)
 {
 	m_pConVar->SetValue(T);
 }
+
 MinspecCvar::MinspecCvar(const char* szCVar, char* newname, float newvalue) : m_pConVar(nullptr)
 {
 	m_pConVar = Interfaces::CVar->FindVar(szCVar);
@@ -77,6 +86,7 @@ bool MinspecCvar::ValidCvar()
 {
 	return m_pConVar != nullptr;
 }
+
 void MinspecCvar::Spoof()
 {
 	if (ValidCvar())
@@ -93,7 +103,8 @@ void MinspecCvar::Spoof()
 
 int MinspecCvar::GetInt()
 {
-	if (ValidCvar()) {
+	if (ValidCvar())
+	{
 		return m_pConVar->GetInt();
 	}
 	return 0;
@@ -101,7 +112,8 @@ int MinspecCvar::GetInt()
 
 float MinspecCvar::GetFloat()
 {
-	if (ValidCvar()) {
+	if (ValidCvar())
+	{
 		return m_pConVar->GetFloat();
 	}
 	return 0.0f;
@@ -109,41 +121,54 @@ float MinspecCvar::GetFloat()
 
 const char* MinspecCvar::GetString()
 {
-	if (ValidCvar()) {
+	if (ValidCvar())
+	{
 		return m_pConVar->GetString();
 	}
 	return nullptr;
 }
-SpoofedConvar::SpoofedConvar(const char* szCVar) {
+
+SpoofedConvar::SpoofedConvar(const char* szCVar)
+{
 	m_pOriginalCVar = Interfaces::CVar->FindVar(szCVar);
 	Spoof();
 }
-SpoofedConvar::SpoofedConvar(ConVar* pCVar) {
+
+SpoofedConvar::SpoofedConvar(ConVar* pCVar)
+{
 	m_pOriginalCVar = pCVar;
 	Spoof();
 }
-SpoofedConvar::~SpoofedConvar() {
-	if (IsSpoofed()) {
+
+SpoofedConvar::~SpoofedConvar()
+{
+	if (IsSpoofed())
+	{
 		DWORD dwOld;
 
 		SetFlags(m_iOriginalFlags);
 		SetString(m_szOriginalValue);
 
-		VirtualProtect((LPVOID)m_pOriginalCVar->pszName, 128, PAGE_READWRITE, &dwOld);
-		strcpy((char*)m_pOriginalCVar->pszName, m_szOriginalName);
-		VirtualProtect((LPVOID)m_pOriginalCVar->pszName, 128, dwOld, &dwOld);
+		VirtualProtect(static_cast<LPVOID>(m_pOriginalCVar->pszName), 128, PAGE_READWRITE, &dwOld);
+		strcpy(static_cast<char*>(m_pOriginalCVar->pszName), m_szOriginalName);
+		VirtualProtect(static_cast<LPVOID>(m_pOriginalCVar->pszName), 128, dwOld, &dwOld);
 
 		//Unregister dummy cvar
 		Interfaces::CVar->UnregisterConCommand(m_pDummyCVar);
 		free(m_pDummyCVar);
-		m_pDummyCVar = NULL;
+		m_pDummyCVar = nullptr;
 	}
 }
-bool SpoofedConvar::IsSpoofed() {
-	return m_pDummyCVar != NULL;
+
+bool SpoofedConvar::IsSpoofed()
+{
+	return m_pDummyCVar != nullptr;
 }
-void SpoofedConvar::Spoof() {
-	if (!IsSpoofed() && m_pOriginalCVar) {
+
+void SpoofedConvar::Spoof()
+{
+	if (!IsSpoofed() && m_pOriginalCVar)
+	{
 		//Save old name value and flags so we can restore the cvar lates if needed
 		m_iOriginalFlags = m_pOriginalCVar->nFlags;
 		strcpy(m_szOriginalName, m_pOriginalCVar->pszName);
@@ -152,51 +177,68 @@ void SpoofedConvar::Spoof() {
 		sprintf_s(m_szDummyName, 128, "d_%s", m_szOriginalName);
 
 		//Create the dummy cvar
-		m_pDummyCVar = (ConVar*)malloc(sizeof(ConVar));
+		m_pDummyCVar = static_cast<ConVar*>(malloc(sizeof(ConVar)));
 		if (!m_pDummyCVar) return;
 		memcpy(m_pDummyCVar, m_pOriginalCVar, sizeof(ConVar));
 
-		m_pDummyCVar->pNext = NULL;
+		m_pDummyCVar->pNext = nullptr;
 		//Register it
 		Interfaces::CVar->RegisterConCommand(m_pDummyCVar);
 
 		//Fix "write access violation" bullshit
 		DWORD dwOld;
-		VirtualProtect((LPVOID)m_pOriginalCVar->pszName, 128, PAGE_READWRITE, &dwOld);
+		VirtualProtect(static_cast<LPVOID>(m_pOriginalCVar->pszName), 128, PAGE_READWRITE, &dwOld);
 
 		//Rename the cvar
-		strcpy((char*)m_pOriginalCVar->pszName, m_szDummyName);
+		strcpy(static_cast<char*>(m_pOriginalCVar->pszName), m_szDummyName);
 
-		VirtualProtect((LPVOID)m_pOriginalCVar->pszName, 128, dwOld, &dwOld);
+		VirtualProtect(static_cast<LPVOID>(m_pOriginalCVar->pszName), 128, dwOld, &dwOld);
 
 		SetFlags(FCVAR_NONE);
 	}
 }
-void SpoofedConvar::SetFlags(int flags) {
-	if (IsSpoofed()) {
+
+void SpoofedConvar::SetFlags(int flags)
+{
+	if (IsSpoofed())
+	{
 		m_pOriginalCVar->nFlags = flags;
 	}
 }
-int SpoofedConvar::GetFlags() {
+
+int SpoofedConvar::GetFlags()
+{
 	return m_pOriginalCVar->nFlags;
 }
-void SpoofedConvar::SetInt(int iValue) {
-	if (IsSpoofed()) {
+
+void SpoofedConvar::SetInt(int iValue)
+{
+	if (IsSpoofed())
+	{
 		m_pOriginalCVar->SetValue(iValue);
 	}
 }
-void SpoofedConvar::SetBool(bool bValue) {
-	if (IsSpoofed()) {
+
+void SpoofedConvar::SetBool(bool bValue)
+{
+	if (IsSpoofed())
+	{
 		m_pOriginalCVar->SetValue(bValue);
 	}
 }
-void SpoofedConvar::SetFloat(float flValue) {
-	if (IsSpoofed()) {
+
+void SpoofedConvar::SetFloat(float flValue)
+{
+	if (IsSpoofed())
+	{
 		m_pOriginalCVar->SetValue(flValue);
 	}
 }
-void SpoofedConvar::SetString(const char* szValue) {
-	if (IsSpoofed()) {
+
+void SpoofedConvar::SetString(const char* szValue)
+{
+	if (IsSpoofed())
+	{
 		m_pOriginalCVar->SetValue(szValue);
 	}
 }

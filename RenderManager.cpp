@@ -54,7 +54,8 @@ void Render::Initialise()
 	Interfaces::Surface->SetFontGlyphSet(Fonts::MenuBold, "DINPro-Regular", 14, 900, 0, 0, FONTFLAG_ANTIALIAS);
 	// Interfaces::Surface->SetFontGlyphSet(Fonts::Menu, "Visitor TT2 BRK", 14, 500, 0, 0, FONTFLAG_ANTIALIAS);
 	// Interfaces::Surface->SetFontGlyphSet(Fonts::MenuBold, "Visitor TT2 BRK", 14, 550, 0, 0, FONTFLAG_ANTIALIAS);
-	Interfaces::Surface->SetFontGlyphSet(Fonts::ESP, "Calibri", 14, 500, 0, 0, FONTFLAG_ANTIALIAS | FONTFLAG_DROPSHADOW);
+	Interfaces::Surface->SetFontGlyphSet(Fonts::ESP, "Calibri", 14, 500, 0, 0,
+		FONTFLAG_ANTIALIAS | FONTFLAG_DROPSHADOW);
 	Interfaces::Surface->SetFontGlyphSet(Fonts::MenuText, "Calibri", 16, 500, 0, 0, FONTFLAG_ANTIALIAS);
 
 	Utilities::Log("Render System Ready");
@@ -65,7 +66,8 @@ RECT Render::GetViewport()
 	RECT Viewport = { 0, 0, 0, 0 };
 	int w, h;
 	Interfaces::Engine->GetScreenSize(w, h);
-	Viewport.right = w; Viewport.bottom = h;
+	Viewport.right = w;
+	Viewport.bottom = h;
 	return Viewport;
 }
 
@@ -95,17 +97,23 @@ void Render::PolyLine(int* x, int* y, int count, Color color)
 
 bool Render::WorldToScreen(Vector& in, Vector& out)
 {
-	const matrix3x4& worldToScreen = Interfaces::Engine->WorldToScreenMatrix(); //Grab the world to screen matrix from CEngineClient::WorldToScreenMatrix
+	const matrix3x4& worldToScreen = Interfaces::Engine->WorldToScreenMatrix();
+	//Grab the world to screen matrix from CEngineClient::WorldToScreenMatrix
 
-	float w = worldToScreen[3][0] * in[0] + worldToScreen[3][1] * in[1] + worldToScreen[3][2] * in[2] + worldToScreen[3][3]; //Calculate the angle in compareson to the player's camera.
+	float w = worldToScreen[3][0] * in[0] + worldToScreen[3][1] * in[1] + worldToScreen[3][2] * in[2] + worldToScreen[3]
+		[3]; //Calculate the angle in compareson to the player's camera.
 	out.z = 0; //Screen doesn't have a 3rd dimension.
 
 	if (w > 0.001) //If the object is within view.
 	{
 		RECT ScreenSize = GetViewport();
 		float fl1DBw = 1 / w; //Divide 1 by the angle.
-		out.x = (ScreenSize.right / 2) + (0.5f * ((worldToScreen[0][0] * in[0] + worldToScreen[0][1] * in[1] + worldToScreen[0][2] * in[2] + worldToScreen[0][3]) * fl1DBw) * ScreenSize.right + 0.5f); //Get the X dimension and push it in to the Vector.
-		out.y = (ScreenSize.bottom / 2) - (0.5f * ((worldToScreen[1][0] * in[0] + worldToScreen[1][1] * in[1] + worldToScreen[1][2] * in[2] + worldToScreen[1][3]) * fl1DBw) * ScreenSize.bottom + 0.5f); //Get the Y dimension and push it in to the Vector.
+		out.x = (ScreenSize.right / 2) + (0.5f * ((worldToScreen[0][0] * in[0] + worldToScreen[0][1] * in[1] +
+			worldToScreen[0][2] * in[2] + worldToScreen[0][3]) * fl1DBw) * ScreenSize.right + 0.5f);
+		//Get the X dimension and push it in to the Vector.
+		out.y = (ScreenSize.bottom / 2) - (0.5f * ((worldToScreen[1][0] * in[0] + worldToScreen[1][1] * in[1] +
+			worldToScreen[1][2] * in[2] + worldToScreen[1][3]) * fl1DBw) * ScreenSize.bottom + 0.5f);
+		//Get the Y dimension and push it in to the Vector.
 		return true;
 	}
 
@@ -125,7 +133,6 @@ void Render::Text(int x, int y, Color color, DWORD font, const char* text)
 	Interfaces::Surface->DrawSetTextColor(color);
 	Interfaces::Surface->DrawSetTextPos(x, y);
 	Interfaces::Surface->DrawPrintText(wcstring, wcslen(wcstring));
-	return;
 }
 
 void Render::Text(int x, int y, Color color, DWORD font, const wchar_t* text)
@@ -161,9 +168,11 @@ RECT Render::GetTextSize(DWORD font, const char* text)
 	wchar_t wcstring[newsize];
 	mbstowcs_s(&convertedChars, wcstring, origsize, text, _TRUNCATE);
 
-	RECT rect; int x, y;
+	RECT rect;
+	int x, y;
 	Interfaces::Surface->GetTextSize(font, wcstring, x, y);
-	rect.left = x; rect.bottom = y;
+	rect.left = x;
+	rect.bottom = y;
 	rect.right = x;
 	return rect;
 }
@@ -201,7 +210,7 @@ void Render::GradientH(int x, int y, int w, int h, Color c1, Color c2)
 void Render::Polygon(int count, Vertex_t* Vertexs, Color color)
 {
 	static int Texture = Interfaces::Surface->CreateNewTextureID(true); //need to make a texture with procedural true
-	unsigned char buffer[4] = { 255, 255, 255, 255 };//{ color.r(), color.g(), color.b(), color.a() };
+	unsigned char buffer[4] = { 255, 255, 255, 255 }; //{ color.r(), color.g(), color.b(), color.a() };
 
 	Interfaces::Surface->DrawSetTextureRGBA(Texture, buffer, 1, 1); //Texture, char array of texture, width, height
 	Interfaces::Surface->DrawSetColor(color); // keep this full color and opacity use the RGBA @top to set values.
@@ -223,7 +232,7 @@ void Render::PolygonOutline(int count, Vertex_t* Vertexs, Color color, Color col
 		y[i] = Vertexs[i].m_Position.y;
 	}
 
-	Render::PolyLine(x, y, count, colorLine);
+	PolyLine(x, y, count, colorLine);
 }
 
 void Render::PolyLine(int count, Vertex_t* Vertexs, Color colorLine)
@@ -237,5 +246,5 @@ void Render::PolyLine(int count, Vertex_t* Vertexs, Color colorLine)
 		y[i] = Vertexs[i].m_Position.y;
 	}
 
-	Render::PolyLine(x, y, count, colorLine);
+	PolyLine(x, y, count, colorLine);
 }

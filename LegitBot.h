@@ -9,9 +9,9 @@ Syn's AyyWare Framework 2015
 class CLegitBot : public CHack
 {
 public:
-	void Init();
-	void Draw();
-	void Move(CUserCmd* pCmd, bool& bSendPacket);
+	void Init() override;
+	void Draw() override;
+	void Move(CUserCmd* pCmd, bool& bSendPacket) override;
 private:
 	// Targetting
 	int GetTargetCrosshair();

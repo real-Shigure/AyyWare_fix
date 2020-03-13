@@ -14,9 +14,9 @@ public:
 	bool GetState();
 protected:
 	bool Checked;
-	void Draw(bool hover);
-	void OnUpdate();
-	void OnClick();
+	void Draw(bool hover) override;
+	void OnUpdate() override;
+	void OnClick() override;
 };
 
 class CLabel : public CControl
@@ -26,9 +26,9 @@ public:
 	void SetText(std::string text);
 protected:
 	std::string Text;
-	void Draw(bool hover);
-	void OnUpdate();
-	void OnClick();
+	void Draw(bool hover) override;
+	void OnUpdate() override;
+	void OnClick() override;
 };
 
 class CGroupBox : public CControl
@@ -40,9 +40,9 @@ public:
 protected:
 	int Items;
 	std::string Text;
-	void Draw(bool hover);
-	void OnUpdate();
-	void OnClick();
+	void Draw(bool hover) override;
+	void OnUpdate() override;
+	void OnClick() override;
 };
 
 class CSlider : public CControl
@@ -57,9 +57,9 @@ protected:
 	float Min;
 	float Max;
 	bool DoDrag;
-	void Draw(bool hover);
-	void OnUpdate();
-	void OnClick();
+	void Draw(bool hover) override;
+	void OnUpdate() override;
+	void OnClick() override;
 };
 
 class CKeyBind : public CControl
@@ -71,24 +71,24 @@ public:
 protected:
 	int Key;
 	bool IsGettingKey;
-	void Draw(bool hover);
-	void OnUpdate();
-	void OnClick();
+	void Draw(bool hover) override;
+	void OnUpdate() override;
+	void OnClick() override;
 };
 
 class CButton : public CControl
 {
 public:
-	typedef void(*ButtonCallback_t)(void);
+	typedef void (*ButtonCallback_t)(void);
 	CButton();
 	void SetCallback(ButtonCallback_t callback);
 	void SetText(std::string text);
 protected:
 	ButtonCallback_t CallBack;
 	std::string Text;
-	void Draw(bool hover);
-	void OnUpdate();
-	void OnClick();
+	void Draw(bool hover) override;
+	void OnUpdate() override;
+	void OnClick() override;
 };
 
 class CComboBox : public CControl
@@ -103,7 +103,7 @@ protected:
 	std::vector<std::string> Items;
 	int SelectedIndex;
 	bool IsOpen;
-	void Draw(bool hover);
-	void OnUpdate();
-	void OnClick();
+	void Draw(bool hover) override;
+	void OnUpdate() override;
+	void OnClick() override;
 };

@@ -28,8 +28,7 @@ bool CControl::Flag(int f)
 {
 	if (m_Flags & f)
 		return true;
-	else
-		return false;
+	return false;
 }
 
 POINT CControl::GetAbsolutePos()
@@ -56,11 +55,11 @@ CCheckBox::CCheckBox()
 {
 	Checked = false;
 
-	m_Flags = UIFlags::UI_Clickable | UIFlags::UI_Drawable | UIFlags::UI_SaveFile;
+	m_Flags = UI_Clickable | UI_Drawable | UI_SaveFile;
 	m_iWidth = 13;
 	m_iHeight = 13;
 
-	FileControlType = UIControlTypes::UIC_CheckBox;
+	FileControlType = UIC_CheckBox;
 }
 
 void CCheckBox::SetState(bool s)
@@ -97,7 +96,11 @@ void CCheckBox::Draw(bool hover)
 	}
 }
 
-void CCheckBox::OnUpdate() { m_iWidth = 13; 	m_iHeight = 13; }
+void CCheckBox::OnUpdate()
+{
+	m_iWidth = 13;
+	m_iHeight = 13;
+}
 
 void CCheckBox::OnClick()
 {
@@ -108,7 +111,7 @@ void CCheckBox::OnClick()
 #pragma region Label
 CLabel::CLabel()
 {
-	m_Flags = UIFlags::UI_Drawable;
+	m_Flags = UI_Drawable;
 	Text = "Default";
 	FileIdentifier = "Default";
 }
@@ -124,15 +127,20 @@ void CLabel::SetText(std::string text)
 	Text = text;
 }
 
-void CLabel::OnUpdate() {}
-void CLabel::OnClick() {}
+void CLabel::OnUpdate()
+{
+}
+
+void CLabel::OnClick()
+{
+}
 #pragma endregion Implementations of the Label functions
 
 #pragma region GroupBox
 CGroupBox::CGroupBox()
 {
 	Items = 1;
-	m_Flags = UIFlags::UI_Drawable | UIFlags::UI_RenderFirst;
+	m_Flags = UI_Drawable | UI_RenderFirst;
 	Text = "Default";
 	FileIdentifier = "Default";
 }
@@ -142,7 +150,8 @@ void CGroupBox::Draw(bool hover)
 	POINT a = GetAbsolutePos();
 	RECT txtSize = Render::GetTextSize(Render::Fonts::MenuBold, Text.c_str());
 	Render::Clear(a.x + 2, a.y + 2, m_iWidth - 4, m_iHeight - 4, Color(8, 8, 8, 10)); // menu mini box color
-	Render::Text(a.x + 15, a.y - (txtSize.bottom / 2), Color(255, 255, 255, 255), Render::Fonts::MenuBold, Text.c_str());
+	Render::Text(a.x + 15, a.y - (txtSize.bottom / 2), Color(255, 255, 255, 255), Render::Fonts::MenuBold,
+		Text.c_str());
 
 	Render::Line(a.x, a.y, a.x + 12, a.y, Color(129, 129, 129, 255));
 	Render::Line(a.x + 15 + txtSize.right + 5, a.y, a.x + m_iWidth, a.y, Color(129, 129, 129, 255));
@@ -176,16 +185,21 @@ void CGroupBox::PlaceLabledControl(std::string Label, CTab* Tab, CControl* contr
 	Items++;
 }
 
-void CGroupBox::OnUpdate() {}
-void CGroupBox::OnClick() {}
+void CGroupBox::OnUpdate()
+{
+}
+
+void CGroupBox::OnClick()
+{
+}
 #pragma endregion Implementations of the Group Box functions
 
 #pragma region Sliders
 CSlider::CSlider()
 {
-	m_Flags = UIFlags::UI_Drawable | UIFlags::UI_Clickable | UIFlags::UI_SaveFile;
+	m_Flags = UI_Drawable | UI_Clickable | UI_SaveFile;
 
-	FileControlType = UIControlTypes::UIC_Slider;
+	FileControlType = UIC_Slider;
 }
 
 void CSlider::Draw(bool hover)
@@ -203,10 +217,12 @@ void CSlider::Draw(bool hover)
 	char buffer[24];
 	sprintf_s(buffer, "%.2f", Value);
 	RECT txtSize = Render::GetTextSize(Render::Fonts::MenuBold, buffer);
-	Render::Text(a.x + (m_iWidth / 2) - txtSize.right / 2, a.y + 10, Color(255, 255, 255, 255), Render::Fonts::MenuBold, buffer);
+	Render::Text(a.x + (m_iWidth / 2) - txtSize.right / 2, a.y + 10, Color(255, 255, 255, 255), Render::Fonts::MenuBold,
+		buffer);
 }
 
-void CSlider::OnUpdate() {
+void CSlider::OnUpdate()
+{
 	POINT a = GetAbsolutePos();
 	m_iHeight = 11;
 
@@ -220,7 +236,7 @@ void CSlider::OnUpdate() {
 			NewX = m.x - a.x - 1;
 			if (NewX < 0) NewX = 0;
 			if (NewX > m_iWidth) NewX = m_iWidth;
-			Ratio = NewX / float(m_iWidth);
+			Ratio = NewX / static_cast<float>(m_iWidth);
 			Value = Min + (Max - Min) * Ratio;
 		}
 		else
@@ -230,7 +246,8 @@ void CSlider::OnUpdate() {
 	}
 }
 
-void CSlider::OnClick() {
+void CSlider::OnClick()
+{
 	POINT a = GetAbsolutePos();
 	RECT SliderRegion = { a.x, a.y, m_iWidth, 11 };
 	if (GUI.IsMouseInRegion(SliderRegion))
@@ -251,34 +268,50 @@ void CSlider::SetValue(float v)
 
 void CSlider::SetBoundaries(float min, float max)
 {
-	Min = min; Max = max;
+	Min = min;
+	Max = max;
 }
 #pragma endregion Implementations of the Slider functions
 
 #pragma region KeyBinders
 
-char* KeyStrings[254] = { nullptr, "Left Mouse", "Right Mouse", "Control+Break", "Middle Mouse", "Mouse 4", "Mouse 5",
-nullptr, "Backspace", "TAB", nullptr, nullptr, nullptr, "ENTER", nullptr, nullptr, "SHIFT", "CTRL", "ALT", "PAUSE",
-"CAPS LOCK", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, "ESC", nullptr, nullptr, nullptr, nullptr, "SPACEBAR",
-"PG UP", "PG DOWN", "END", "HOME", "Left", "Up", "Right", "Down", nullptr, "Print", nullptr, "Print Screen", "Insert",
-"Delete", nullptr, "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-nullptr, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
-"Y", "Z", "Left Windows", "Right Windows", nullptr, nullptr, nullptr, "NUM 0", "NUM 1", "NUM 2", "NUM 3", "NUM 4", "NUM 5", "NUM 6",
-"NUM 7", "NUM 8", "NUM 9", "*", "+", "_", "-", ".", "/", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12",
-"F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", nullptr, nullptr, nullptr, nullptr, nullptr,
-nullptr, nullptr, nullptr, "NUM LOCK", "SCROLL LOCK", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-nullptr, nullptr, nullptr, nullptr, nullptr, "LSHIFT", "RSHIFT", "LCONTROL", "RCONTROL", "LMENU", "RMENU", nullptr, nullptr, nullptr,
-nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, "Next Track", "Previous Track", "Stop", "Play/Pause", nullptr, nullptr,
-nullptr, nullptr, nullptr, nullptr, ";", "+", ",", "-", ".", "/?", "~", nullptr, nullptr, nullptr, nullptr,
-nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, "[{", "\\|", "}]", "'\"", nullptr, nullptr, nullptr, nullptr,
-nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
-nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+char* KeyStrings[254] = {
+	nullptr, "Left Mouse", "Right Mouse", "Control+Break", "Middle Mouse", "Mouse 4", "Mouse 5",
+	nullptr, "Backspace", "TAB", nullptr, nullptr, nullptr, "ENTER", nullptr, nullptr, "SHIFT", "CTRL", "ALT", "PAUSE",
+	"CAPS LOCK", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, "ESC", nullptr, nullptr, nullptr, nullptr,
+	"SPACEBAR",
+	"PG UP", "PG DOWN", "END", "HOME", "Left", "Up", "Right", "Down", nullptr, "Print", nullptr, "Print Screen",
+	"Insert",
+	"Delete", nullptr, "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", nullptr, nullptr, nullptr, nullptr, nullptr,
+	nullptr,
+	nullptr, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
+	"V", "W", "X",
+	"Y", "Z", "Left Windows", "Right Windows", nullptr, nullptr, nullptr, "NUM 0", "NUM 1", "NUM 2", "NUM 3", "NUM 4",
+	"NUM 5", "NUM 6",
+	"NUM 7", "NUM 8", "NUM 9", "*", "+", "_", "-", ".", "/", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9",
+	"F10", "F11", "F12",
+	"F13", "F14", "F15", "F16", "F17", "F18", "F19", "F20", "F21", "F22", "F23", "F24", nullptr, nullptr, nullptr,
+	nullptr, nullptr,
+	nullptr, nullptr, nullptr, "NUM LOCK", "SCROLL LOCK", nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+	nullptr, nullptr,
+	nullptr, nullptr, nullptr, nullptr, nullptr, "LSHIFT", "RSHIFT", "LCONTROL", "RCONTROL", "LMENU", "RMENU", nullptr,
+	nullptr, nullptr,
+	nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, "Next Track", "Previous Track", "Stop", "Play/Pause",
+	nullptr, nullptr,
+	nullptr, nullptr, nullptr, nullptr, ";", "+", ",", "-", ".", "/?", "~", nullptr, nullptr, nullptr, nullptr,
+	nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+	nullptr, nullptr,
+	nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, "[{", "\\|", "}]", "'\"", nullptr, nullptr, nullptr,
+	nullptr,
+	nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+	nullptr, nullptr,
+	nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr
+};
 
 CKeyBind::CKeyBind()
 {
-	m_Flags = UIFlags::UI_Drawable | UIFlags::UI_Clickable | UIFlags::UI_SaveFile;
-	FileControlType = UIControlTypes::UIC_KeyBind;
+	m_Flags = UI_Drawable | UI_Clickable | UI_SaveFile;
+	FileControlType = UIC_KeyBind;
 }
 
 void CKeyBind::Draw(bool hover)
@@ -324,7 +357,8 @@ void CKeyBind::Draw(bool hover)
 	Render::Text(a.x + 2, a.y + 2, Color(255, 255, 255, 255), Render::Fonts::MenuBold, KeyName);
 }
 
-void CKeyBind::OnUpdate() {
+void CKeyBind::OnUpdate()
+{
 	m_iHeight = 16;
 	POINT a = GetAbsolutePos();
 	if (IsGettingKey)
@@ -348,7 +382,8 @@ void CKeyBind::OnUpdate() {
 	}
 }
 
-void CKeyBind::OnClick() {
+void CKeyBind::OnClick()
+{
 	POINT a = GetAbsolutePos();
 	if (!IsGettingKey)
 	{
@@ -372,7 +407,7 @@ void CKeyBind::SetKey(int key)
 CButton::CButton()
 {
 	m_iWidth = 177;
-	m_Flags = UIFlags::UI_Drawable | UIFlags::UI_Clickable;
+	m_Flags = UI_Drawable | UI_Clickable;
 	Text = "Default";
 	CallBack = nullptr;
 	FileIdentifier = "Default";
@@ -383,7 +418,8 @@ void CButton::Draw(bool hover)
 	POINT a = GetAbsolutePos();
 	Render::Outline(a.x, a.y, m_iWidth, m_iHeight, Color(129, 129, 129, 255));
 	if (hover)
-		Render::GradientV(a.x + 2, a.y + 2, m_iWidth - 4, m_iHeight - 4, Color(60, 60, 60, 255), Color(80, 80, 80, 255));
+		Render::GradientV(a.x + 2, a.y + 2, m_iWidth - 4, m_iHeight - 4, Color(60, 60, 60, 255),
+			Color(80, 80, 80, 255));
 	else
 		Render::GradientV(a.x + 2, a.y + 2, m_iWidth - 4, m_iHeight - 4, Color(8, 8, 8, 255), Color(8, 8, 8, 255));
 
@@ -399,7 +435,7 @@ void CButton::SetText(std::string text)
 	Text = text;
 }
 
-void CButton::SetCallback(CButton::ButtonCallback_t callback)
+void CButton::SetCallback(ButtonCallback_t callback)
 {
 	CallBack = callback;
 }
@@ -419,8 +455,8 @@ void CButton::OnClick()
 #pragma region ComboBox
 CComboBox::CComboBox()
 {
-	m_Flags = UIFlags::UI_Drawable | UIFlags::UI_Clickable | UIFlags::UI_Focusable | UIFlags::UI_SaveFile;
-	FileControlType = UIControlTypes::UIC_ComboBox;
+	m_Flags = UI_Drawable | UI_Clickable | UI_Focusable | UI_SaveFile;
+	FileControlType = UIC_ComboBox;
 }
 
 void CComboBox::Draw(bool hover)
@@ -455,7 +491,8 @@ void CComboBox::Draw(bool hover)
 					Render::Clear(a.x, a.y + 17 + i * 16, m_iWidth, 16, Color(207, 207, 207, 255));
 				}
 
-				Render::Text(a.x + 2, a.y + 19 + i * 16, Color(255, 255, 255, 255), Render::Fonts::MenuBold, Items[i].c_str());
+				Render::Text(a.x + 2, a.y + 19 + i * 16, Color(255, 255, 255, 255), Render::Fonts::MenuBold,
+					Items[i].c_str());
 			}
 		}
 	}

@@ -10,7 +10,8 @@ Syn's AyyWare Framework 2015
 
 void CWindow::SetPosition(int x, int y)
 {
-	m_x = x; m_y = y;
+	m_x = x;
+	m_y = y;
 }
 
 void CWindow::SetSize(int w, int h)

@@ -32,12 +32,14 @@ public:
 	char unknowndata00[2]; //0x0080
 	char charinFont; //0x0082
 	char unknowndata01[1]; //0x0083
-};//Size=0x00AC
+}; //Size=0x00AC
 
 class CSWeaponInfo
 {
 public:
-	virtual ~CSWeaponInfo() {};
+	virtual ~CSWeaponInfo()
+	{
+	};
 	char pad_0x0000[0x4]; //0x0000
 	char* szWeaponName; //0x0004
 	char pad_0x0008[0xC]; //0x0008
@@ -367,19 +369,32 @@ enum class CSGOClassID
 
 enum moveTypes
 {
-	MOVETYPE_NONE = 0,			// never moves
-	MOVETYPE_ISOMETRIC,					// For players -- in TF2 commander view, etc.
-	MOVETYPE_WALK,						// Player only - moving on the ground
-	MOVETYPE_STEP,						// gravity, special edge handling -- monsters use this
-	MOVETYPE_FLY,						// No gravity, but still collides with stuff
-	MOVETYPE_FLYGRAVITY,				// flies through the air + is affected by gravity
-	MOVETYPE_VPHYSICS,					// uses VPHYSICS for simulation
-	MOVETYPE_PUSH,						// no clip to world, push and crush
-	MOVETYPE_NOCLIP,					// No gravity, no collisions, still do velocity/avelocity
-	MOVETYPE_LADDER,					// Used by players only when going onto a ladder
-	MOVETYPE_OBSERVER,					// Observer movement, depends on player's observer mode
-	MOVETYPE_CUSTOM,					// Allows the entity to describe its own physics
-	MOVETYPE_LAST = MOVETYPE_CUSTOM,	// should always be defined as the last item in the list
+	MOVETYPE_NONE = 0,
+	// never moves
+	MOVETYPE_ISOMETRIC,
+	// For players -- in TF2 commander view, etc.
+	MOVETYPE_WALK,
+	// Player only - moving on the ground
+	MOVETYPE_STEP,
+	// gravity, special edge handling -- monsters use this
+	MOVETYPE_FLY,
+	// No gravity, but still collides with stuff
+	MOVETYPE_FLYGRAVITY,
+	// flies through the air + is affected by gravity
+	MOVETYPE_VPHYSICS,
+	// uses VPHYSICS for simulation
+	MOVETYPE_PUSH,
+	// no clip to world, push and crush
+	MOVETYPE_NOCLIP,
+	// No gravity, no collisions, still do velocity/avelocity
+	MOVETYPE_LADDER,
+	// Used by players only when going onto a ladder
+	MOVETYPE_OBSERVER,
+	// Observer movement, depends on player's observer mode
+	MOVETYPE_CUSTOM,
+	// Allows the entity to describe its own physics
+	MOVETYPE_LAST = MOVETYPE_CUSTOM,
+	// should always be defined as the last item in the list
 	MOVETYPE_MAX_BITS = 4
 };
 
@@ -529,7 +544,7 @@ public:
 	float GetInaccuracy()
 	{
 		typedef float(__thiscall* oInaccuracy)(PVOID);
-		return call_vfunc< oInaccuracy >(this, 481)(this);
+		return call_vfunc<oInaccuracy>(this, 481)(this);
 	}
 
 	float GetInnacc()
@@ -554,7 +569,7 @@ public:
 		if (!this) return nullptr;
 
 		typedef CSWeaponInfo* (__thiscall* OriginalFn)(void*);
-		return  call_vfunc<OriginalFn>(this, 459)(this);
+		return call_vfunc<OriginalFn>(this, 459)(this);
 	}
 };
 
@@ -569,18 +584,18 @@ public:
 class CLocalPlayerExclusive
 {
 public:
-	CNETVAR_FUNC(Vector, GetViewPunchAngle, 0x68F014C0);//m_viewPunchAngle
-	CNETVAR_FUNC(Vector, GetAimPunchAngle, 0xBF25C290);//m_aimPunchAngle
-	CNETVAR_FUNC(Vector, GetAimPunchAngleVel, 0x8425E045);//m_aimPunchAngleVel
+	CNETVAR_FUNC(Vector, GetViewPunchAngle, 0x68F014C0); //m_viewPunchAngle
+	CNETVAR_FUNC(Vector, GetAimPunchAngle, 0xBF25C290); //m_aimPunchAngle
+	CNETVAR_FUNC(Vector, GetAimPunchAngleVel, 0x8425E045); //m_aimPunchAngleVel
 };
 
 class CollisionProperty
 {
 public:
-	CNETVAR_FUNC(Vector, GetMins, 0xF6F78BAB);//m_vecMins
-	CNETVAR_FUNC(Vector, GetMaxs, 0xE47C6FC4);//m_vecMaxs
-	CNETVAR_FUNC(unsigned char, GetSolidType, 0xB86722A1);//m_nSolidType
-	CNETVAR_FUNC(unsigned short, GetSolidFlags, 0x63BB24C1);//m_usSolidFlags
+	CNETVAR_FUNC(Vector, GetMins, 0xF6F78BAB); //m_vecMins
+	CNETVAR_FUNC(Vector, GetMaxs, 0xE47C6FC4); //m_vecMaxs
+	CNETVAR_FUNC(unsigned char, GetSolidType, 0xB86722A1); //m_nSolidType
+	CNETVAR_FUNC(unsigned short, GetSolidFlags, 0x63BB24C1); //m_usSolidFlags
 	CNETVAR_FUNC(int, GetSurroundsType, 0xB677A0BB); //m_nSurroundType
 
 	bool IsSolid()
@@ -595,21 +610,21 @@ public:
 	//virtual void*					GetIClientUnknown() = 0;
 	virtual Vector const& GetRenderOrigin(void) = 0;
 	virtual Vector const& GetRenderAngles(void) = 0;
-	virtual bool					ShouldDraw(void) = 0;
-	virtual bool					IsTransparent(void) = 0;
-	virtual bool					UsesPowerOfTwoFrameBufferTexture() = 0;
-	virtual bool					UsesFullFrameBufferTexture() = 0;
-	virtual void					GetShadowHandle() const = 0;
+	virtual bool ShouldDraw(void) = 0;
+	virtual bool IsTransparent(void) = 0;
+	virtual bool UsesPowerOfTwoFrameBufferTexture() = 0;
+	virtual bool UsesFullFrameBufferTexture() = 0;
+	virtual void GetShadowHandle() const = 0;
 	virtual void* RenderHandle() = 0;
 	virtual const model_t* GetModel() const = 0;
-	virtual int						DrawModel(int flags) = 0;
-	virtual int						GetBody() = 0;
-	virtual void					ComputeFxBlend() = 0;
+	virtual int DrawModel(int flags) = 0;
+	virtual int GetBody() = 0;
+	virtual void ComputeFxBlend() = 0;
 
 	bool SetupBones(matrix3x4* pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime)
 	{
 		typedef bool(__thiscall* oSetupBones)(PVOID, matrix3x4*, int, int, float);
-		return call_vfunc< oSetupBones>(this, 13)(this, pBoneToWorldOut, nMaxBones, boneMask, currentTime);
+		return call_vfunc<oSetupBones>(this, 13)(this, pBoneToWorldOut, nMaxBones, boneMask, currentTime);
 	}
 };
 
@@ -617,19 +632,19 @@ class IClientNetworkable
 {
 public:
 	virtual IClientUnknown* GetIClientUnknown() = 0;
-	virtual void			Release() = 0;
-	virtual ClientClass* GetClientClass() = 0;// FOR NETVARS FIND YOURSELF ClientClass* stuffs
-	virtual void			NotifyShouldTransmit( /* ShouldTransmitState_t state*/) = 0;
-	virtual void			OnPreDataChanged( /*DataUpdateType_t updateType*/) = 0;
-	virtual void			OnDataChanged( /*DataUpdateType_t updateType*/) = 0;
-	virtual void			PreDataUpdate( /*DataUpdateType_t updateType*/) = 0;
-	virtual void			PostDataUpdate( /*DataUpdateType_t updateType*/) = 0;
-	virtual void			unknown();
-	virtual bool			IsDormant(void) = 0;
-	virtual int				GetIndex(void) const = 0;
-	virtual void			ReceiveMessage(int classID /*, bf_read &msg*/) = 0;
+	virtual void Release() = 0;
+	virtual ClientClass* GetClientClass() = 0; // FOR NETVARS FIND YOURSELF ClientClass* stuffs
+	virtual void NotifyShouldTransmit(/* ShouldTransmitState_t state*/) = 0;
+	virtual void OnPreDataChanged(/*DataUpdateType_t updateType*/) = 0;
+	virtual void OnDataChanged(/*DataUpdateType_t updateType*/) = 0;
+	virtual void PreDataUpdate(/*DataUpdateType_t updateType*/) = 0;
+	virtual void PostDataUpdate(/*DataUpdateType_t updateType*/) = 0;
+	virtual void unknown();
+	virtual bool IsDormant(void) = 0;
+	virtual int GetIndex(void) const = 0;
+	virtual void ReceiveMessage(int classID /*, bf_read &msg*/) = 0;
 	virtual void* GetDataTableBasePtr() = 0;
-	virtual void			SetDestroyedOnRecreateEntities(void) = 0;
+	virtual void SetDestroyedOnRecreateEntities(void) = 0;
 };
 
 class IClientUnknown
@@ -647,19 +662,20 @@ class IClientThinkable
 {
 public:
 	virtual IClientUnknown* GetIClientUnknown() = 0;
-	virtual void				ClientThink() = 0;
+	virtual void ClientThink() = 0;
 	virtual void* GetThinkHandle() = 0;
-	virtual void				SetThinkHandle(void* hThink) = 0;
-	virtual void				Release() = 0;
+	virtual void SetThinkHandle(void* hThink) = 0;
+	virtual void Release() = 0;
 };
 
-class __declspec (novtable)IClientEntity : public IClientUnknown, public IClientRenderable, public IClientNetworkable, public IClientThinkable
+class __declspec (novtable)IClientEntity : public IClientUnknown, public IClientRenderable, public IClientNetworkable,
+	public IClientThinkable
 {
 public:
 public:
-	virtual void			Release(void) = 0;
-	virtual void			blahblahpad(void) = 0;
-	virtual Vector& GetAbsOrigin(void) const = 0;//in broken place use GetOrigin Below
+	void Release(void) override = 0;
+	virtual void blahblahpad(void) = 0;
+	virtual Vector& GetAbsOrigin(void) const = 0; //in broken place use GetOrigin Below
 	virtual const Vector& GetAbsAngles(void) const = 0;
 
 	//---                 NetVars                  ---//
@@ -669,8 +685,8 @@ public:
 		return *(int*)(this + 0xA310);
 	}
 
-	CPNETVAR_FUNC(CLocalPlayerExclusive*, localPlayerExclusive, 0x7177BC3E);// m_Local
-	CPNETVAR_FUNC(CollisionProperty*, collisionProperty, 0xE477CBD0);//m_Collision
+	CPNETVAR_FUNC(CLocalPlayerExclusive*, localPlayerExclusive, 0x7177BC3E); // m_Local
+	CPNETVAR_FUNC(CollisionProperty*, collisionProperty, 0xE477CBD0); //m_Collision
 
 	CNETVAR_FUNC(float, GetLowerBodyYaw, 0xE6996CCF); //m_flLowerBodyYawTarget
 	CNETVAR_FUNC(int, GetFlags, 0xE456D580); //m_fFlags
@@ -716,12 +732,12 @@ public:
 
 	QAngle* GetEyeAnglesPointer()
 	{
-		return reinterpret_cast<QAngle*>((DWORD)this + (DWORD)0xB344);
+		return reinterpret_cast<QAngle*>((DWORD)this + static_cast<DWORD>(0xB344));
 	}
 
 	QAngle GetEyeAngles()
 	{
-		return *reinterpret_cast<QAngle*>((DWORD)this + (DWORD)0xB344);
+		return *reinterpret_cast<QAngle*>((DWORD)this + static_cast<DWORD>(0xB344));
 	}
 
 	QAngle GetEyeAnglesXY()
@@ -751,18 +767,21 @@ public:
 
 	bool IsPlayer()
 	{
-		return GetClientClass()->m_ClassID == (int)CSGOClassID::CCSPlayer;
+		return GetClientClass()->m_ClassID == static_cast<int>(CSGOClassID::CCSPlayer);
 	}
 
-	Vector GetOrigin2() {
+	Vector GetOrigin2()
+	{
 		return *(Vector*)((DWORD)this + 0x00000134);
 	}
 
-	Vector GetViewAngles2() {
+	Vector GetViewAngles2()
+	{
 		return *(Vector*)((DWORD)this + 0x00000104);
 	}
 
-	Vector GetAbsOrigin2() {
+	Vector GetAbsOrigin2()
+	{
 		__asm {
 			MOV ECX, this
 			MOV EAX, DWORD PTR DS : [ECX]
@@ -770,7 +789,8 @@ public:
 		}
 	}
 
-	Vector GetAbsAngles2() {
+	Vector GetAbsAngles2()
+	{
 		__asm {
 			MOV ECX, this;
 			MOV EAX, DWORD PTR DS : [ECX] ;
@@ -778,27 +798,32 @@ public:
 		}
 	}
 
-	Vector GetEyePosition() {
+	Vector GetEyePosition()
+	{
 		Vector Origin = *(Vector*)((DWORD)this + 0x138);
 		Vector View = *(Vector*)((DWORD)this + 0x108);
-		return(Origin + View);
+		return (Origin + View);
 	}
 
-	Vector GetAimPunch() {
+	Vector GetAimPunch()
+	{
 		return *(Vector*)((DWORD)this + 0x302C);
 	}
 
-	bool IsImmune() {
+	bool IsImmune()
+	{
 		return *(bool*)((DWORD)this + 0x392C);
 	}
 
-	ClientClass* GetClientClass2() {
+	ClientClass* GetClientClass2()
+	{
 		PVOID Networkable = (PVOID)((DWORD)(this) + 0x8);
 		using Original = ClientClass * (__thiscall*)(PVOID);
 		return call_vfunc<Original>(Networkable, 2)(Networkable);
 	}
 
-	HANDLE GetWeaponHandle() {
+	HANDLE GetWeaponHandle()
+	{
 		return *(HANDLE*)((DWORD)this + 0x2EF8);
 	}
 };

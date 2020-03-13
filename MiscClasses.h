@@ -16,6 +16,7 @@ class IClientModeShared
 {
 public:
 };
+
 class IClientEntityList
 {
 public:
@@ -24,10 +25,10 @@ public:
 	virtual void Function2();
 	virtual IClientEntity* GetClientEntity(int entnum);
 	virtual IClientEntity* GetClientEntityFromHandle(HANDLE hEnt) = 0;
-	virtual int					NumberOfEntities(bool bIncludeNonNetworkable) = 0;
-	virtual int					GetHighestEntityIndex(void);
-	virtual void				SetMaxEntities(int maxents);
-	virtual int					GetMaxEntities();
+	virtual int NumberOfEntities(bool bIncludeNonNetworkable) = 0;
+	virtual int GetHighestEntityIndex(void);
+	virtual void SetMaxEntities(int maxents);
+	virtual int GetMaxEntities();
 };
 
 struct CViewSetup
@@ -38,9 +39,9 @@ struct CViewSetup
 	__int32 y;
 	__int32 y_old;
 	__int32 width;
-	__int32    width_old;
+	__int32 width_old;
 	__int32 height;
-	__int32    height_old;
+	__int32 height_old;
 	char _0x0030[128];
 	float fov;
 	float fovViewmodel;
@@ -72,6 +73,7 @@ public:
 		typedef const char* (__thiscall* OriginalFn)(PVOID, unsigned int);
 		return call_vfunc<OriginalFn>(this, Offsets::VMT::Panel_GetName)(this, vguiPanel);
 	}
+
 	void SetMouseInputEnabled(unsigned int iPanel, bool bState)
 	{
 		return (call_vfunc<void(__thiscall*)(PVOID, int, bool)>(this, 32))(this, iPanel, bState);
@@ -87,20 +89,23 @@ public:
 	{
 		*((int*)this) = 0;
 	}
+
 	Color(int r, int g, int b)
 	{
 		SetColor(r, g, b, 0);
 	}
+
 	Color(int r, int g, int b, int a)
 	{
 		SetColor(r, g, b, a);
 	}
+
 	void SetColor(int r, int g, int b, int a = 0)
 	{
-		_color[0] = (unsigned char)r;
-		_color[1] = (unsigned char)g;
-		_color[2] = (unsigned char)b;
-		_color[3] = (unsigned char)a;
+		_color[0] = static_cast<unsigned char>(r);
+		_color[1] = static_cast<unsigned char>(g);
+		_color[2] = static_cast<unsigned char>(b);
+		_color[3] = static_cast<unsigned char>(a);
 	}
 
 	void GetColor(int& r, int& g, int& b, int& a) const
@@ -121,13 +126,13 @@ public:
 		return *((int*)this);
 	}
 
-	inline int r() const { return _color[0]; }
-	inline int g() const { return _color[1]; }
-	inline int b() const { return _color[2]; }
-	inline int a() const { return _color[3]; }
+	int r() const { return _color[0]; }
+	int g() const { return _color[1]; }
+	int b() const { return _color[2]; }
+	int a() const { return _color[3]; }
 
-	void SetAlpha(int a) { _color[0] = (unsigned char)a; }
-	int  GetAlpha() { return _color[0]; }
+	void SetAlpha(int a) { _color[0] = static_cast<unsigned char>(a); }
+	int GetAlpha() { return _color[0]; }
 
 	unsigned char& operator[](int index)
 	{
@@ -139,12 +144,12 @@ public:
 		return _color[index];
 	}
 
-	bool operator == (const Color& rhs) const
+	bool operator ==(const Color& rhs) const
 	{
 		return (*((int*)this) == *((int*)&rhs));
 	}
 
-	bool operator != (const Color& rhs) const
+	bool operator !=(const Color& rhs) const
 	{
 		return !(operator==(rhs));
 	}
@@ -163,17 +168,24 @@ private:
 class IVDebugOverlay
 {
 public:
-	virtual void AddEntityTextOverlay(int ent_index, int line_offset, float duration, int r, int g, int b, int a, const char* format, ...) = 0;
-	virtual void AddBoxOverlay(const Vector& origin, const Vector& mins, const Vector& max, Vector const& orientation, int r, int g, int b, int a, float duration) = 0;
-	virtual void AddSphereOverlay(const Vector& vOrigin, float flRadius, int nTheta, int nPhi, int r, int g, int b, int a, float flDuration) = 0;
-	virtual void AddTriangleOverlay(const Vector& p1, const Vector& p2, const Vector& p3, int r, int g, int b, int a, bool noDepthTest, float duration) = 0;
-	virtual void AddLineOverlay(const Vector& origin, const Vector& dest, int r, int g, int b, bool noDepthTest, float duration) = 0;
+	virtual void AddEntityTextOverlay(int ent_index, int line_offset, float duration, int r, int g, int b, int a,
+		const char* format, ...) = 0;
+	virtual void AddBoxOverlay(const Vector& origin, const Vector& mins, const Vector& max, Vector const& orientation,
+		int r, int g, int b, int a, float duration) = 0;
+	virtual void AddSphereOverlay(const Vector& vOrigin, float flRadius, int nTheta, int nPhi, int r, int g, int b,
+		int a, float flDuration) = 0;
+	virtual void AddTriangleOverlay(const Vector& p1, const Vector& p2, const Vector& p3, int r, int g, int b, int a,
+		bool noDepthTest, float duration) = 0;
+	virtual void AddLineOverlay(const Vector& origin, const Vector& dest, int r, int g, int b, bool noDepthTest,
+		float duration) = 0;
 	virtual void AddTextOverlay(const Vector& origin, float duration, const char* format, ...) = 0;
 	virtual void AddTextOverlay(const Vector& origin, int line_offset, float duration, const char* format, ...) = 0;
-	virtual void AddScreenTextOverlay(float flXPos, float flYPos, float flDuration, int r, int g, int b, int a, const char* text) = 0;
-	virtual void AddSweptBoxOverlay(const Vector& start, const Vector& end, const Vector& mins, const Vector& max, const Vector& angles, int r, int g, int b, int a, float flDuration) = 0;
+	virtual void AddScreenTextOverlay(float flXPos, float flYPos, float flDuration, int r, int g, int b, int a,
+		const char* text) = 0;
+	virtual void AddSweptBoxOverlay(const Vector& start, const Vector& end, const Vector& mins, const Vector& max,
+		const Vector& angles, int r, int g, int b, int a, float flDuration) = 0;
 	virtual void AddGridOverlay(const Vector& origin) = 0;
-	virtual void AddCoordFrameOverlay(const matrix3x4& frame, float flScale, int vColorTable[3][3] = NULL) = 0;
+	virtual void AddCoordFrameOverlay(const matrix3x4& frame, float flScale, int vColorTable[3][3] = nullptr) = 0;
 
 	virtual int ScreenPosition(const Vector& point, Vector& screen) = 0;
 	virtual int ScreenPosition(float flXPos, float flYPos, Vector& screen) = 0;
@@ -183,11 +195,15 @@ public:
 	virtual void ClearDeadOverlays(void) = 0;
 	virtual void ClearAllOverlays() = 0;
 
-	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, float r, float g, float b, float alpha, const char* format, ...) = 0;
-	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, int r, int g, int b, int a, const char* format, ...) = 0;
+	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, float r, float g, float b,
+		float alpha, const char* format, ...) = 0;
+	virtual void AddTextOverlayRGB(const Vector& origin, int line_offset, float duration, int r, int g, int b, int a,
+		const char* format, ...) = 0;
 
-	virtual void AddLineOverlayAlpha(const Vector& origin, const Vector& dest, int r, int g, int b, int a, bool noDepthTest, float duration) = 0;
-	virtual void AddBoxOverlay2(const Vector& origin, const Vector& mins, const Vector& max, Vector const& orientation, const Color& faceColor, const Color& edgeColor, float duration) = 0;
+	virtual void AddLineOverlayAlpha(const Vector& origin, const Vector& dest, int r, int g, int b, int a,
+		bool noDepthTest, float duration) = 0;
+	virtual void AddBoxOverlay2(const Vector& origin, const Vector& mins, const Vector& max, Vector const& orientation,
+		const Color& faceColor, const Color& edgeColor, float duration) = 0;
 
 	virtual void PurgeTextOverlays() = 0;
 };
@@ -196,7 +212,9 @@ public:
 class CUserCmd
 {
 public:
-	virtual ~CUserCmd() {}; //Destructor 0
+	virtual ~CUserCmd()
+	{
+	}; //Destructor 0
 	CUserCmd()
 	{
 		Reset();
@@ -253,30 +271,30 @@ public:
 		*this = src;
 	}
 
-	int        command_number;
-	int        tick_count;
-	Vector  viewangles;
-	Vector    aimdirection;
-	float    forwardmove;
-	float    sidemove;
-	float    upmove;
-	int        buttons;
-	BYTE    impulse;
-	int        weaponselect;
-	int        weaponsubtype;
-	int        random_seed;
-	short    mousedx;
-	short    mousedy;
-	bool    hasbeenpredicted;
-	Vector  headangles;
-	Vector    headoffset;
+	int command_number;
+	int tick_count;
+	Vector viewangles;
+	Vector aimdirection;
+	float forwardmove;
+	float sidemove;
+	float upmove;
+	int buttons;
+	BYTE impulse;
+	int weaponselect;
+	int weaponsubtype;
+	int random_seed;
+	short mousedx;
+	short mousedy;
+	bool hasbeenpredicted;
+	Vector headangles;
+	Vector headoffset;
 };
 
 class CVerifiedUserCmd
 {
 public:
-	CUserCmd	m_cmd;
-	unsigned long	m_crc;
+	CUserCmd m_cmd;
+	unsigned long m_crc;
 };
 
 //========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
@@ -296,7 +314,7 @@ typedef unsigned long CRC32_t;
 void CRC32_Init(CRC32_t* pulCRC);
 void CRC32_ProcessBuffer(CRC32_t* pulCRC, const void* p, int len);
 void CRC32_Final(CRC32_t* pulCRC);
-CRC32_t	CRC32_GetTableEntry(unsigned int slot);
+CRC32_t CRC32_GetTableEntry(unsigned int slot);
 
 inline CRC32_t CRC32_ProcessSingleBuffer(const void* p, int len)
 {
@@ -314,33 +332,33 @@ inline CRC32_t CRC32_ProcessSingleBuffer(const void* p, int len)
 class CInput
 {
 public:
-	void* pvftable;                     //0x00
-	bool                m_fTrackIRAvailable;          //0x04
-	bool                m_fMouseInitialized;          //0x05
-	bool                m_fMouseActive;               //0x06
-	bool                m_fJoystickAdvancedInit;      //0x07
-	char                pad_0x08[0x2C];               //0x08
-	void* m_pKeys;                      //0x34
-	char                pad_0x38[0x64];               //0x38
-	int					pad_0x41;
-	int					pad_0x42;
-	bool                m_fCameraInterceptingMouse;   //0x9C
-	bool                m_fCameraInThirdPerson;       //0x9D
-	bool                m_fCameraMovingWithMouse;     //0x9E
-	Vector				m_vecCameraOffset;            //0xA0
-	bool                m_fCameraDistanceMove;        //0xAC
-	int                 m_nCameraOldX;                //0xB0
-	int                 m_nCameraOldY;                //0xB4
-	int                 m_nCameraX;                   //0xB8
-	int                 m_nCameraY;                   //0xBC
-	bool                m_CameraIsOrthographic;       //0xC0
-	Vector              m_angPreviousViewAngles;      //0xC4
-	Vector              m_angPreviousViewAnglesTilt;  //0xD0
-	float               m_flLastForwardMove;          //0xDC
-	int                 m_nClearInputState;           //0xE0
-	char                pad_0xE4[0x8];                //0xE4
-	CUserCmd* m_pCommands;                  //0xEC
-													  //CVerifiedUserCmd*   m_pVerifiedCommands;          //0xF0
+	void* pvftable; //0x00
+	bool m_fTrackIRAvailable; //0x04
+	bool m_fMouseInitialized; //0x05
+	bool m_fMouseActive; //0x06
+	bool m_fJoystickAdvancedInit; //0x07
+	char pad_0x08[0x2C]; //0x08
+	void* m_pKeys; //0x34
+	char pad_0x38[0x64]; //0x38
+	int pad_0x41;
+	int pad_0x42;
+	bool m_fCameraInterceptingMouse; //0x9C
+	bool m_fCameraInThirdPerson; //0x9D
+	bool m_fCameraMovingWithMouse; //0x9E
+	Vector m_vecCameraOffset; //0xA0
+	bool m_fCameraDistanceMove; //0xAC
+	int m_nCameraOldX; //0xB0
+	int m_nCameraOldY; //0xB4
+	int m_nCameraX; //0xB8
+	int m_nCameraY; //0xBC
+	bool m_CameraIsOrthographic; //0xC0
+	Vector m_angPreviousViewAngles; //0xC4
+	Vector m_angPreviousViewAnglesTilt; //0xD0
+	float m_flLastForwardMove; //0xDC
+	int m_nClearInputState; //0xE0
+	char pad_0xE4[0x8]; //0xE4
+	CUserCmd* m_pCommands; //0xEC
+	//CVerifiedUserCmd*   m_pVerifiedCommands;          //0xF0
 	class CUserCmd
 	{
 	public:
@@ -365,6 +383,7 @@ public:
 			CRC32_Final(&crc);
 			return crc;
 		}
+
 		BYTE u1[4];
 		int command_number;
 		int tick_count;
@@ -384,12 +403,14 @@ public:
 		Vector headangles;
 		Vector headoffset;
 	};
+
 	class CVerifiedUserCmd
 	{
 	public:
-		CUserCmd			m_cmd;
-		unsigned long		m_crc;
+		CUserCmd m_cmd;
+		unsigned long m_crc;
 	};
+
 	CUserCmd* GetUserCmd(int slot, int seq)
 	{
 		typedef CUserCmd* (__thiscall* OriginalFn)(PVOID, int, int);
@@ -400,33 +421,33 @@ public:
 class CGlobalVarsBase
 {
 public:
-	float    realtime;
-	int      framecount;
-	float    absoluteframetime;
-	float    absoluteframestarttimestddev;
-	float    curtime;
-	float    frametime;
-	int      maxClients;
-	int      tickcount;
-	float    interval_per_tick;
-	float    interpolation_amount;
-	int      simTicksThisFrame;
-	int      network_protocol;
+	float realtime;
+	int framecount;
+	float absoluteframetime;
+	float absoluteframestarttimestddev;
+	float curtime;
+	float frametime;
+	int maxClients;
+	int tickcount;
+	float interval_per_tick;
+	float interpolation_amount;
+	int simTicksThisFrame;
+	int network_protocol;
 	void* pSaveData;
-	bool     m_bClient;
-	int      nTimestampNetworkingBase;
-	int      nTimestampRandomizeWindow;
+	bool m_bClient;
+	int nTimestampNetworkingBase;
+	int nTimestampRandomizeWindow;
 };
 
 struct Ray_t
 {
-	__declspec(align(16)) Vector  m_Start;
-	__declspec(align(16)) Vector  m_Delta;
-	__declspec(align(16)) Vector  m_StartOffset;
-	__declspec(align(16)) Vector  m_Extents;
+	__declspec(align(16)) Vector m_Start;
+	__declspec(align(16)) Vector m_Delta;
+	__declspec(align(16)) Vector m_StartOffset;
+	__declspec(align(16)) Vector m_Extents;
 	//without your matrix3x4
-	bool	m_IsRay;
-	bool	m_IsSwept;
+	bool m_IsRay;
+	bool m_IsSwept;
 
 	void Init(Vector& vecStart, Vector& vecEnd)
 	{
@@ -446,48 +467,48 @@ struct Ray_t
 
 struct cplane_t
 {
-	Vector  normal;
-	float   dist;
-	BYTE    type;
-	BYTE    signbits;
-	BYTE    pad[2];
+	Vector normal;
+	float dist;
+	BYTE type;
+	BYTE signbits;
+	BYTE pad[2];
 };
 
 class CBaseTrace
 {
 public:
-	Vector                  startpos;
-	Vector                  endpos;
-	cplane_t                plane;
-	float                   fraction;
-	int                             contents;
-	unsigned short  dispFlags;
-	bool                    allsolid;
-	bool                    startsolid;
+	Vector startpos;
+	Vector endpos;
+	cplane_t plane;
+	float fraction;
+	int contents;
+	unsigned short dispFlags;
+	bool allsolid;
+	bool startsolid;
 };
 
 struct csurface_t
 {
 	const char* name;
-	short                   surfaceProps;
-	unsigned short  flags;
+	short surfaceProps;
+	unsigned short flags;
 };
 
 class CGameTrace : public CBaseTrace
 {
 public:
-	bool                    DidHitWorld() const;
-	bool                    DidHitNonWorldEntity() const;
-	int                             GetEntityIndex() const;
-	bool                    DidHit() const;
+	bool DidHitWorld() const;
+	bool DidHitNonWorldEntity() const;
+	int GetEntityIndex() const;
+	bool DidHit() const;
 public:
-	float                   fractionleftsolid;
-	csurface_t              surface;
-	int                             hitgroup;
-	short                   physicsbone;
-	unsigned short  worldSurfaceIndex;
+	float fractionleftsolid;
+	csurface_t surface;
+	int hitgroup;
+	short physicsbone;
+	unsigned short worldSurfaceIndex;
 	IClientEntity* m_pEnt;
-	int                             hitbox;
+	int hitbox;
 	char shit[0x24];
 };
 
@@ -509,19 +530,19 @@ enum TraceType_t
 class ITraceFilter
 {
 public:
-	virtual bool            ShouldHitEntity(IClientEntity* pEntity, int contentsMask) = 0;
-	virtual TraceType_t     GetTraceType() const = 0;
+	virtual bool ShouldHitEntity(IClientEntity* pEntity, int contentsMask) = 0;
+	virtual TraceType_t GetTraceType() const = 0;
 };
 
 class CTraceFilter : public ITraceFilter
 {
 public:
-	bool ShouldHitEntity(IClientEntity* pEntityHandle, int contentsMask)
+	bool ShouldHitEntity(IClientEntity* pEntityHandle, int contentsMask) override
 	{
 		return !(pEntityHandle == pSkip);
 	}
 
-	TraceType_t GetTraceType() const
+	TraceType_t GetTraceType() const override
 	{
 		return TRACE_EVERYTHING;
 	}
@@ -532,7 +553,7 @@ public:
 class IEngineTrace
 {
 public:
-	int	GetPointContents(const Vector& vecAbsPosition, int contentsMask = MASK_ALL, IClientEntity** ppEntity = NULL)
+	int GetPointContents(const Vector& vecAbsPosition, int contentsMask = MASK_ALL, IClientEntity** ppEntity = nullptr)
 	{
 		typedef int(__thiscall* fnGetPointContents)(void*, const Vector&, int, IClientEntity**);
 		return call_vfunc<fnGetPointContents>(this, 0)(this, vecAbsPosition, contentsMask, ppEntity);
@@ -543,21 +564,22 @@ public:
 		typedef void(__thiscall* fnTraceRay)(void*, const Ray_t&, unsigned int, ITraceFilter*, trace_t*);
 		call_vfunc<fnTraceRay>(this, 5)(this, ray, fMask, pTraceFilter, pTrace);
 	}
+
 	void EdgeTraceRay(Ray_t& ray, CTraceFilter& filt, CGameTrace& trace, bool wall = false)
 	{
 		typedef void(__thiscall* OrigFn)(void*, Ray_t&, unsigned int, CTraceFilter&, CGameTrace&);
-		call_vfunc<OrigFn>(this, 5)(this, ray, wall ? 0x200400B : 0x46004003, filt, trace);				// 0x46004003 0x4600400B
+		call_vfunc<OrigFn>(this, 5)(this, ray, wall ? 0x200400B : 0x46004003, filt, trace); // 0x46004003 0x4600400B
 	}
 };
 
 struct mstudiobbox_t
 {
-	int     bone;
-	int     group;
-	Vector  bbmin;
-	Vector  bbmax;
-	int     szhitboxnameindex;
-	int     unused[8];
+	int bone;
+	int group;
+	Vector bbmin;
+	Vector bbmax;
+	int szhitboxnameindex;
+	int unused[8];
 	//float	radius;
 
 	char* GetHitboxName(void)
@@ -568,90 +590,97 @@ struct mstudiobbox_t
 		return ((char*)this) + szhitboxnameindex;
 	}
 };
+
 struct mstudiohitboxset_t
 {
-	int                                             sznameindex;
-	inline char* const              GetName(void) const { return ((char*)this) + sznameindex; }
-	int                                             numhitboxes;
-	int                                             hitboxindex;
-	inline mstudiobbox_t* GetHitbox(int i) const { return (mstudiobbox_t*)(((byte*)this) + hitboxindex) + i; };
+	int sznameindex;
+	char* const GetName(void) const { return ((char*)this) + sznameindex; }
+	int numhitboxes;
+	int hitboxindex;
+	mstudiobbox_t* GetHitbox(int i) const { return (mstudiobbox_t*)(((byte*)this) + hitboxindex) + i; };
 };
+
 struct mstudiobone_t
 {
-	int                                     sznameindex;
-	inline char* const GetName(void) const { return ((char*)this) + sznameindex; }
-	int                                     parent;
-	int                                     bonecontroller[6];
+	int sznameindex;
+	char* const GetName(void) const { return ((char*)this) + sznameindex; }
+	int parent;
+	int bonecontroller[6];
 
-	Vector                          pos;
-	float                           quat[4];
-	Vector                          rot;
-	Vector                          posscale;
-	Vector                          rotscale;
+	Vector pos;
+	float quat[4];
+	Vector rot;
+	Vector posscale;
+	Vector rotscale;
 
-	matrix3x4                     poseToBone;
-	float                           qAlignment[4];
-	int                                     flags;
-	int                                     proctype;
-	int                                     procindex;              // procedural rule
-	mutable int                     physicsbone;    // index into physically simulated bone
-	inline void* GetProcedure() const { if (procindex == 0) return NULL; else return  (void*)(((byte*)this) + procindex); };
-	int                                     surfacepropidx; // index into string tablefor property name
-	inline char* const GetSurfaceProps(void) const { return ((char*)this) + surfacepropidx; }
-	int                                     contents;               // See BSPFlags.h for the contents flags
+	matrix3x4 poseToBone;
+	float qAlignment[4];
+	int flags;
+	int proctype;
+	int procindex; // procedural rule
+	mutable int physicsbone; // index into physically simulated bone
+	void* GetProcedure() const
+	{
+		if (procindex == 0) return nullptr;
+		return static_cast<void*>(((byte*)this) + procindex);
+	};
+	int surfacepropidx; // index into string tablefor property name
+	char* const GetSurfaceProps(void) const { return ((char*)this) + surfacepropidx; }
+	int contents; // See BSPFlags.h for the contents flags
 
-	int                                     unused[8];              // remove as appropriate
+	int unused[8]; // remove as appropriate
 };
+
 struct studiohdr_t
 {
-	int                                     id;
-	int                                     version;
+	int id;
+	int version;
 
-	int                                     checksum;
+	int checksum;
 
-	char                            name[64];
-	int                                     length;
+	char name[64];
+	int length;
 
-	Vector                          eyeposition;
+	Vector eyeposition;
 
-	Vector                          illumposition;
+	Vector illumposition;
 
-	Vector                          hull_min;
-	Vector                          hull_max;
+	Vector hull_min;
+	Vector hull_max;
 
-	Vector                          view_bbmin;
-	Vector                          view_bbmax;
+	Vector view_bbmin;
+	Vector view_bbmax;
 
-	int                                     flags;
+	int flags;
 
-	int                                     numbones;
-	int                                     boneindex;
+	int numbones;
+	int boneindex;
 
-	inline mstudiobone_t* GetBone(int i) const { return (mstudiobone_t*)(((byte*)this) + boneindex) + i; };
+	mstudiobone_t* GetBone(int i) const { return (mstudiobone_t*)(((byte*)this) + boneindex) + i; };
 	//	inline mstudiobone_t *pBone(int i) const { Assert(i >= 0 && i < numbones); return (mstudiobone_t *)(((byte *)this) + boneindex) + i; };
 
-	int                                     numbonecontrollers;
-	int                                     bonecontrollerindex;
+	int numbonecontrollers;
+	int bonecontrollerindex;
 
-	int                                     numhitboxsets;
-	int                                     hitboxsetindex;
+	int numhitboxsets;
+	int hitboxsetindex;
 
 	mstudiohitboxset_t* GetHitboxSet(int i) const
 	{
 		return (mstudiohitboxset_t*)(((byte*)this) + hitboxsetindex) + i;
 	}
 
-	inline mstudiobbox_t* GetHitbox(int i, int set) const
+	mstudiobbox_t* GetHitbox(int i, int set) const
 	{
 		mstudiohitboxset_t const* s = GetHitboxSet(set);
 
 		if (!s)
-			return NULL;
+			return nullptr;
 
 		return s->GetHitbox(i);
 	}
 
-	inline int GetHitboxCount(int set) const
+	int GetHitboxCount(int set) const
 	{
 		mstudiohitboxset_t const* s = GetHitboxSet(set);
 
@@ -661,149 +690,149 @@ struct studiohdr_t
 		return s->numhitboxes;
 	}
 
-	int                                     numlocalanim;
-	int                                     localanimindex;
+	int numlocalanim;
+	int localanimindex;
 
-	int                                     numlocalseq;
-	int                                     localseqindex;
+	int numlocalseq;
+	int localseqindex;
 
-	mutable int                     activitylistversion;
-	mutable int                     eventsindexed;
+	mutable int activitylistversion;
+	mutable int eventsindexed;
 
-	int                                     numtextures;
-	int                                     textureindex;
+	int numtextures;
+	int textureindex;
 
-	int                                     numcdtextures;
-	int                                     cdtextureindex;
+	int numcdtextures;
+	int cdtextureindex;
 
-	int                                     numskinref;
-	int                                     numskinfamilies;
-	int                                     skinindex;
+	int numskinref;
+	int numskinfamilies;
+	int skinindex;
 
-	int                                     numbodyparts;
-	int                                     bodypartindex;
+	int numbodyparts;
+	int bodypartindex;
 
-	int                                     numlocalattachments;
-	int                                     localattachmentindex;
+	int numlocalattachments;
+	int localattachmentindex;
 
-	int                                     numlocalnodes;
-	int                                     localnodeindex;
-	int                                     localnodenameindex;
+	int numlocalnodes;
+	int localnodeindex;
+	int localnodenameindex;
 
-	int                                     numflexdesc;
-	int                                     flexdescindex;
+	int numflexdesc;
+	int flexdescindex;
 
-	int                                     numflexcontrollers;
-	int                                     flexcontrollerindex;
+	int numflexcontrollers;
+	int flexcontrollerindex;
 
-	int                                     numflexrules;
-	int                                     flexruleindex;
+	int numflexrules;
+	int flexruleindex;
 
-	int                                     numikchains;
-	int                                     ikchainindex;
+	int numikchains;
+	int ikchainindex;
 
-	int                                     nummouths;
-	int                                     mouthindex;
+	int nummouths;
+	int mouthindex;
 
-	int                                     numlocalposeparameters;
-	int                                     localposeparamindex;
+	int numlocalposeparameters;
+	int localposeparamindex;
 
-	int                                     surfacepropindex;
+	int surfacepropindex;
 
-	int                                     keyvalueindex;
-	int                                     keyvaluesize;
+	int keyvalueindex;
+	int keyvaluesize;
 
-	int                                     numlocalikautoplaylocks;
-	int                                     localikautoplaylockindex;
+	int numlocalikautoplaylocks;
+	int localikautoplaylockindex;
 
-	float                           mass;
-	int                                     contents;
+	float mass;
+	int contents;
 
-	int                                     numincludemodels;
-	int                                     includemodelindex;
+	int numincludemodels;
+	int includemodelindex;
 
 	mutable void* virtualModel;
 
-	int                                     szanimblocknameindex;
-	int                                     numanimblocks;
-	int                                     animblockindex;
+	int szanimblocknameindex;
+	int numanimblocks;
+	int animblockindex;
 
 	mutable void* animblockModel;
 
-	int                                     bonetablebynameindex;
+	int bonetablebynameindex;
 
 	void* pVertexBase;
 	void* pIndexBase;
 
-	byte                            constdirectionallightdot;
+	byte constdirectionallightdot;
 
-	byte                            rootLOD;
+	byte rootLOD;
 
-	byte                            numAllowedRootLODs;
+	byte numAllowedRootLODs;
 
-	byte                            unused[1];
+	byte unused[1];
 
-	int                                     unused4;
+	int unused4;
 
-	int                                     numflexcontrollerui;
-	int                                     flexcontrolleruiindex;
-	float                           flVertAnimFixedPointScale;
-	int                                     unused3[1];
-	int                                     studiohdr2index;
-	int                                     unused2[1];
+	int numflexcontrollerui;
+	int flexcontrolleruiindex;
+	float flVertAnimFixedPointScale;
+	int unused3[1];
+	int studiohdr2index;
+	int unused2[1];
 };
 
 struct surfacephysicsparams_t
 {
-	float    friction;
-	float    elasticity; // collision elasticity - used to compute coefficient of restitution
-	float    density;    // physical density (in kg / m^3)
-	float    thickness;    // material thickness if not solid (sheet materials) in inches
-	float    dampening;
+	float friction;
+	float elasticity; // collision elasticity - used to compute coefficient of restitution
+	float density; // physical density (in kg / m^3)
+	float thickness; // material thickness if not solid (sheet materials) in inches
+	float dampening;
 };
 
 struct surfaceaudioparams_t
 {
-	float    reflectivity;            // like elasticity, but how much sound should be reflected by this surface
-	float    hardnessFactor;            // like elasticity, but only affects impact sound choices
-	float    roughnessFactor;        // like friction, but only affects scrape sound choices
-	float    roughThreshold;            // surface roughness > this causes "rough" scrapes, < this causes "smooth" scrapes
-	float    hardThreshold;            // surface hardness > this causes "hard" impacts, < this causes "soft" impacts
-	float    hardVelocityThreshold;    // collision velocity > this causes "hard" impacts, < this causes "soft" impacts
+	float reflectivity; // like elasticity, but how much sound should be reflected by this surface
+	float hardnessFactor; // like elasticity, but only affects impact sound choices
+	float roughnessFactor; // like friction, but only affects scrape sound choices
+	float roughThreshold; // surface roughness > this causes "rough" scrapes, < this causes "smooth" scrapes
+	float hardThreshold; // surface hardness > this causes "hard" impacts, < this causes "soft" impacts
+	float hardVelocityThreshold; // collision velocity > this causes "hard" impacts, < this causes "soft" impacts
 };
 
 struct surfacesoundnames_t
 {
-	unsigned short    stepleft;
-	unsigned short    stepright;
-	unsigned short    impactSoft;
-	unsigned short    impactHard;
-	unsigned short    scrapeSmooth;
-	unsigned short    scrapeRough;
-	unsigned short    bulletImpact;
-	unsigned short    rolling;
-	unsigned short    breakSound;
-	unsigned short    strainSound;
+	unsigned short stepleft;
+	unsigned short stepright;
+	unsigned short impactSoft;
+	unsigned short impactHard;
+	unsigned short scrapeSmooth;
+	unsigned short scrapeRough;
+	unsigned short bulletImpact;
+	unsigned short rolling;
+	unsigned short breakSound;
+	unsigned short strainSound;
 };
 
 struct surfacegameprops_t
 {
 public:
-	float    maxSpeedFactor; //0x0000
-	float    jumpFactor; //0x0004
-	char    pad00[0x4]; //0x0008
-	float    flPenetrationModifier; //0x000C
-	float    flDamageModifier; //0x0010
-	unsigned short    material; //0x0014
-	char    pad01[0x3];
-};//Size=0x0019
+	float maxSpeedFactor; //0x0000
+	float jumpFactor; //0x0004
+	char pad00[0x4]; //0x0008
+	float flPenetrationModifier; //0x000C
+	float flDamageModifier; //0x0010
+	unsigned short material; //0x0014
+	char pad01[0x3];
+}; //Size=0x0019
 
 struct surfacedata_t
 {
-	surfacephysicsparams_t    physics;
-	surfaceaudioparams_t    audio;
-	surfacesoundnames_t        sounds;
-	surfacegameprops_t        game;
+	surfacephysicsparams_t physics;
+	surfaceaudioparams_t audio;
+	surfacesoundnames_t sounds;
+	surfacegameprops_t game;
 };
 
 class IPhysicsSurfaceProps
@@ -827,9 +856,9 @@ public:
 	void InternalSetString(const char* str);
 	char* GetName();
 	char* GetDefault();
-	float						GetFloat(void) const;
-	int						GetInt(void) const;
-	Color							GetColor(void) const;
+	float GetFloat(void) const;
+	int GetInt(void) const;
+	Color GetColor(void) const;
 	const char* GetString(void) const;
 
 	char pad_0x0000[0x4]; //0x0000
@@ -850,9 +879,10 @@ public:
 	__int32 bHasMax; //0x003C
 	float fMaxVal; //0x0040
 	void* fnChangeCallback; //0x0044
-};//Size=0x0048
+}; //Size=0x0048
 
-class SpoofedConvar {
+class SpoofedConvar
+{
 public:
 	SpoofedConvar();
 	SpoofedConvar(const char* szCVar);
@@ -860,20 +890,20 @@ public:
 
 	~SpoofedConvar();
 
-	bool           IsSpoofed();
-	void           Spoof();
+	bool IsSpoofed();
+	void Spoof();
 
-	void           SetFlags(int flags);
-	int            GetFlags();
+	void SetFlags(int flags);
+	int GetFlags();
 
-	void           SetBool(bool bValue);
-	void           SetInt(int iValue);
-	void           SetFloat(float flValue);
-	void           SetString(const char* szValue);
+	void SetBool(bool bValue);
+	void SetInt(int iValue);
+	void SetFloat(float flValue);
+	void SetString(const char* szValue);
 
 private:
-	ConVar* m_pOriginalCVar = NULL;
-	ConVar* m_pDummyCVar = NULL;
+	ConVar* m_pOriginalCVar = nullptr;
+	ConVar* m_pDummyCVar = nullptr;
 
 	char m_szDummyName[128];
 	char m_szDummyValue[128];
@@ -891,10 +921,10 @@ public:
 	bool ValidCvar();
 	void Spoof();
 
-	template<typename T>
+	template <typename T>
 	void SetValue(T value);
 
-	int	GetInt();
+	int GetInt();
 	float GetFloat();
 	const char* GetString();
 private:
@@ -930,18 +960,18 @@ struct CVarDLLIdentifier_t;
 class ICVar : public IAppSystem
 {
 public:
-	virtual void			func10() = 0;
-	virtual void			RegisterConCommand(ConVar* pCommandBase) = 0;
-	virtual void			UnregisterConCommand(ConVar* pCommandBase) = 0;
-	virtual void			func13() = 0;
+	virtual void func10() = 0;
+	virtual void RegisterConCommand(ConVar* pCommandBase) = 0;
+	virtual void UnregisterConCommand(ConVar* pCommandBase) = 0;
+	virtual void func13() = 0;
 	virtual ConVar* FindVar(const char* var_name) = 0;
 	//	virtual void            ConsoleColorPrintf(const Color& clr, const char *pFormat, ...) const = 0;
-	virtual void			func15() = 0;
-	virtual void			func16() = 0;
-	virtual void			func17() = 0;
-	virtual void			func18() = 0;
-	virtual void			func19() = 0;
-	virtual void			func20() = 0;
+	virtual void func15() = 0;
+	virtual void func16() = 0;
+	virtual void func17() = 0;
+	virtual void func18() = 0;
+	virtual void func19() = 0;
+	virtual void func20() = 0;
 
 	void const ConsoleColorPrintf(const Color& clr, const char* pFormat, ...)
 	{
@@ -965,8 +995,11 @@ public:
 class CTraceFilterNoPlayer : public CTraceFilter
 {
 public:
-	CTraceFilterNoPlayer() {}
-	virtual bool ShouldHitEntity(IClientEntity* pServerEntity, int contentsMask)
+	CTraceFilterNoPlayer()
+	{
+	}
+
+	bool ShouldHitEntity(IClientEntity* pServerEntity, int contentsMask) override
 	{
 		if (pServerEntity)
 			return !pServerEntity->IsPlayer();
@@ -1100,8 +1133,10 @@ enum ButtonCode_t
 	MOUSE_MIDDLE,
 	MOUSE_4,
 	MOUSE_5,
-	MOUSE_WHEEL_UP,		// A fake button which is 'pressed' and 'released' when the wheel is moved up
-	MOUSE_WHEEL_DOWN,	// A fake button which is 'pressed' and 'released' when the wheel is moved down
+	MOUSE_WHEEL_UP,
+	// A fake button which is 'pressed' and 'released' when the wheel is moved up
+	MOUSE_WHEEL_DOWN,
+	// A fake button which is 'pressed' and 'released' when the wheel is moved down
 
 	MOUSE_LAST = MOUSE_WHEEL_DOWN,
 	MOUSE_COUNT = MOUSE_LAST - MOUSE_FIRST + 1,

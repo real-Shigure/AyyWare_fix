@@ -25,7 +25,8 @@ void CLegitBot::Move(CUserCmd* pCmd, bool& bSendPacket)
 		DoAimbot(pCmd, bSendPacket);
 
 	// Triggerbot
-	if (Menu::Window.LegitBotTab.TriggerEnable.GetState() && (!Menu::Window.LegitBotTab.TriggerKeyPress.GetState() || GUI.GetKeyState(Menu::Window.LegitBotTab.TriggerKeyBind.GetKey())))
+	if (Menu::Window.LegitBotTab.TriggerEnable.GetState() && (!Menu::Window.LegitBotTab.TriggerKeyPress.GetState() ||
+		GUI.GetKeyState(Menu::Window.LegitBotTab.TriggerKeyBind.GetKey())))
 		DoTrigger(pCmd);
 }
 
@@ -33,7 +34,8 @@ void CLegitBot::SyncWeaponSettings()
 {
 	std::vector<int> HitBoxesToScan;
 	IClientEntity* pLocal = hackManager.pLocal();
-	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(pLocal->GetActiveWeaponHandle());
+	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(
+		pLocal->GetActiveWeaponHandle());
 
 	if (!pWeapon)
 		return;
@@ -49,16 +51,16 @@ void CLegitBot::SyncWeaponSettings()
 		switch (Menu::Window.LegitBotTab.WeaponPistHitbox.GetIndex())
 		{
 		case 0:
-			HitBox = ((int)CSGOHitboxID::Head);
+			HitBox = static_cast<int>(CSGOHitboxID::Head);
 			break;
 		case 1:
-			HitBox = ((int)CSGOHitboxID::Neck);
+			HitBox = static_cast<int>(CSGOHitboxID::Neck);
 			break;
 		case 2:
-			HitBox = ((int)CSGOHitboxID::Chest);
+			HitBox = static_cast<int>(CSGOHitboxID::Chest);
 			break;
 		case 3:
-			HitBox = ((int)CSGOHitboxID::Stomach);
+			HitBox = static_cast<int>(CSGOHitboxID::Stomach);
 			break;
 		}
 	}
@@ -73,16 +75,16 @@ void CLegitBot::SyncWeaponSettings()
 		switch (Menu::Window.LegitBotTab.WeaponSnipHitbox.GetIndex())
 		{
 		case 0:
-			HitBox = ((int)CSGOHitboxID::Head);
+			HitBox = static_cast<int>(CSGOHitboxID::Head);
 			break;
 		case 1:
-			HitBox = ((int)CSGOHitboxID::Neck);
+			HitBox = static_cast<int>(CSGOHitboxID::Neck);
 			break;
 		case 2:
-			HitBox = ((int)CSGOHitboxID::Chest);
+			HitBox = static_cast<int>(CSGOHitboxID::Chest);
 			break;
 		case 3:
-			HitBox = ((int)CSGOHitboxID::Stomach);
+			HitBox = static_cast<int>(CSGOHitboxID::Stomach);
 			break;
 		}
 	}
@@ -97,16 +99,16 @@ void CLegitBot::SyncWeaponSettings()
 		switch (Menu::Window.LegitBotTab.WeaponMainHitbox.GetIndex())
 		{
 		case 0:
-			HitBox = ((int)CSGOHitboxID::Head);
+			HitBox = static_cast<int>(CSGOHitboxID::Head);
 			break;
 		case 1:
-			HitBox = ((int)CSGOHitboxID::Neck);
+			HitBox = static_cast<int>(CSGOHitboxID::Neck);
 			break;
 		case 2:
-			HitBox = ((int)CSGOHitboxID::Chest);
+			HitBox = static_cast<int>(CSGOHitboxID::Chest);
 			break;
 		case 3:
-			HitBox = ((int)CSGOHitboxID::Stomach);
+			HitBox = static_cast<int>(CSGOHitboxID::Stomach);
 			break;
 		}
 	}
@@ -121,7 +123,8 @@ void CLegitBot::DoAimbot(CUserCmd* pCmd, bool& bSendPacket)
 	//IsLocked = false;
 
 	// Don't aimbot with the knife..
-	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(pLocal->GetActiveWeaponHandle());
+	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(
+		pLocal->GetActiveWeaponHandle());
 	if (pWeapon)
 	{
 		if (pWeapon->GetAmmoInClip() == 0 || !GameUtils::IsBallisticWeapon(pWeapon))
@@ -146,7 +149,8 @@ void CLegitBot::DoAimbot(CUserCmd* pCmd, bool& bSendPacket)
 			if (HitBox >= 0)
 			{
 				Vector ViewOffset = pLocal->GetOrigin() + pLocal->GetViewOffset();
-				Vector View; Interfaces::Engine->GetViewAngles(View);
+				Vector View;
+				Interfaces::Engine->GetViewAngles(View);
 				View += pLocal->localPlayerExclusive()->GetAimPunchAngle() * 2.f;
 				float nFoV = FovToPlayer(ViewOffset, View, pTarget, HitBox);
 				if (nFoV < FoV)
@@ -229,15 +233,19 @@ void CLegitBot::DoAimbot(CUserCmd* pCmd, bool& bSendPacket)
 bool TargetMeetsTriggerRequirements(IClientEntity* pEntity)
 {
 	// Is a valid player
-	if (pEntity && pEntity->IsDormant() == false && pEntity->IsAlive() && pEntity->GetIndex() != hackManager.pLocal()->GetIndex())
+	if (pEntity && pEntity->IsDormant() == false && pEntity->IsAlive() && pEntity->GetIndex() != hackManager
+		.pLocal()->GetIndex())
 	{
 		// Entity Type checks
 		ClientClass* pClientClass = pEntity->GetClientClass();
 		player_info_t pinfo;
-		if (pClientClass->m_ClassID == (int)CSGOClassID::CCSPlayer && Interfaces::Engine->GetPlayerInfo(pEntity->GetIndex(), &pinfo))
+		if (pClientClass->m_ClassID == static_cast<int>(CSGOClassID::CCSPlayer) && Interfaces::Engine->GetPlayerInfo(
+			pEntity->GetIndex(), &pinfo))
 		{
 			// Team Check
-			if (pEntity->GetTeamNum() != hackManager.pLocal()->GetTeamNum() || Menu::Window.LegitBotTab.AimbotFriendlyFire.GetState())
+			if (pEntity->GetTeamNum() != hackManager.pLocal()->GetTeamNum() || Menu::Window
+				.LegitBotTab.AimbotFriendlyFire.
+				GetState())
 			{
 				// Spawn Check
 				if (!pEntity->HasGunGameImmunity())
@@ -257,7 +265,8 @@ void CLegitBot::DoTrigger(CUserCmd* pCmd)
 	IClientEntity* pLocal = hackManager.pLocal();
 
 	// Don't triggerbot with the knife..
-	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(pLocal->GetActiveWeaponHandle());
+	CBaseCombatWeapon* pWeapon = (CBaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(
+		pLocal->GetActiveWeaponHandle());
 	if (pWeapon)
 	{
 		if (pWeapon->GetAmmoInClip() == 0 || !GameUtils::IsBallisticWeapon(pWeapon))
@@ -325,15 +334,19 @@ void CLegitBot::DoTrigger(CUserCmd* pCmd)
 bool CLegitBot::TargetMeetsRequirements(IClientEntity* pEntity)
 {
 	// Is a valid player
-	if (pEntity && pEntity->IsDormant() == false && pEntity->IsAlive() && pEntity->GetIndex() != hackManager.pLocal()->GetIndex())
+	if (pEntity && pEntity->IsDormant() == false && pEntity->IsAlive() && pEntity->GetIndex() != hackManager
+		.pLocal()->GetIndex())
 	{
 		// Entity Type checks
 		ClientClass* pClientClass = pEntity->GetClientClass();
 		player_info_t pinfo;
-		if (pClientClass->m_ClassID == (int)CSGOClassID::CCSPlayer && Interfaces::Engine->GetPlayerInfo(pEntity->GetIndex(), &pinfo))
+		if (pClientClass->m_ClassID == static_cast<int>(CSGOClassID::CCSPlayer) && Interfaces::Engine->GetPlayerInfo(
+			pEntity->GetIndex(), &pinfo))
 		{
 			// Team Check
-			if (pEntity->GetTeamNum() != hackManager.pLocal()->GetTeamNum() || Menu::Window.LegitBotTab.AimbotFriendlyFire.GetState())
+			if (pEntity->GetTeamNum() != hackManager.pLocal()->GetTeamNum() || Menu::Window
+				.LegitBotTab.AimbotFriendlyFire.
+				GetState())
 			{
 				// Spawn Check
 				if (!pEntity->HasGunGameImmunity())
@@ -393,7 +406,8 @@ int CLegitBot::GetTargetCrosshair()
 
 	IClientEntity* pLocal = hackManager.pLocal();
 	Vector ViewOffset = pLocal->GetOrigin() + pLocal->GetViewOffset();
-	Vector View; Interfaces::Engine->GetViewAngles(View);
+	Vector View;
+	Interfaces::Engine->GetViewAngles(View);
 	View += pLocal->localPlayerExclusive()->GetAimPunchAngle() * 2.f;
 
 	for (int i = 0; i < Interfaces::EntList->GetHighestEntityIndex(); i++)
@@ -419,13 +433,15 @@ int CLegitBot::GetTargetCrosshair()
 
 bool ShouldFire()
 {
-	IClientEntity* pLocalEntity = (IClientEntity*)Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+	IClientEntity* pLocalEntity = static_cast<IClientEntity*>(Interfaces::EntList->GetClientEntity(
+		Interfaces::Engine->GetLocalPlayer()));
 	if (!pLocalEntity)
 		return false;
 
-	CBaseCombatWeapon* entwep = (CBaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(pLocalEntity->GetActiveWeaponHandle());
+	CBaseCombatWeapon* entwep = (CBaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(
+		pLocalEntity->GetActiveWeaponHandle());
 
-	float flServerTime = (float)pLocalEntity->GetTickBase() * Interfaces::Globals->interval_per_tick;
+	float flServerTime = static_cast<float>(pLocalEntity->GetTickBase()) * Interfaces::Globals->interval_per_tick;
 	float flNextPrimaryAttack = entwep->GetNextPrimaryAttack();
 
 	std::cout << flServerTime << " " << flNextPrimaryAttack << std::endl;
@@ -439,7 +455,7 @@ bool CLegitBot::AimAtPoint(IClientEntity* pLocal, Vector point, CUserCmd* pCmd, 
 	if (point.Length() == 0) return false;
 
 	static clock_t start_t = clock();
-	double timeSoFar = (double)(clock() - start_t) / CLOCKS_PER_SEC;
+	double timeSoFar = static_cast<double>(clock() - start_t) / CLOCKS_PER_SEC;
 	static Vector Inaccuracy;
 
 	if (timeSoFar > 0.2)

@@ -31,14 +31,17 @@ OverrideViewFn oOverrideView;
 RenderViewFn oRenderView;
 
 // Hook function prototypes
-void __fastcall PaintTraverse_Hooked(PVOID pPanels, int edx, unsigned int vguiPanel, bool forceRepaint, bool allowForce);
+void __fastcall PaintTraverse_Hooked(PVOID pPanels, int edx, unsigned int vguiPanel, bool forceRepaint,
+	bool allowForce);
 bool __stdcall Hooked_InPrediction();
-void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void* state, const ModelRenderInfo_t& pInfo, matrix3x4* pCustomBoneToWorld);
+void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void* state, const ModelRenderInfo_t& pInfo,
+	matrix3x4* pCustomBoneToWorld);
 bool __stdcall CreateMoveClient_Hooked(/*void* self, int edx,*/ float frametime, CUserCmd* pCmd);
-void  __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage);
+void __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage);
 void __fastcall Hooked_OverrideView(void* ecx, void* edx, CViewSetup* pSetup);
 float __stdcall GGetViewModelFOV();
-void __fastcall Hooked_RenderView(void* ecx, void* edx, CViewSetup& setup, CViewSetup& hudViewSetup, int nClearFlags, int whatToDraw);
+void __fastcall Hooked_RenderView(void* ecx, void* edx, CViewSetup& setup, CViewSetup& hudViewSetup, int nClearFlags,
+	int whatToDraw);
 
 // VMT Managers
 namespace Hooks
@@ -67,17 +70,19 @@ void Hooks::Initialise()
 {
 	// Panel hooks for drawing to the screen via surface functions
 	VMTPanel.Initialise((DWORD*)Interfaces::Panels);
-	oPaintTraverse = (PaintTraverse_)VMTPanel.HookMethod((DWORD)&PaintTraverse_Hooked, Offsets::VMT::Panel_PaintTraverse);
+	oPaintTraverse = (PaintTraverse_)VMTPanel.HookMethod((DWORD)&PaintTraverse_Hooked,
+		Offsets::VMT::Panel_PaintTraverse);
 	//Utilities::Log("Paint Traverse Hooked");
 
 	// No Visual Recoi	l
-	VMTPrediction.Initialise((DWORD*)Interfaces::Prediction);
+	VMTPrediction.Initialise(static_cast<DWORD*>(Interfaces::Prediction));
 	VMTPrediction.HookMethod((DWORD)&Hooked_InPrediction, 14);
 	//Utilities::Log("InPrediction Hooked");
 
 	// Chams
 	VMTModelRender.Initialise((DWORD*)Interfaces::ModelRender);
-	oDrawModelExecute = (DrawModelEx_)VMTModelRender.HookMethod((DWORD)&Hooked_DrawModelExecute, Offsets::VMT::ModelRender_DrawModelExecute);
+	oDrawModelExecute = (DrawModelEx_)VMTModelRender.HookMethod((DWORD)&Hooked_DrawModelExecute,
+		Offsets::VMT::ModelRender_DrawModelExecute);
 	//Utilities::Log("DrawModelExecute Hooked");
 
 	// Setup ClientMode Hooks
@@ -100,9 +105,11 @@ void MovementCorrection(CUserCmd* pCmd)
 //                                         Hooked Functions
 //---------------------------------------------------------------------------------------------------------
 
-void SetClanTag(const char* tag, const char* name)//190% paste
+void SetClanTag(const char* tag, const char* name) //190% paste
 {
-	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(((DWORD)Utilities::Memory::FindPattern("engine.dll", (PBYTE)"\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15", "xxxxxxxxx")));
+	static auto pSetClanTag = reinterpret_cast<void(__fastcall*)(const char*, const char*)>(static_cast<DWORD>(Utilities
+		::Memory::FindPattern("engine.dll", (PBYTE)"\x53\x56\x57\x8B\xDA\x8B\xF9\xFF\x15",
+			"xxxxxxxxx")));
 	pSetClanTag(tag, name);
 }
 
@@ -122,32 +129,55 @@ void ClanTag()
 	case 1:
 	{
 		static int motion = 0;
-		int ServerTime = (float)Interfaces::Globals->interval_per_tick * hackManager.pLocal()->GetTickBase() * 2.5;
+		int ServerTime = static_cast<float>(Interfaces::Globals->interval_per_tick) * hackManager
+			.pLocal()->GetTickBase() *
+			2.5;
 
 		if (counter % 48 == 0)
 			motion++;
 		int value = ServerTime % 19;
-		switch (value) {
-		case 0:SetClanTag("          ", "pasteware"); break;
-		case 1:SetClanTag("         p", "pasteware"); break;
-		case 2:SetClanTag("        pa", "pasteware"); break;
-		case 3:SetClanTag("       pas", "pasteware"); break;
-		case 4:SetClanTag("      past", "pasteware"); break;
-		case 5:SetClanTag("     paste", "pasteware"); break;
-		case 6:SetClanTag("    pastew", "pasteware"); break;
-		case 7:SetClanTag("   pastewa", "pasteware"); break;
-		case 8:SetClanTag("  pastewar", "pasteware"); break;
-		case 9:SetClanTag(" pasteware", "pasteware"); break;
-		case 10:SetClanTag("pasteware ", "pasteware"); break;
-		case 11:SetClanTag("asteware  ", "pasteware"); break;
-		case 12:SetClanTag("steware   ", "pasteware"); break;
-		case 13:SetClanTag("teware    ", "pasteware"); break;
-		case 14:SetClanTag("eware     ", "pasteware"); break;
-		case 15:SetClanTag("ware      ", "pasteware"); break;
-		case 16:SetClanTag("are       ", "pasteware"); break;
-		case 17:SetClanTag("re        ", "pasteware"); break;
-		case 18:SetClanTag("e         ", "pasteware"); break;
-		case 19:SetClanTag("          ", "pasteware"); break;
+		switch (value)
+		{
+		case 0: SetClanTag("          ", "pasteware");
+			break;
+		case 1: SetClanTag("         p", "pasteware");
+			break;
+		case 2: SetClanTag("        pa", "pasteware");
+			break;
+		case 3: SetClanTag("       pas", "pasteware");
+			break;
+		case 4: SetClanTag("      past", "pasteware");
+			break;
+		case 5: SetClanTag("     paste", "pasteware");
+			break;
+		case 6: SetClanTag("    pastew", "pasteware");
+			break;
+		case 7: SetClanTag("   pastewa", "pasteware");
+			break;
+		case 8: SetClanTag("  pastewar", "pasteware");
+			break;
+		case 9: SetClanTag(" pasteware", "pasteware");
+			break;
+		case 10: SetClanTag("pasteware ", "pasteware");
+			break;
+		case 11: SetClanTag("asteware  ", "pasteware");
+			break;
+		case 12: SetClanTag("steware   ", "pasteware");
+			break;
+		case 13: SetClanTag("teware    ", "pasteware");
+			break;
+		case 14: SetClanTag("eware     ", "pasteware");
+			break;
+		case 15: SetClanTag("ware      ", "pasteware");
+			break;
+		case 16: SetClanTag("are       ", "pasteware");
+			break;
+		case 17: SetClanTag("re        ", "pasteware");
+			break;
+		case 18: SetClanTag("e         ", "pasteware");
+			break;
+		case 19: SetClanTag("          ", "pasteware");
+			break;
 		}
 		counter++;
 	}
@@ -155,30 +185,50 @@ void ClanTag()
 	case 2:
 	{
 		static int motion = 0;
-		int ServerTime = (float)Interfaces::Globals->interval_per_tick * hackManager.pLocal()->GetTickBase() * 3;
+		int ServerTime = static_cast<float>(Interfaces::Globals->interval_per_tick) * hackManager
+			.pLocal()->GetTickBase() * 3;
 
 		if (counter % 48 == 0)
 			motion++;
 		int value = ServerTime % 17;
-		switch (value) {
-		case 0:SetClanTag("          ", "skeet.cc"); break;
-		case 1:SetClanTag("         s", "skeet.cc"); break;
-		case 2:SetClanTag("        sk", "skeet.cc"); break;
-		case 3:SetClanTag("       ske", "skeet.cc"); break;
-		case 4:SetClanTag("      skee", "skeet.cc"); break;
-		case 5:SetClanTag("     skeet", "skeet.cc"); break;
-		case 6:SetClanTag("    skeet.", "skeet.cc"); break;
-		case 7:SetClanTag("   skeet.c", "skeet.cc"); break;
-		case 8:SetClanTag(" skeet.cc", "skeet.cc"); break;
-		case 9:SetClanTag("skeet.cc ", "skeet.cc"); break;
-		case 10:SetClanTag("keet.cc  ", "skeet.cc"); break;
-		case 11:SetClanTag("eet.cc   ", "skeet.cc"); break;
-		case 12:SetClanTag("et.cc    ", "skeet.cc"); break;
-		case 13:SetClanTag("t.cc     ", "skeet.cc"); break;
-		case 14:SetClanTag(".cc      ", "skeet.cc"); break;
-		case 15:SetClanTag("cc       ", "skeet.cc"); break;
-		case 16:SetClanTag("c        ", "skeet.cc"); break;
-		case 17:SetClanTag("         ", "skeet.cc"); break;
+		switch (value)
+		{
+		case 0: SetClanTag("          ", "skeet.cc");
+			break;
+		case 1: SetClanTag("         s", "skeet.cc");
+			break;
+		case 2: SetClanTag("        sk", "skeet.cc");
+			break;
+		case 3: SetClanTag("       ske", "skeet.cc");
+			break;
+		case 4: SetClanTag("      skee", "skeet.cc");
+			break;
+		case 5: SetClanTag("     skeet", "skeet.cc");
+			break;
+		case 6: SetClanTag("    skeet.", "skeet.cc");
+			break;
+		case 7: SetClanTag("   skeet.c", "skeet.cc");
+			break;
+		case 8: SetClanTag(" skeet.cc", "skeet.cc");
+			break;
+		case 9: SetClanTag("skeet.cc ", "skeet.cc");
+			break;
+		case 10: SetClanTag("keet.cc  ", "skeet.cc");
+			break;
+		case 11: SetClanTag("eet.cc   ", "skeet.cc");
+			break;
+		case 12: SetClanTag("et.cc    ", "skeet.cc");
+			break;
+		case 13: SetClanTag("t.cc     ", "skeet.cc");
+			break;
+		case 14: SetClanTag(".cc      ", "skeet.cc");
+			break;
+		case 15: SetClanTag("cc       ", "skeet.cc");
+			break;
+		case 16: SetClanTag("c        ", "skeet.cc");
+			break;
+		case 17: SetClanTag("         ", "skeet.cc");
+			break;
 		}
 		counter++;
 	}
@@ -202,7 +252,7 @@ bool __stdcall CreateMoveClient_Hooked(/*void* self, int edx,*/ float frametime,
 	{
 		PVOID pebp;
 		__asm mov pebp, ebp;
-		bool* pbSendPacket = (bool*)(*(DWORD*)pebp - 0x1C);
+		bool* pbSendPacket = (bool*)(*static_cast<DWORD*>(pebp) - 0x1C);
 		bool& bSendPacket = *pbSendPacket;
 
 		if (Menu::Window.MiscTab.OtherClantag.GetIndex() > 0)
@@ -225,13 +275,17 @@ bool __stdcall CreateMoveClient_Hooked(/*void* self, int edx,*/ float frametime,
 
 		//Movement Fix
 		//GameUtils::CL_FixMove(pCmd, origView);
-		qAimAngles.Init(0.0f, GetAutostrafeView().y, 0.0f); // if pCmd->viewangles.x > 89, set pCmd->viewangles.x instead of 0.0f on first
+		qAimAngles.Init(0.0f, GetAutostrafeView().y, 0.0f);
+		// if pCmd->viewangles.x > 89, set pCmd->viewangles.x instead of 0.0f on first
 		AngleVectors(qAimAngles, &viewforward, &viewright, &viewup);
 		qAimAngles.Init(0.0f, pCmd->viewangles.y, 0.0f);
 		AngleVectors(qAimAngles, &aimforward, &aimright, &aimup);
-		Vector vForwardNorm;		Normalize(viewforward, vForwardNorm);
-		Vector vRightNorm;			Normalize(viewright, vRightNorm);
-		Vector vUpNorm;				Normalize(viewup, vUpNorm);
+		Vector vForwardNorm;
+		Normalize(viewforward, vForwardNorm);
+		Vector vRightNorm;
+		Normalize(viewright, vRightNorm);
+		Vector vUpNorm;
+		Normalize(viewup, vUpNorm);
 
 		// Original shit for movement correction
 		float forward = pCmd->forwardmove;
@@ -243,9 +297,12 @@ bool __stdcall CreateMoveClient_Hooked(/*void* self, int edx,*/ float frametime,
 		if (forward < -450) forward = -450;
 		if (right < -450) right = -450;
 		if (up < -450) up = -450;
-		pCmd->forwardmove = DotProduct(forward * vForwardNorm, aimforward) + DotProduct(right * vRightNorm, aimforward) + DotProduct(up * vUpNorm, aimforward);
-		pCmd->sidemove = DotProduct(forward * vForwardNorm, aimright) + DotProduct(right * vRightNorm, aimright) + DotProduct(up * vUpNorm, aimright);
-		pCmd->upmove = DotProduct(forward * vForwardNorm, aimup) + DotProduct(right * vRightNorm, aimup) + DotProduct(up * vUpNorm, aimup);
+		pCmd->forwardmove = DotProduct(forward * vForwardNorm, aimforward) + DotProduct(right * vRightNorm, aimforward)
+			+ DotProduct(up * vUpNorm, aimforward);
+		pCmd->sidemove = DotProduct(forward * vForwardNorm, aimright) + DotProduct(right * vRightNorm, aimright) +
+			DotProduct(up * vUpNorm, aimright);
+		pCmd->upmove = DotProduct(forward * vForwardNorm, aimup) + DotProduct(right * vRightNorm, aimup) + DotProduct(
+			up * vUpNorm, aimup);
 
 		// Angle normalisation
 		if (Menu::Window.MiscTab.OtherSafeMode.GetState())
@@ -257,12 +314,15 @@ bool __stdcall CreateMoveClient_Hooked(/*void* self, int edx,*/ float frametime,
 				pCmd->viewangles.z = 0.00;
 			}
 
-			if (pCmd->viewangles.x < -89 || pCmd->viewangles.x > 89 || pCmd->viewangles.y < -180 || pCmd->viewangles.y > 180)
+			if (pCmd->viewangles.x < -89 || pCmd->viewangles.x > 89 || pCmd->viewangles.y < -180 || pCmd->viewangles.y >
+				180)
 			{
 				Utilities::Log("Having to re-normalise!");
 				GameUtils::NormaliseViewAngle(pCmd->viewangles);
 				Beep(750, 800); // Why does it do this
-				if (pCmd->viewangles.x < -89 || pCmd->viewangles.x > 89 || pCmd->viewangles.y < -180 || pCmd->viewangles.y > 180)
+				if (pCmd->viewangles.x < -89 || pCmd->viewangles.x > 89 || pCmd->viewangles.y < -180 || pCmd
+					->viewangles.y >
+					180)
 				{
 					pCmd->viewangles = origView;
 					pCmd->sidemove = right;
@@ -341,11 +401,12 @@ bool __stdcall Hooked_InPrediction()
 
 	// If we are in the right place where the player view is calculated
 	// Calculate the change in the view and get rid of it
-	if (Menu::Window.VisualsTab.OtherNoVisualRecoil.GetState() && (DWORD)(_ReturnAddress()) == Offsets::Functions::dwCalcPlayerView)
+	if (Menu::Window.VisualsTab.OtherNoVisualRecoil.GetState() && (DWORD)(_ReturnAddress()) == Offsets::Functions::
+		dwCalcPlayerView)
 	{
-		IClientEntity* pLocalEntity = NULL;
+		IClientEntity* pLocalEntity = nullptr;
 
-		float* m_LocalViewAngles = NULL;
+		float* m_LocalViewAngles = nullptr;
 
 		__asm
 		{
@@ -366,7 +427,8 @@ bool __stdcall Hooked_InPrediction()
 }
 
 // DrawModelExec for chams and shit
-void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void* state, const ModelRenderInfo_t& pInfo, matrix3x4* pCustomBoneToWorld)
+void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void* state, const ModelRenderInfo_t& pInfo,
+	matrix3x4* pCustomBoneToWorld)
 {
 	Color color;
 	float flColor[3] = { 0.f };
@@ -377,8 +439,9 @@ void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void*
 	bool DontDraw = false;
 
 	const char* ModelName = Interfaces::ModelInfo->GetModelName((model_t*)pInfo.pModel);
-	IClientEntity* pModelEntity = (IClientEntity*)Interfaces::EntList->GetClientEntity(pInfo.entity_index);
-	IClientEntity* pLocal = (IClientEntity*)Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+	IClientEntity* pModelEntity = static_cast<IClientEntity*>(Interfaces::EntList->GetClientEntity(pInfo.entity_index));
+	IClientEntity* pLocal = static_cast<IClientEntity*>(Interfaces::EntList->GetClientEntity(
+		Interfaces::Engine->GetLocalPlayer()));
 
 	if (Menu::Window.VisualsTab.Active.GetState())
 	{
@@ -387,18 +450,22 @@ void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void*
 		int HandsStyle = Menu::Window.VisualsTab.OtherNoHands.GetIndex();
 		if (ChamsStyle != 0 && Menu::Window.VisualsTab.FiltersPlayers.GetState() && strstr(ModelName, "models/player"))
 		{
-			if (pLocal/* && (!Menu::Window.VisualsTab.FiltersEnemiesOnly.GetState() || pModelEntity->GetTeamNum() != pLocal->GetTeamNum())*/)
+			if (pLocal
+				/* && (!Menu::Window.VisualsTab.FiltersEnemiesOnly.GetState() || pModelEntity->GetTeamNum() != pLocal->GetTeamNum())*/
+				)
 			{
 				IMaterial* covered = ChamsStyle == 1 ? CoveredLit : CoveredFlat;
 				IMaterial* open = ChamsStyle == 1 ? OpenLit : OpenFlat;
 
-				IClientEntity* pModelEntity = (IClientEntity*)Interfaces::EntList->GetClientEntity(pInfo.entity_index);
+				IClientEntity* pModelEntity = static_cast<IClientEntity*>(Interfaces::EntList->GetClientEntity(
+					pInfo.entity_index));
 				if (pModelEntity)
 				{
 					IClientEntity* local = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 					if (local)
 					{
-						if (pModelEntity->IsAlive() && pModelEntity->GetHealth() > 0 /*&& pModelEntity->GetTeamNum() != local->GetTeamNum()*/)
+						if (pModelEntity->IsAlive() && pModelEntity->GetHealth() > 0
+							/*&& pModelEntity->GetTeamNum() != local->GetTeamNum()*/)
 						{
 							float alpha = 1.f;
 
@@ -515,7 +582,8 @@ void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void*
 				Interfaces::ModelRender->ForcedMaterialOverride(OpenLit);
 			}
 		}
-		else if (ChamsStyle != 0 && Menu::Window.VisualsTab.FiltersWeapons.GetState() && strstr(ModelName, "_dropped.mdl"))
+		else if (ChamsStyle != 0 && Menu::Window.VisualsTab.FiltersWeapons.GetState() && strstr(
+			ModelName, "_dropped.mdl"))
 		{
 			IMaterial* covered = ChamsStyle == 1 ? CoveredLit : CoveredFlat;
 			color.SetColor(255, 255, 255, 255);
@@ -525,11 +593,11 @@ void __fastcall Hooked_DrawModelExecute(void* thisptr, int edx, void* ctx, void*
 
 	if (!DontDraw)
 		oDrawModelExecute(thisptr, ctx, state, pInfo, pCustomBoneToWorld);
-	Interfaces::ModelRender->ForcedMaterialOverride(NULL);
+	Interfaces::ModelRender->ForcedMaterialOverride(nullptr);
 }
 
 // Hooked FrameStageNotify for removing visual recoil
-void  __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage)
+void __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage)
 {
 	DWORD eyeangles = NetVar.GetNetVar(0xBFEA4E7B);
 	IClientEntity* pLocal = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
@@ -542,7 +610,8 @@ void  __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage)
 				*(Vector*)((DWORD)pLocal + 0x31C8) = LastAngleAA;
 		}
 
-		if ((Menu::Window.MiscTab.OtherThirdperson.GetState()) || Menu::Window.RageBotTab.AccuracyPositionAdjustment.GetState())
+		if ((Menu::Window.MiscTab.OtherThirdperson.GetState()) || Menu::Window
+			.RageBotTab.AccuracyPositionAdjustment.GetState())
 		{
 			static bool rekt = false;
 			if (!rekt)
@@ -611,7 +680,8 @@ void  __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage)
 		}
 	}
 
-	if (Interfaces::Engine->IsConnected() && Interfaces::Engine->IsInGame() && curStage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
+	if (Interfaces::Engine->IsConnected() && Interfaces::Engine->IsInGame() && curStage ==
+		FRAME_NET_UPDATE_POSTDATAUPDATE_START)
 	{
 		IClientEntity* pLocal = Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
 
@@ -648,7 +718,7 @@ void  __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage)
 
 			if (Weapon)
 			{
-				if (WeaponEnt->GetClientClass()->m_ClassID == (int)CSGOClassID::CKnife)
+				if (WeaponEnt->GetClientClass()->m_ClassID == static_cast<int>(CSGOClassID::CKnife))
 				{
 					if (Model == 0) // Karambit
 					{
@@ -699,7 +769,8 @@ void  __stdcall Hooked_FrameStageNotify(ClientFrameStage_t curStage)
 
 void __fastcall Hooked_OverrideView(void* ecx, void* edx, CViewSetup* pSetup)
 {
-	IClientEntity* pLocal = (IClientEntity*)Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+	IClientEntity* pLocal = static_cast<IClientEntity*>(Interfaces::EntList->GetClientEntity(
+		Interfaces::Engine->GetLocalPlayer()));
 
 	if (Interfaces::Engine->IsConnected() && Interfaces::Engine->IsInGame())
 	{
@@ -736,7 +807,8 @@ float __stdcall GGetViewModelFOV()
 	return fov;
 }
 
-void __fastcall Hooked_RenderView(void* ecx, void* edx, CViewSetup& setup, CViewSetup& hudViewSetup, int nClearFlags, int whatToDraw)
+void __fastcall Hooked_RenderView(void* ecx, void* edx, CViewSetup& setup, CViewSetup& hudViewSetup, int nClearFlags,
+	int whatToDraw)
 {
 	static DWORD oRenderView = Hooks::VMTRenderView.GetOriginalFunction(6);
 

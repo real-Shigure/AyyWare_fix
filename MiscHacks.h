@@ -11,9 +11,9 @@ Vector GetAutostrafeView();
 class CMiscHacks : public CHack
 {
 public:
-	void Init();
-	void Draw();
-	void Move(CUserCmd* pCmd, bool& bSendPacket);
+	void Init() override;
+	void Draw() override;
+	void Move(CUserCmd* pCmd, bool& bSendPacket) override;
 private:
 	void AutoJump(CUserCmd* pCmd);
 	void AutoJumpSMAC(CUserCmd* pCmd);

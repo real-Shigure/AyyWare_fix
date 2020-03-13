@@ -74,19 +74,19 @@ int InitialThread()
 // Entry point for our module
 BOOL WINAPI DllMain(
 	_In_ HINSTANCE hinstDLL,
-	_In_ DWORD     fdwReason,
-	_In_ LPVOID    lpvReserved
+	_In_ DWORD fdwReason,
+	_In_ LPVOID lpvReserved
 	)
 {
 	switch (fdwReason)
 	{
 	case DLL_QUERY_HMODULE:
-		if (lpvReserved != NULL)
-			*(HMODULE*)lpvReserved = hAppInstance;
+		if (lpvReserved != nullptr)
+			*static_cast<HMODULE*>(lpvReserved) = hAppInstance;
 		break;
 	case DLL_PROCESS_ATTACH:
 		HThisModule = hinstDLL;
-		CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)InitialThread, NULL, NULL, NULL);
+		CreateThread(nullptr, NULL, (LPTHREAD_START_ROUTINE)InitialThread, nullptr, NULL, nullptr);
 		break;
 	case DLL_PROCESS_DETACH:
 		break;

@@ -124,13 +124,14 @@ bool bCompare(const BYTE* Data, const BYTE* Mask, const char* szMask)
 DWORD Utilities::Memory::FindPattern(std::string moduleName, BYTE* Mask, char* szMask)
 {
 	DWORD Address = WaitOnModuleHandle(moduleName.c_str());
-	MODULEINFO ModInfo; GetModuleInformation(GetCurrentProcess(), (HMODULE)Address, &ModInfo, sizeof(MODULEINFO));
+	MODULEINFO ModInfo;
+	GetModuleInformation(GetCurrentProcess(), (HMODULE)Address, &ModInfo, sizeof(MODULEINFO));
 	DWORD Length = ModInfo.SizeOfImage;
 	for (DWORD c = 0; c < Length; c += 1)
 	{
 		if (bCompare((BYTE*)(Address + c), Mask, szMask))
 		{
-			return (DWORD)(Address + c);
+			return static_cast<DWORD>(Address + c);
 		}
 	}
 	return 0;
@@ -141,7 +142,8 @@ DWORD Utilities::Memory::FindPatternV2(std::string moduleName, std::string patte
 	const char* pat = pattern.c_str();
 	DWORD firstMatch = 0;
 	DWORD rangeStart = (DWORD)GetModuleHandleA(moduleName.c_str());
-	MODULEINFO miModInfo; GetModuleInformation(GetCurrentProcess(), (HMODULE)rangeStart, &miModInfo, sizeof(MODULEINFO));
+	MODULEINFO miModInfo;
+	GetModuleInformation(GetCurrentProcess(), (HMODULE)rangeStart, &miModInfo, sizeof(MODULEINFO));
 	DWORD rangeEnd = rangeStart + miModInfo.SizeOfImage;
 	for (DWORD pCur = rangeStart; pCur < rangeEnd; pCur++)
 	{
@@ -156,7 +158,9 @@ DWORD Utilities::Memory::FindPatternV2(std::string moduleName, std::string patte
 			if (!pat[2])
 				return firstMatch;
 
-			if (*(PWORD)pat == '\?\?' || *(PBYTE)pat != '\?')
+			if (*(PWORD)pat == '\?\
+				? ' || *(PBYTE)pat != '\
+				? ')
 				pat += 3;
 
 			else
@@ -165,7 +169,7 @@ DWORD Utilities::Memory::FindPatternV2(std::string moduleName, std::string patte
 		else
 		{
 			pat = pattern.c_str();
-			firstMatch = 0;
+				firstMatch = 0;
 		}
 	}
 	return NULL;
@@ -174,7 +178,8 @@ DWORD Utilities::Memory::FindPatternV2(std::string moduleName, std::string patte
 DWORD Utilities::Memory::FindTextPattern(std::string moduleName, char* string)
 {
 	DWORD Address = WaitOnModuleHandle(moduleName.c_str());
-	MODULEINFO ModInfo; GetModuleInformation(GetCurrentProcess(), (HMODULE)Address, &ModInfo, sizeof(MODULEINFO));
+	MODULEINFO ModInfo;
+	GetModuleInformation(GetCurrentProcess(), (HMODULE)Address, &ModInfo, sizeof(MODULEINFO));
 	DWORD Length = ModInfo.SizeOfImage;
 
 	int len = strlen(string);
@@ -189,7 +194,7 @@ DWORD Utilities::Memory::FindTextPattern(std::string moduleName, char* string)
 	{
 		if (bCompare((BYTE*)(Address + c), (BYTE*)string, szMask))
 		{
-			return (DWORD)(Address + c);
+			return static_cast<DWORD>(Address + c);
 		}
 	}
 	return 0;
@@ -197,7 +202,7 @@ DWORD Utilities::Memory::FindTextPattern(std::string moduleName, char* string)
 
 // --------         Utilities Memory VMT Manager       ------------ //
 
-bool	Utilities::Memory::VMTManager::Initialise(DWORD* InstancePointer)
+bool Utilities::Memory::VMTManager::Initialise(DWORD* InstancePointer)
 {
 	// Store the instance pointers and such, and work out how big the table is
 	Instance = InstancePointer;
@@ -206,9 +211,9 @@ bool	Utilities::Memory::VMTManager::Initialise(DWORD* InstancePointer)
 	size_t TableBytes = VMTSize * 4;
 
 	// Allocate some memory and copy the table
-	CustomTable = (DWORD*)malloc(TableBytes + 8);
+	CustomTable = static_cast<DWORD*>(malloc(TableBytes + 8));
 	if (!CustomTable) return false;
-	memcpy((void*)CustomTable, (void*)OriginalTable, VMTSize * 4);
+	memcpy(static_cast<void*>(CustomTable), static_cast<void*>(OriginalTable), VMTSize * 4);
 
 	// Change the pointer
 	*InstancePointer = (DWORD)CustomTable;
@@ -217,7 +222,7 @@ bool	Utilities::Memory::VMTManager::Initialise(DWORD* InstancePointer)
 	return true;
 }
 
-int		Utilities::Memory::VMTManager::MethodCount(DWORD* InstancePointer)
+int Utilities::Memory::VMTManager::MethodCount(DWORD* InstancePointer)
 {
 	DWORD* VMT = (DWORD*)*InstancePointer;
 	int Index = 0;
@@ -234,43 +239,39 @@ int		Utilities::Memory::VMTManager::MethodCount(DWORD* InstancePointer)
 	return Amount;
 }
 
-DWORD	Utilities::Memory::VMTManager::HookMethod(DWORD NewFunction, int Index)
+DWORD Utilities::Memory::VMTManager::HookMethod(DWORD NewFunction, int Index)
 {
 	if (initComplete)
 	{
 		CustomTable[Index] = NewFunction;
 		return OriginalTable[Index];
 	}
-	else
-		return NULL;
+	return NULL;
 }
 
-void	Utilities::Memory::VMTManager::UnhookMethod(int Index)
+void Utilities::Memory::VMTManager::UnhookMethod(int Index)
 {
 	if (initComplete)
 		CustomTable[Index] = OriginalTable[Index];
-	return;
 }
 
-void	Utilities::Memory::VMTManager::RestoreOriginal()
+void Utilities::Memory::VMTManager::RestoreOriginal()
 {
 	if (initComplete)
 	{
 		*Instance = (DWORD)OriginalTable;
 	}
-	return;
 }
 
-void	Utilities::Memory::VMTManager::RestoreCustom()
+void Utilities::Memory::VMTManager::RestoreCustom()
 {
 	if (initComplete)
 	{
 		*Instance = (DWORD)CustomTable;
 	}
-	return;
 }
 
-DWORD	Utilities::Memory::VMTManager::GetOriginalFunction(int Index)
+DWORD Utilities::Memory::VMTManager::GetOriginalFunction(int Index)
 {
 	return OriginalTable[Index];
 }
