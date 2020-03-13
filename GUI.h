@@ -40,6 +40,7 @@ class CControl
 	friend class CTab;
 	friend class CWindow;
 public:
+	virtual ~CControl() = default;
 	void SetPosition(int x, int y);
 	void SetSize(int w, int h);
 	void GetSize(int& w, int& h);
@@ -97,8 +98,6 @@ public:
 	RECT GetTabArea();
 
 private:
-	void DrawControls();
-
 	std::vector<CTab*> Tabs;
 	CTab* SelectedTab;
 
@@ -153,7 +152,6 @@ private:
 	bool oldKeys[256];
 	// Mouse
 	POINT Mouse;
-	bool MenuOpen;
 
 	// Window Dragging
 	bool IsDraggingWindow;
