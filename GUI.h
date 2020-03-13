@@ -110,8 +110,10 @@ private:
 	int m_y;
 	int m_iWidth;
 	int m_iHeight;
+	bool m_bIsOpen;
 };
 extern bool m_bIsOpen;
+
 // User interface manager
 class CGUI
 {

@@ -288,22 +288,6 @@ void CLegitBot::DoTrigger(CUserCmd* pCmd)
 
 	if (Trace.m_pEnt && 0 < Trace.hitgroup <= 7) // hitbox not hitgroup
 	{
-		if (TargetMeetsTriggerRequirements(Trace.m_pEnt) && !time < Menu::Window.LegitBotTab.TriggerDelay.GetValue())
-		{
-			float time = 0;
-			time++;
-			float delay = Menu::Window.LegitBotTab.TriggerDelay.GetValue() / 1000.f;
-
-			if ((time * 64) < delay)
-			{
-				return;
-			}
-			else
-			{
-				pCmd->buttons |= IN_ATTACK;
-				time = 0;
-			}
-		}
 	}
 
 	// Auto Pistol
