@@ -28,7 +28,7 @@
 #include "ReflectiveLoader.h"
 //===============================================================================================//
 // Our loader will set this to a pseudo correct HINSTANCE/HMODULE value
-HINSTANCE hAppInstance = nullptr;
+HINSTANCE hAppInstance = NULL;
 //===============================================================================================//
 #pragma intrinsic( _ReturnAddress )
 // This function can not be inlined by the compiler or we will not get the address we expect. Ideally
@@ -55,10 +55,10 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 #endif
 {
 	// the functions we need
-	LOADLIBRARYA pLoadLibraryA = nullptr;
-	GETPROCADDRESS pGetProcAddress = nullptr;
-	VIRTUALALLOC pVirtualAlloc = nullptr;
-	NTFLUSHINSTRUCTIONCACHE pNtFlushInstructionCache = nullptr;
+	LOADLIBRARYA pLoadLibraryA = NULL;
+	GETPROCADDRESS pGetProcAddress = NULL;
+	VIRTUALALLOC pVirtualAlloc = NULL;
+	NTFLUSHINSTRUCTIONCACHE pNtFlushInstructionCache = NULL;
 
 	USHORT usCounter;
 
@@ -137,7 +137,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 		// compute the hash of the module name...
 		do
 		{
-			uiValueC = ror(static_cast<DWORD>(uiValueC));
+			uiValueC = ror((DWORD)uiValueC);
 			// normalize to uppercase if the madule name is in lowercase
 			if (*((BYTE*)uiValueB) >= 'a')
 				uiValueC += *((BYTE*)uiValueB) - 0x20;
@@ -147,7 +147,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 		} while (--usCounter);
 
 		// compare the hash with that of kernel32.dll
-		if (static_cast<DWORD>(uiValueC) == KERNEL32DLL_HASH)
+		if ((DWORD)uiValueC == KERNEL32DLL_HASH)
 		{
 			// get this modules base address
 			uiBaseAddress = (ULONG_PTR)((PLDR_DATA_TABLE_ENTRY)uiValueA)->DllBase;
@@ -156,8 +156,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 			uiExportDir = uiBaseAddress + ((PIMAGE_DOS_HEADER)uiBaseAddress)->e_lfanew;
 
 			// uiNameArray = the address of the modules export directory entry
-			uiNameArray = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiExportDir)->OptionalHeader.DataDirectory[
-				IMAGE_DIRECTORY_ENTRY_EXPORT];
+			uiNameArray = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiExportDir)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
 
 			// get the VA of the export directory
 			uiExportDir = (uiBaseAddress + ((PIMAGE_DATA_DIRECTORY)uiNameArray)->VirtualAddress);
@@ -177,8 +176,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 				dwHashValue = hash((char*)(uiBaseAddress + DEREF_32(uiNameArray)));
 
 				// if we have found a function we want we get its virtual address
-				if (dwHashValue == LOADLIBRARYA_HASH || dwHashValue == GETPROCADDRESS_HASH || dwHashValue ==
-					VIRTUALALLOC_HASH)
+				if (dwHashValue == LOADLIBRARYA_HASH || dwHashValue == GETPROCADDRESS_HASH || dwHashValue == VIRTUALALLOC_HASH)
 				{
 					// get the VA for the array of addresses
 					uiAddressArray = (uiBaseAddress + ((PIMAGE_EXPORT_DIRECTORY)uiExportDir)->AddressOfFunctions);
@@ -205,7 +203,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 				uiNameOrdinals += sizeof(WORD);
 			}
 		}
-		else if (static_cast<DWORD>(uiValueC) == NTDLLDLL_HASH)
+		else if ((DWORD)uiValueC == NTDLLDLL_HASH)
 		{
 			// get this modules base address
 			uiBaseAddress = (ULONG_PTR)((PLDR_DATA_TABLE_ENTRY)uiValueA)->DllBase;
@@ -214,8 +212,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 			uiExportDir = uiBaseAddress + ((PIMAGE_DOS_HEADER)uiBaseAddress)->e_lfanew;
 
 			// uiNameArray = the address of the modules export directory entry
-			uiNameArray = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiExportDir)->OptionalHeader.DataDirectory[
-				IMAGE_DIRECTORY_ENTRY_EXPORT];
+			uiNameArray = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiExportDir)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
 
 			// get the VA of the export directory
 			uiExportDir = (uiBaseAddress + ((PIMAGE_DATA_DIRECTORY)uiNameArray)->VirtualAddress);
@@ -274,8 +271,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 
 	// allocate all the memory for the DLL to be loaded into. we can load at any address because we will
 	// relocate the image. Also zeros all memory and marks it as READ, WRITE and EXECUTE to avoid any problems.
-	uiBaseAddress = (ULONG_PTR)pVirtualAlloc(nullptr, ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader.SizeOfImage,
-		MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+	uiBaseAddress = (ULONG_PTR)pVirtualAlloc(NULL, ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader.SizeOfImage, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 
 	// we must now copy over the headers
 	uiValueA = ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader.SizeOfHeaders;
@@ -288,8 +284,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 	// STEP 3: load in all of our sections...
 
 	// uiValueA = the VA of the first section
-	uiValueA = ((ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader + ((PIMAGE_NT_HEADERS)uiHeaderValue)
-		->FileHeader.SizeOfOptionalHeader);
+	uiValueA = ((ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader + ((PIMAGE_NT_HEADERS)uiHeaderValue)->FileHeader.SizeOfOptionalHeader);
 
 	// itterate through all sections, loading them into memory.
 	uiValueE = ((PIMAGE_NT_HEADERS)uiHeaderValue)->FileHeader.NumberOfSections;
@@ -314,8 +309,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 	// STEP 4: process our images import table...
 
 	// uiValueB = the address of the import directory
-	uiValueB = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT
-	];
+	uiValueB = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
 
 	// we assume their is an import table to process
 	// uiValueC is the first entry in the import table
@@ -325,8 +319,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 	while (((PIMAGE_IMPORT_DESCRIPTOR)uiValueC)->Name)
 	{
 		// use LoadLibraryA to load the imported module into memory
-		uiLibraryAddress = (ULONG_PTR)pLoadLibraryA(
-		(LPCSTR)(uiBaseAddress + ((PIMAGE_IMPORT_DESCRIPTOR)uiValueC)->Name));
+		uiLibraryAddress = (ULONG_PTR)pLoadLibraryA((LPCSTR)(uiBaseAddress + ((PIMAGE_IMPORT_DESCRIPTOR)uiValueC)->Name));
 
 		// uiValueD = VA of the OriginalFirstThunk
 		uiValueD = (uiBaseAddress + ((PIMAGE_IMPORT_DESCRIPTOR)uiValueC)->OriginalFirstThunk);
@@ -344,8 +337,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 				uiExportDir = uiLibraryAddress + ((PIMAGE_DOS_HEADER)uiLibraryAddress)->e_lfanew;
 
 				// uiNameArray = the address of the modules export directory entry
-				uiNameArray = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiExportDir)->OptionalHeader.DataDirectory[
-					IMAGE_DIRECTORY_ENTRY_EXPORT];
+				uiNameArray = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiExportDir)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
 
 				// get the VA of the export directory
 				uiExportDir = (uiLibraryAddress + ((PIMAGE_DATA_DIRECTORY)uiNameArray)->VirtualAddress);
@@ -354,8 +346,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 				uiAddressArray = (uiLibraryAddress + ((PIMAGE_EXPORT_DIRECTORY)uiExportDir)->AddressOfFunctions);
 
 				// use the import ordinal (- export ordinal base) as an index into the array of addresses
-				uiAddressArray += ((IMAGE_ORDINAL(((PIMAGE_THUNK_DATA)uiValueD)->u1.Ordinal) - ((PIMAGE_EXPORT_DIRECTORY
-					)uiExportDir)->Base) * sizeof(DWORD));
+				uiAddressArray += ((IMAGE_ORDINAL(((PIMAGE_THUNK_DATA)uiValueD)->u1.Ordinal) - ((PIMAGE_EXPORT_DIRECTORY)uiExportDir)->Base) * sizeof(DWORD));
 
 				// patch in the address for this imported function
 				DEREF(uiValueA) = (uiLibraryAddress + DEREF_32(uiAddressArray));
@@ -366,9 +357,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 				uiValueB = (uiBaseAddress + DEREF(uiValueA));
 
 				// use GetProcAddress and patch in the address for this imported function
-				DEREF(uiValueA) = (ULONG_PTR)pGetProcAddress((HMODULE)uiLibraryAddress,
-					static_cast<LPCSTR>(((PIMAGE_IMPORT_BY_NAME)uiValueB)->Name
-						));
+				DEREF(uiValueA) = (ULONG_PTR)pGetProcAddress((HMODULE)uiLibraryAddress, (LPCSTR)((PIMAGE_IMPORT_BY_NAME)uiValueB)->Name);
 			}
 			// get the next imported function
 			uiValueA += sizeof(ULONG_PTR);
@@ -386,8 +375,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 	uiLibraryAddress = uiBaseAddress - ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader.ImageBase;
 
 	// uiValueB = the address of the relocation directory
-	uiValueB = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader.DataDirectory[
-		IMAGE_DIRECTORY_ENTRY_BASERELOC];
+	uiValueB = (ULONG_PTR) & ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC];
 
 	// check if their are any relocations present
 	if (((PIMAGE_DATA_DIRECTORY)uiValueB)->Size)
@@ -402,8 +390,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 			uiValueA = (uiBaseAddress + ((PIMAGE_BASE_RELOCATION)uiValueC)->VirtualAddress);
 
 			// uiValueB = number of entries in this relocation block
-			uiValueB = (((PIMAGE_BASE_RELOCATION)uiValueC)->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION)) / sizeof(
-				IMAGE_RELOC);
+			uiValueB = (((PIMAGE_BASE_RELOCATION)uiValueC)->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION)) / sizeof(IMAGE_RELOC);
 
 			// uiValueD is now the first entry in the current relocation block
 			uiValueD = uiValueC + sizeof(IMAGE_BASE_RELOCATION);
@@ -417,7 +404,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 				if (((PIMAGE_RELOC)uiValueD)->type == IMAGE_REL_BASED_DIR64)
 					*(ULONG_PTR*)(uiValueA + ((PIMAGE_RELOC)uiValueD)->offset) += uiLibraryAddress;
 				else if (((PIMAGE_RELOC)uiValueD)->type == IMAGE_REL_BASED_HIGHLOW)
-					*(DWORD*)(uiValueA + ((PIMAGE_RELOC)uiValueD)->offset) += static_cast<DWORD>(uiLibraryAddress);
+					*(DWORD*)(uiValueA + ((PIMAGE_RELOC)uiValueD)->offset) += (DWORD)uiLibraryAddress;
 #ifdef WIN_ARM
 				// Note: On ARM, the compiler optimization /O2 seems to introduce an off by one issue, possibly a code gen bug. Using /O1 instead avoids this problem.
 				else if (((PIMAGE_RELOC)uiValueD)->type == IMAGE_REL_BASED_ARM_MOV32T)
@@ -471,7 +458,7 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 	uiValueA = (uiBaseAddress + ((PIMAGE_NT_HEADERS)uiHeaderValue)->OptionalHeader.AddressOfEntryPoint);
 
 	// We must flush the instruction cache to avoid stale code being used which was updated by our relocation processing.
-	pNtFlushInstructionCache((HANDLE)-1, nullptr, 0);
+	pNtFlushInstructionCache((HANDLE)-1, NULL, 0);
 
 	// call our respective entry point, fudging our hInstance value
 #ifdef REFLECTIVEDLLINJECTION_VIA_LOADREMOTELIBRARYR
@@ -479,13 +466,12 @@ DLLEXPORT ULONG_PTR WINAPI ReflectiveLoader(VOID)
 	((DLLMAIN)uiValueA)((HINSTANCE)uiBaseAddress, DLL_PROCESS_ATTACH, lpParameter);
 #else
 	// if we are injecting an DLL via a stub we call DllMain with no parameter
-	((DLLMAIN)uiValueA)((HINSTANCE)uiBaseAddress, DLL_PROCESS_ATTACH, nullptr);
+	((DLLMAIN)uiValueA)((HINSTANCE)uiBaseAddress, DLL_PROCESS_ATTACH, NULL);
 #endif
 
 	// STEP 8: return our new entry point address so whatever called us can call DllMain() if needed.
 	return uiValueA;
 }
-
 //===============================================================================================//
 #ifndef REFLECTIVEDLLINJECTION_CUSTOM_DLLMAIN
 

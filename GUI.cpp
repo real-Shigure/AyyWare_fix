@@ -57,10 +57,8 @@ void CGUI::Update()
 	}
 
 	// Mouse Location
-	POINT mp;
-	GetCursorPos(&mp);
-	Mouse.x = mp.x;
-	Mouse.y = mp.y;
+	POINT mp; GetCursorPos(&mp);
+	Mouse.x = mp.x; Mouse.y = mp.y;
 
 	RECT Screen = Render::GetViewport();
 
@@ -101,8 +99,7 @@ void CGUI::Update()
 			// If the user clicks inside the window
 			if (GetKeyPress(VK_LBUTTON))
 			{
-				if (IsMouseInRegion(window->m_x, window->m_y, window->m_x + window->m_iWidth,
-					window->m_y + window->m_iHeight))
+				if (IsMouseInRegion(window->m_x, window->m_y, window->m_x + window->m_iWidth, window->m_y + window->m_iHeight))
 				{
 					// Is it inside the client area?
 					if (IsMouseInRegion(window->GetClientArea()))
@@ -173,13 +170,10 @@ void CGUI::Update()
 						SkipMe = window->FocusedControl;
 
 						POINT cAbs = window->FocusedControl->GetAbsolutePos();
-						RECT controlRect = {
-							cAbs.x, cAbs.y, window->FocusedControl->m_iWidth, window->FocusedControl->m_iHeight
-						};
+						RECT controlRect = { cAbs.x, cAbs.y, window->FocusedControl->m_iWidth, window->FocusedControl->m_iHeight };
 						window->FocusedControl->OnUpdate();
 
-						if (window->FocusedControl->Flag(UI_Clickable) && IsMouseInRegion(controlRect) &&
-							bCheckWidgetClicks)
+						if (window->FocusedControl->Flag(UIFlags::UI_Clickable) && IsMouseInRegion(controlRect) && bCheckWidgetClicks)
 						{
 							window->FocusedControl->OnClick();
 
@@ -203,13 +197,13 @@ void CGUI::Update()
 						RECT controlRect = { cAbs.x, cAbs.y, control->m_iWidth, control->m_iHeight };
 						control->OnUpdate();
 
-						if (control->Flag(UI_Clickable) && IsMouseInRegion(controlRect) && bCheckWidgetClicks)
+						if (control->Flag(UIFlags::UI_Clickable) && IsMouseInRegion(controlRect) && bCheckWidgetClicks)
 						{
 							control->OnClick();
 							bCheckWidgetClicks = false;
 
 							// Change of focus
-							if (control->Flag(UI_Focusable))
+							if (control->Flag(UIFlags::UI_Focusable))
 							{
 								window->IsFocusingControl = true;
 								window->FocusedControl = control;
@@ -240,7 +234,8 @@ bool CGUI::GetKeyPress(unsigned int key)
 {
 	if (keys[key] == true && oldKeys[key] == false)
 		return true;
-	return false;
+	else
+		return false;
 }
 
 bool CGUI::GetKeyState(unsigned int key)
@@ -252,7 +247,8 @@ bool CGUI::IsMouseInRegion(int x, int y, int x2, int y2)
 {
 	if (Mouse.x > x && Mouse.y > y && Mouse.x < x2 && Mouse.y < y2)
 		return true;
-	return false;
+	else
+		return false;
 }
 
 bool CGUI::IsMouseInRegion(RECT region)
@@ -269,23 +265,17 @@ bool CGUI::DrawWindow(CWindow* window)
 {
 	// Main Window
 	Render::Outline(window->m_x, window->m_y, window->m_iWidth, window->m_iHeight, Color(21, 21, 21, 80));
-	Render::GradientV(window->m_x + 2, window->m_y + 2, window->m_iWidth - 4, 26, Color(45, 40, 40, 255),
-		Color(45, 45, 40, 255));
-	Render::Clear(window->m_x + 2, window->m_y + 2 + 26, window->m_iWidth - 4, window->m_iHeight - 4 - 26,
-		Color(49, 42, 42, 255));
-	Render::Outline(window->m_x + 1, window->m_y + 1, window->m_iWidth - 2, window->m_iHeight - 2,
-		Color(49, 42, 42, 255));
+	Render::GradientV(window->m_x + 2, window->m_y + 2, window->m_iWidth - 4, 26, Color(45, 40, 40, 255), Color(45, 45, 40, 255));
+	Render::Clear(window->m_x + 2, window->m_y + 2 + 26, window->m_iWidth - 4, window->m_iHeight - 4 - 26, Color(49, 42, 42, 255));
+	Render::Outline(window->m_x + 1, window->m_y + 1, window->m_iWidth - 2, window->m_iHeight - 2, Color(49, 42, 42, 255));
 
-	Render::Text(window->m_x + 8, window->m_y + 8, Color(255, 0, 0, 255), Render::Fonts::MenuBold,
-		window->Title.c_str());
+	Render::Text(window->m_x + 8, window->m_y + 8, Color(255, 0, 0, 255), Render::Fonts::MenuBold, window->Title.c_str());
 
 	//Inner
-	Render::Clear(window->m_x + 8, window->m_y + 1 + 27, window->m_iWidth - 4 - 12, window->m_iHeight - 2 - 8 - 26,
-		Color(30, 30, 30, 255));
+	Render::Clear(window->m_x + 8, window->m_y + 1 + 27, window->m_iWidth - 4 - 12, window->m_iHeight - 2 - 8 - 26, Color(30, 30, 30, 255));
 
 	//Tab
-	Render::GradientV(window->m_x + 8, window->m_y + 1 + 27, window->m_iWidth - 4 - 12, 29, Color(49, 42, 42, 255),
-		Color(49, 42, 42, 255));
+	Render::GradientV(window->m_x + 8, window->m_y + 1 + 27, window->m_iWidth - 4 - 12, 29, Color(49, 42, 42, 255), Color(49, 42, 42, 255));
 	int TabCount = window->Tabs.size();
 	if (TabCount) // If there are some tabs
 	{
@@ -296,17 +286,14 @@ bool CGUI::DrawWindow(CWindow* window)
 			CTab* tab = window->Tabs[i];
 			if (window->SelectedTab == tab)
 			{
-				Render::GradientV(window->m_x + 8 + (i * TabSize), window->m_y + 1 + 27, TabSize, 29,
-					Color(106, 106, 106, 255), Color(49, 42, 42, 255));
+				Render::GradientV(window->m_x + 8 + (i * TabSize), window->m_y + 1 + 27, TabSize, 29, Color(106, 106, 106, 255), Color(49, 42, 42, 255));
 			}
 			else if (IsMouseInRegion(TabArea))
 			{
-				Render::GradientV(window->m_x + 8 + (i * TabSize), window->m_y + 1 + 27, TabSize, 29,
-					Color(106, 106, 106, 255), Color(80, 80, 80, 255));
+				Render::GradientV(window->m_x + 8 + (i * TabSize), window->m_y + 1 + 27, TabSize, 29, Color(106, 106, 106, 255), Color(80, 80, 80, 255));
 			}
 			RECT TextSize = Render::GetTextSize(Render::Fonts::MenuBold, tab->Title.c_str());
-			Render::Text(TabArea.left + (TabSize / 2) - (TextSize.right / 2), TabArea.top + 8, Color(255, 0, 0, 255),
-				Render::Fonts::MenuBold, tab->Title.c_str());
+			Render::Text(TabArea.left + (TabSize / 2) - (TextSize.right / 2), TabArea.top + 8, Color(255, 0, 0, 255), Render::Fonts::MenuBold, tab->Title.c_str());
 			Render::Clear(window->m_x + 8, window->m_y + 1 + 27, window->m_iWidth - 4 - 12, 2, Color(62, 55, 55, 255));
 		}
 	}
@@ -335,7 +322,7 @@ bool CGUI::DrawWindow(CWindow* window)
 			if (SkipWidget && SkipMe == control)
 				continue;
 
-			if (control != nullptr && control->Flag(UI_Drawable))
+			if (control != nullptr && control->Flag(UIFlags::UI_Drawable))
 			{
 				POINT cAbs = control->GetAbsolutePos();
 				RECT controlRect = { cAbs.x, cAbs.y, control->m_iWidth, control->m_iHeight };
@@ -353,7 +340,7 @@ bool CGUI::DrawWindow(CWindow* window)
 		{
 			auto control = window->FocusedControl;
 
-			if (control != nullptr && control->Flag(UI_Drawable))
+			if (control != nullptr && control->Flag(UIFlags::UI_Drawable))
 			{
 				POINT cAbs = control->GetAbsolutePos();
 				RECT controlRect = { cAbs.x, cAbs.y, control->m_iWidth, control->m_iHeight };
@@ -379,11 +366,10 @@ void CGUI::RegisterWindow(CWindow* window)
 	{
 		for (auto control : tab->Controls)
 		{
-			if (control->Flag(UI_RenderFirst))
+			if (control->Flag(UIFlags::UI_RenderFirst))
 			{
 				CControl* c = control;
-				tab->Controls.erase(std::remove(tab->Controls.begin(), tab->Controls.end(), control),
-					tab->Controls.end());
+				tab->Controls.erase(std::remove(tab->Controls.begin(), tab->Controls.end(), control), tab->Controls.end());
 				tab->Controls.insert(tab->Controls.begin(), control);
 			}
 		}
@@ -426,8 +412,7 @@ void CGUI::SaveWindowState(CWindow* window, std::string Filename)
 				for (auto Control : Tab->Controls)
 				{
 					// If the control is ok to be saved
-					if (Control && Control->Flag(UI_SaveFile) && Control->FileIdentifier.length() > 1 && Control->
-						FileControlType)
+					if (Control && Control->Flag(UIFlags::UI_SaveFile) && Control->FileIdentifier.length() > 1 && Control->FileControlType)
 					{
 						// Create an element for the control
 						tinyxml2::XMLElement* ControlElement = Doc.NewElement(Control->FileIdentifier.c_str());
@@ -449,20 +434,20 @@ void CGUI::SaveWindowState(CWindow* window, std::string Filename)
 						// Figure out what kind of control and data this is
 						switch (Control->FileControlType)
 						{
-						case UIC_CheckBox:
-							cbx = static_cast<CCheckBox*>(Control);
+						case UIControlTypes::UIC_CheckBox:
+							cbx = (CCheckBox*)Control;
 							ControlElement->SetText(cbx->GetState());
 							break;
-						case UIC_ComboBox:
-							cbo = static_cast<CComboBox*>(Control);
+						case UIControlTypes::UIC_ComboBox:
+							cbo = (CComboBox*)Control;
 							ControlElement->SetText(cbo->GetIndex());
 							break;
-						case UIC_KeyBind:
-							key = static_cast<CKeyBind*>(Control);
+						case UIControlTypes::UIC_KeyBind:
+							key = (CKeyBind*)Control;
 							ControlElement->SetText(key->GetKey());
 							break;
-						case UIC_Slider:
-							sld = static_cast<CSlider*>(Control);
+						case UIControlTypes::UIC_Slider:
+							sld = (CSlider*)Control;
 							ControlElement->SetText(sld->GetValue());
 							break;
 						}
@@ -475,7 +460,7 @@ void CGUI::SaveWindowState(CWindow* window, std::string Filename)
 	//Save the file
 	if (Doc.SaveFile(Filename.c_str()) != tinyxml2::XML_NO_ERROR)
 	{
-		MessageBox(nullptr, "Failed To Save Config File!", "AyyWare", MB_OK);
+		MessageBox(NULL, "Failed To Save Config File!", "AyyWare", MB_OK);
 	}
 }
 
@@ -505,12 +490,10 @@ void CGUI::LoadWindowState(CWindow* window, std::string Filename)
 							for (auto Control : Tab->Controls)
 							{
 								// If the control is ok to be saved
-								if (Control && Control->Flag(UI_SaveFile) && Control->FileIdentifier.length() > 1 &&
-									Control->FileControlType)
+								if (Control && Control->Flag(UIFlags::UI_SaveFile) && Control->FileIdentifier.length() > 1 && Control->FileControlType)
 								{
 									// Get the controls element
-									tinyxml2::XMLElement* ControlElement = TabElement->FirstChildElement(
-										Control->FileIdentifier.c_str());
+									tinyxml2::XMLElement* ControlElement = TabElement->FirstChildElement(Control->FileIdentifier.c_str());
 
 									if (ControlElement)
 									{
@@ -522,20 +505,20 @@ void CGUI::LoadWindowState(CWindow* window, std::string Filename)
 										// Figure out what kind of control and data this is
 										switch (Control->FileControlType)
 										{
-										case UIC_CheckBox:
-											cbx = static_cast<CCheckBox*>(Control);
+										case UIControlTypes::UIC_CheckBox:
+											cbx = (CCheckBox*)Control;
 											cbx->SetState(ControlElement->GetText()[0] == '1' ? true : false);
 											break;
-										case UIC_ComboBox:
-											cbo = static_cast<CComboBox*>(Control);
+										case UIControlTypes::UIC_ComboBox:
+											cbo = (CComboBox*)Control;
 											cbo->SelectIndex(atoi(ControlElement->GetText()));
 											break;
-										case UIC_KeyBind:
-											key = static_cast<CKeyBind*>(Control);
+										case UIControlTypes::UIC_KeyBind:
+											key = (CKeyBind*)Control;
 											key->SetKey(atoi(ControlElement->GetText()));
 											break;
-										case UIC_Slider:
-											sld = static_cast<CSlider*>(Control);
+										case UIControlTypes::UIC_Slider:
+											sld = (CSlider*)Control;
 											sld->SetValue(atof(ControlElement->GetText()));
 											break;
 										}

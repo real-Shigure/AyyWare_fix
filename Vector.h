@@ -38,7 +38,7 @@ inline void SinCosX(const float rad, float& sin, float& cos)
 	const __m128 _mask_sign_raw = *(__m128*) & _mm_set1_epi32(0x80000000);
 	const __m128 _mask_sign_inv = *(__m128*) & _mm_set1_epi32(~0x80000000);
 
-	__m128 xmm3 = _mm_setzero_ps();
+	__m128  xmm3 = _mm_setzero_ps();
 	__m128i emm0, emm2, emm4;
 
 	__m128 sign_bit_cos, sign_bit_sin;
@@ -148,7 +148,7 @@ public:
 	bool IsValid() const;
 	void Invalidate();
 
-	vec_t operator[](int i) const;
+	vec_t   operator[](int i) const;
 	vec_t& operator[](int i);
 
 	vec_t* Base();
@@ -168,13 +168,13 @@ public:
 	FORCEINLINE Vector& operator/=(float s);
 	FORCEINLINE Vector& operator+=(float fl);
 	FORCEINLINE Vector& operator-=(float fl);
-	float Long() { return sqrt2(x * x + y * y + z * z); }
+	inline float Long() { return sqrt2(x * x + y * y + z * z); }
 
 	void Negate();
 
 	inline vec_t Length() const;
 
-	Vector Angle(Vector* up = nullptr)
+	inline Vector Angle(Vector* up = 0)
 	{
 		if (!x && !y)
 			return Vector(0, 0, 0);
@@ -191,7 +191,7 @@ public:
 		return Vector(deg(atan2f(-z, sqrtf(x * x + y * y))), deg(atan2f(y, x)), roll);
 	}
 
-	Vector Forward()
+	inline Vector Forward()
 	{
 		float cp, cy, sp, sy;
 
@@ -276,9 +276,7 @@ inline Vector::Vector(void)
 
 inline Vector::Vector(vec_t X, vec_t Y, vec_t Z)
 {
-	x = X;
-	y = Y;
-	z = Z;
+	x = X; y = Y; z = Z;
 }
 
 inline Vector::Vector(vec_t XYZ)
@@ -288,9 +286,7 @@ inline Vector::Vector(vec_t XYZ)
 
 inline void Vector::Init(vec_t ix, vec_t iy, vec_t iz)
 {
-	x = ix;
-	y = iy;
-	z = iz;
+	x = ix; y = iy; z = iz;
 }
 
 inline void Vector::Zero()
@@ -305,9 +301,7 @@ inline void VectorClear(Vector& a)
 
 inline Vector& Vector::operator=(const Vector& vOther)
 {
-	x = vOther.x;
-	y = vOther.y;
-	z = vOther.z;
+	x = vOther.x; y = vOther.y; z = vOther.z;
 	return *this;
 }
 
@@ -360,31 +354,23 @@ FORCEINLINE void VectorCopy(const Vector& src, Vector& dst)
 
 inline void Vector::CopyToArray(float* rgfl) const
 {
-	rgfl[0] = x;
-	rgfl[1] = y;
-	rgfl[2] = z;
+	rgfl[0] = x; rgfl[1] = y; rgfl[2] = z;
 }
 
 inline void Vector::Negate()
 {
-	x = -x;
-	y = -y;
-	z = -z;
+	x = -x; y = -y; z = -z;
 }
 
 FORCEINLINE Vector& Vector::operator+=(const Vector& v)
 {
-	x += v.x;
-	y += v.y;
-	z += v.z;
+	x += v.x; y += v.y; z += v.z;
 	return *this;
 }
 
 FORCEINLINE Vector& Vector::operator-=(const Vector& v)
 {
-	x -= v.x;
-	y -= v.y;
-	z -= v.z;
+	x -= v.x; y -= v.y; z -= v.z;
 	return *this;
 }
 
@@ -523,7 +509,7 @@ inline void CrossProduct(const Vector& a, const Vector& b, Vector& result)
 
 inline vec_t VectorLength(const Vector& v)
 {
-	return static_cast<vec_t>(sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
+	return (vec_t)sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }
 
 inline vec_t Vector::Length(void) const
@@ -541,8 +527,7 @@ inline vec_t VectorNormalize(Vector& v)
 	}
 	else
 	{
-		v.x = v.y = 0.0f;
-		v.z = 1.0f;
+		v.x = v.y = 0.0f; v.z = 1.0f;
 	}
 
 	return l;
@@ -552,7 +537,6 @@ FORCEINLINE float VectorNormalizer(float* v)
 {
 	return VectorNormalize(*(reinterpret_cast<Vector*>(v)));
 }
-
 inline vec_t Vector::NormalizeInPlace()
 {
 	return VectorNormalize(*this);
@@ -649,7 +633,7 @@ inline Vector Vector::Cross(const Vector& vOther) const
 
 inline vec_t Vector::Length2D(void) const
 {
-	return static_cast<vec_t>(sqrtf(x * x + y * y));
+	return (vec_t)::sqrtf(x * x + y * y);
 }
 
 inline vec_t Vector::Length2DSqr(void) const
@@ -686,9 +670,7 @@ public:
 
 	VectorAligned(const Vector& v)
 	{
-		x = v.x;
-		y = v.y;
-		z = v.z;
+		x = v.x; y = v.y; z = v.z;
 	}
 
 	float w;

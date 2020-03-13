@@ -24,8 +24,7 @@ void R::Resolve()
 
 		Vector* eyeAngles = pEntity->GetEyeAnglesPointer();
 
-		if (Menu::Window.RageBotTab.AccuracyResolver.GetIndex() == 1 || Menu::Window
-			.RageBotTab.AccuracyResolver.GetIndex() == 2)
+		if (Menu::Window.RageBotTab.AccuracyResolver.GetIndex() == 1 || Menu::Window.RageBotTab.AccuracyResolver.GetIndex() == 2)
 		{
 			if (pEntity != Globals::Target) continue;
 
@@ -37,27 +36,18 @@ void R::Resolve()
 			if (pEntity->GetLowerBodyYaw() != StoredYaw) bLowerBodyIsUpdated = true;
 			else bLowerBodyIsUpdated = false;
 			if (bLowerBodyIsUpdated) StoredYaw = pEntity->GetLowerBodyYaw();
-			if (pEntity->GetFlags() & FL_ONGROUND && pEntity->GetVelocity().Length2D() != 0) eyeAngles->y = pEntity->
-				GetLowerBodyYaw();
+			if (pEntity->GetFlags() & FL_ONGROUND && pEntity->GetVelocity().Length2D() != 0) eyeAngles->y = pEntity->GetLowerBodyYaw();
 			else
 			{
-				if (Menu::Window.RageBotTab.AccuracyResolver.GetIndex() == 1 || Menu::Window
-					.RageBotTab.AccuracyResolver.GetIndex()
-					== 2)
+				if (Menu::Window.RageBotTab.AccuracyResolver.GetIndex() == 1 || Menu::Window.RageBotTab.AccuracyResolver.GetIndex() == 2)
 				{
 					int num = Globals::Shots % 5;
-					switch (num)
-					{
-					case 0: eyeAngles->y = AimAngle.y - 0;
-						break;
-					case 1: eyeAngles->y = AimAngle.y - 15;
-						break;
-					case 2: eyeAngles->y = AimAngle.y + 40;
-						break;
-					case 3: eyeAngles->y = AimAngle.y - 40;
-						break;
-					case 4: eyeAngles->y = AimAngle.y + 15;
-						break;
+					switch (num) {
+					case 0:eyeAngles->y = AimAngle.y - 0; break;
+					case 1:eyeAngles->y = AimAngle.y - 15; break;
+					case 2:eyeAngles->y = AimAngle.y + 40; break;
+					case 3:eyeAngles->y = AimAngle.y - 40; break;
+					case 4:eyeAngles->y = AimAngle.y + 15; break;
 					}
 				}
 				/*	if (Menu::Window.RageBotTab.AccuracyAutoResolver.GetIndex() == 4 && eyeAngles->y != pEntity->GetLowerBodyYaw())

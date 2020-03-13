@@ -16,24 +16,22 @@ Syn's AyyWare Framework 2015
 class Interface
 {
 public:
-	template <typename Function>
-	Function VFunc(int Index)
+	template< typename Function > inline Function VFunc(int Index)
 	{
 		PDWORD* VTablePointer = (PDWORD*)this;
 		PDWORD VTableFunctionBase = *VTablePointer;
 		DWORD dwAddress = VTableFunctionBase[Index];
-		return static_cast<Function>(dwAddress);
+		return (Function)(dwAddress);
 	}
 };
 
 // For calling VMT functions in our classes
-template <typename Function>
-Function call_vfunc(PVOID Base, DWORD Index)
+template< typename Function > Function call_vfunc(PVOID Base, DWORD Index)
 {
-	PDWORD* VTablePointer = static_cast<PDWORD*>(Base);
+	PDWORD* VTablePointer = (PDWORD*)Base;
 	PDWORD VTableFunctionBase = *VTablePointer;
 	DWORD dwAddress = VTableFunctionBase[Index];
-	return static_cast<Function>(dwAddress);
+	return (Function)(dwAddress);
 }
 
 // Netvar shit
@@ -86,18 +84,12 @@ enum playercontrols
 	IN_RELOAD = (1 << 13),
 	IN_ALT1 = (1 << 14),
 	IN_ALT2 = (1 << 15),
-	IN_SCORE = (1 << 16),
-	// Used by client_panorama.dll for when scoreboard is held down
-	IN_SPEED = (1 << 17),
-	// Player is holding the speed key
-	IN_WALK = (1 << 18),
-	// Player holding walk key
-	IN_ZOOM = (1 << 19),
-	// Zoom key for HUD zoom
-	IN_WEAPON1 = (1 << 20),
-	// weapon defines these bits
-	IN_WEAPON2 = (1 << 21),
-	// weapon defines these bits
+	IN_SCORE = (1 << 16),	// Used by client_panorama.dll for when scoreboard is held down
+	IN_SPEED = (1 << 17),	// Player is holding the speed key
+	IN_WALK = (1 << 18),	// Player holding walk key
+	IN_ZOOM = (1 << 19),	// Zoom key for HUD zoom
+	IN_WEAPON1 = (1 << 20),	// weapon defines these bits
+	IN_WEAPON2 = (1 << 21),	// weapon defines these bits
 	IN_BULLRUSH = (1 << 22),
 };
 
@@ -133,46 +125,29 @@ public:
 
 enum SolidType_t
 {
-	SOLID_NONE = 0,
-	// no solid model
-	SOLID_BSP = 1,
-	// a BSP tree
-	SOLID_BBOX = 2,
-	// an AABB
-	SOLID_OBB = 3,
-	// an OBB (not implemented yet)
-	SOLID_OBB_YAW = 4,
-	// an OBB, constrained so that it can only yaw
-	SOLID_CUSTOM = 5,
-	// Always call into the entity for tests
-	SOLID_VPHYSICS = 6,
-	// solid vphysics object, get vcollide from the model and collide with that
+	SOLID_NONE = 0,	// no solid model
+	SOLID_BSP = 1,	// a BSP tree
+	SOLID_BBOX = 2,	// an AABB
+	SOLID_OBB = 3,	// an OBB (not implemented yet)
+	SOLID_OBB_YAW = 4,	// an OBB, constrained so that it can only yaw
+	SOLID_CUSTOM = 5,	// Always call into the entity for tests
+	SOLID_VPHYSICS = 6,	// solid vphysics object, get vcollide from the model and collide with that
 	SOLID_LAST,
 };
 
 enum SolidFlags_t
 {
-	FSOLID_CUSTOMRAYTEST = 0x0001,
-	// Ignore solid type + always call into the entity for ray tests
-	FSOLID_CUSTOMBOXTEST = 0x0002,
-	// Ignore solid type + always call into the entity for swept box tests
-	FSOLID_NOT_SOLID = 0x0004,
-	// Are we currently not solid?
-	FSOLID_TRIGGER = 0x0008,
-	// This is something may be collideable but fires touch functions
+	FSOLID_CUSTOMRAYTEST = 0x0001,	// Ignore solid type + always call into the entity for ray tests
+	FSOLID_CUSTOMBOXTEST = 0x0002,	// Ignore solid type + always call into the entity for swept box tests
+	FSOLID_NOT_SOLID = 0x0004,	// Are we currently not solid?
+	FSOLID_TRIGGER = 0x0008,	// This is something may be collideable but fires touch functions
 	// even when it's not collideable (when the FSOLID_NOT_SOLID flag is set)
-	FSOLID_NOT_STANDABLE = 0x0010,
-	// You can't stand on this
-	FSOLID_VOLUME_CONTENTS = 0x0020,
-	// Contains volumetric contents (like water)
-	FSOLID_FORCE_WORLD_ALIGNED = 0x0040,
-	// Forces the collision rep to be world-aligned even if it's SOLID_BSP or SOLID_VPHYSICS
-	FSOLID_USE_TRIGGER_BOUNDS = 0x0080,
-	// Uses a special trigger bounds separate from the normal OBB
-	FSOLID_ROOT_PARENT_ALIGNED = 0x0100,
-	// Collisions are defined in root parent's local coordinate space
-	FSOLID_TRIGGER_TOUCH_DEBRIS = 0x0200,
-	// This trigger will touch debris objects
+	FSOLID_NOT_STANDABLE = 0x0010,	// You can't stand on this
+	FSOLID_VOLUME_CONTENTS = 0x0020,	// Contains volumetric contents (like water)
+	FSOLID_FORCE_WORLD_ALIGNED = 0x0040,	// Forces the collision rep to be world-aligned even if it's SOLID_BSP or SOLID_VPHYSICS
+	FSOLID_USE_TRIGGER_BOUNDS = 0x0080,	// Uses a special trigger bounds separate from the normal OBB
+	FSOLID_ROOT_PARENT_ALIGNED = 0x0100,	// Collisions are defined in root parent's local coordinate space
+	FSOLID_TRIGGER_TOUCH_DEBRIS = 0x0200,	// This trigger will touch debris objects
 
 	FSOLID_MAX_BITS = 10
 };
@@ -181,7 +156,7 @@ enum SolidFlags_t
 class KeyValues
 {
 public:
-	char _pad[0x20]; //csgo, for css its a diff size
+	char _pad[0x20];//csgo, for css its a diff size
 };
 
 // Memes
@@ -204,9 +179,9 @@ struct ModelRenderInfo_t
 
 	ModelRenderInfo_t()
 	{
-		pModelToWorld = nullptr;
-		pLightingOffset = nullptr;
-		pLightingOrigin = nullptr;
+		pModelToWorld = NULL;
+		pLightingOffset = NULL;
+		pLightingOrigin = NULL;
 	}
 };
 
@@ -308,8 +283,7 @@ enum MaterialVarFlags_t
 
 enum ClientFrameStage_t
 {
-	FRAME_UNDEFINED = -1,
-	// (haven't run any frames yet)
+	FRAME_UNDEFINED = -1,			// (haven't run any frames yet)
 	FRAME_START,
 
 	// A network packet is being recieved

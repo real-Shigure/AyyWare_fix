@@ -38,9 +38,9 @@ void CNetVar::RetrieveClasses()
 
 	vars.clear();
 
-	while (clientClass != nullptr)
+	while (clientClass != 0)
 	{
-		if (clientClass == nullptr)
+		if (clientClass == 0)
 			break;
 
 		LogNetVar(clientClass->m_pRecvTable, 0);
@@ -72,7 +72,7 @@ void CNetVar::LogNetVar(RecvTable* table, int align)
 
 		sprintf_s(szCRC32, "%s%s", table->m_pNetTableName, prop->m_pVarName);
 
-		DWORD_PTR dwCRC32 = CRC32(static_cast<void*>(szCRC32), strlen(szCRC32));
+		DWORD_PTR dwCRC32 = CRC32((void*)szCRC32, strlen(szCRC32));
 
 #ifdef DUMP_NETVARS_TO_FILE
 		U::Log("%s%s [0x%X] [CRC32::0x%X]", AlignText(15 + align), prop->m_pVarName, prop->m_Offset, dwCRC32);
@@ -82,7 +82,7 @@ void CNetVar::LogNetVar(RecvTable* table, int align)
 
 		bool bAddNetVar = true;
 
-		for (auto netvar = 0; netvar < static_cast<int>(vars.size()); ++netvar)
+		for (auto netvar = 0; netvar < (int)vars.size(); ++netvar)
 		{
 			netvar_info_s* netvars = &vars[netvar];
 
@@ -118,10 +118,9 @@ void CNetVar::LogNetVar(RecvTable* table, int align)
 	}
 }
 
-DWORD_PTR CNetVar::GetNetVar(DWORD_PTR dwCRC32)
-//returns 0xFFFFFFFF (-1) if not found (ex: if(GetNetVar(0xD34DB33F)==-1) return false;
+DWORD_PTR CNetVar::GetNetVar(DWORD_PTR dwCRC32) //returns 0xFFFFFFFF (-1) if not found (ex: if(GetNetVar(0xD34DB33F)==-1) return false;
 {
-	for (auto i = 0; i < static_cast<int>(vars.size()); ++i)
+	for (auto i = 0; i < (int)vars.size(); ++i)
 	{
 		if (vars[i].dwCRC32 == dwCRC32)
 			return vars[i].dwOffset;

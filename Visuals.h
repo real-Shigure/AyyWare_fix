@@ -11,9 +11,9 @@ Syn's AyyWare Framework 2015
 class CVisuals : public CHack
 {
 public:
-	void Init() override;
-	void Draw() override;
-	void Move(CUserCmd* pCmd, bool& bSendPacket) override;
+	void Init();
+	void Draw();
+	void Move(CUserCmd* pCmd, bool& bSendPacket);
 private:
 	void DrawCrosshair();
 	void DrawRecoilCrosshair();

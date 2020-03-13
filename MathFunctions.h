@@ -15,7 +15,7 @@ Syn's AyyWare Framework 2015
 #define rad(a) a * 0.01745329251
 
 void AngleVectors(const Vector& angles, Vector* forward);
-void VectorTransform(Vector in1, float in2[3][4], Vector& out);
+void VectorTransform(const Vector in1, float in2[3][4], Vector& out);
 void SinCos(float a, float* s, float* c);
 //void SinCos1(const float rad, float &sin, float &cos);
 void VectorAngles(Vector forward, Vector& angles);

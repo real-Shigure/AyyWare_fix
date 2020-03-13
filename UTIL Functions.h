@@ -26,7 +26,7 @@ struct Hitbox
 		hitbox = newHitBox;
 	}
 
-	int hitbox;
+	int  hitbox;
 	Vector points[9];
 };
 
@@ -58,10 +58,10 @@ struct BestPoint
 	}
 
 	Vector point;
-	int index;
-	int dmg;
-	int flags;
-	int hitbox;
+	int  index;
+	int  dmg;
+	int  flags;
+	int  hitbox;
 };
 
 namespace GameUtils
@@ -82,11 +82,9 @@ namespace GameUtils
 };
 
 // Trace Line Memes
-void UTIL_TraceLine(const Vector& vecAbsStart, const Vector& vecAbsEnd, unsigned int mask, const IClientEntity* ignore,
-	int collisionGroup, trace_t* ptr);
+void UTIL_TraceLine(const Vector& vecAbsStart, const Vector& vecAbsEnd, unsigned int mask, const IClientEntity* ignore, int collisionGroup, trace_t* ptr);
 
-void UTIL_ClipTraceToPlayers(const Vector& vecAbsStart, const Vector& vecAbsEnd, unsigned int mask,
-	ITraceFilter* filter, trace_t* tr);
+void UTIL_ClipTraceToPlayers(const Vector& vecAbsStart, const Vector& vecAbsEnd, unsigned int mask, ITraceFilter* filter, trace_t* tr);
 
 bool IsBreakableEntity(IClientEntity* ent);
 

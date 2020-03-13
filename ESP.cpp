@@ -42,19 +42,16 @@ void CEsp::Draw()
 			}
 
 			// Is it a player?!
-			if (Menu::Window.VisualsTab.FiltersPlayers.GetState() && Interfaces::Engine->GetPlayerInfo(i, &pinfo) &&
-				pEntity->IsAlive())
+			if (Menu::Window.VisualsTab.FiltersPlayers.GetState() && Interfaces::Engine->GetPlayerInfo(i, &pinfo) && pEntity->IsAlive())
 			{
 				DrawPlayer(pEntity, pinfo);
 			}
 
 			// ~ Other ESP's here (items and shit) ~ //
-			ClientClass* cClass = static_cast<ClientClass*>(pEntity->GetClientClass());
+			ClientClass* cClass = (ClientClass*)pEntity->GetClientClass();
 
 			// Dropped weapons
-			if (Menu::Window.VisualsTab.FiltersWeapons.GetState() && cClass->m_ClassID != static_cast<int>(CSGOClassID::
-				CBaseWeaponWorldModel) && ((strstr(cClass->m_pNetworkName, "Weapon") || cClass->m_ClassID == static_cast
-					<int>(CSGOClassID::CDEagle) || cClass->m_ClassID == static_cast<int>(CSGOClassID::CAK47))))
+			if (Menu::Window.VisualsTab.FiltersWeapons.GetState() && cClass->m_ClassID != (int)CSGOClassID::CBaseWeaponWorldModel && ((strstr(cClass->m_pNetworkName, "Weapon") || cClass->m_ClassID == (int)CSGOClassID::CDEagle || cClass->m_ClassID == (int)CSGOClassID::CAK47)))
 			{
 				DrawDrop(pEntity, cClass);
 			}
@@ -62,17 +59,17 @@ void CEsp::Draw()
 			// If entity is the bomb
 			if (Menu::Window.VisualsTab.FiltersC4.GetState())
 			{
-				if (cClass->m_ClassID == static_cast<int>(CSGOClassID::CPlantedC4))
+				if (cClass->m_ClassID == (int)CSGOClassID::CPlantedC4)
 					DrawBombPlanted(pEntity, cClass);
 
-				if (cClass->m_ClassID == static_cast<int>(CSGOClassID::CC4))
+				if (cClass->m_ClassID == (int)CSGOClassID::CC4)
 					DrawBomb(pEntity, cClass);
 			}
 
 			// If entity is a chicken
 			if (Menu::Window.VisualsTab.FiltersChickens.GetState())
 			{
-				if (cClass->m_ClassID == static_cast<int>(CSGOClassID::CChicken))
+				if (cClass->m_ClassID == (int)CSGOClassID::CChicken)
 					DrawChicken(pEntity, cClass);
 			}
 		}
@@ -115,15 +112,10 @@ void CEsp::SpecList()
 					{
 						if (Interfaces::Engine->GetPlayerInfo(pTarget->GetIndex(), &pinfo2))
 						{
-							char buf[255];
-							sprintf_s(buf, "%s => %s", pinfo.name, pinfo2.name);
+							char buf[255]; sprintf_s(buf, "%s => %s", pinfo.name, pinfo2.name);
 							RECT TextSize = Render::GetTextSize(Render::Fonts::ESP, buf);
-							Render::Clear(scrn.right - 260, (scrn.bottom / 2) + (16 * ayy), 260, 16,
-								Color(0, 0, 0, 140));
-							Render::Text(scrn.right - TextSize.right - 4, (scrn.bottom / 2) + (16 * ayy),
-								pTarget->GetIndex() == pLocal->GetIndex()
-								? Color(240, 70, 80, 255)
-								: Color(255, 255, 255, 255), Render::Fonts::ESP, buf);
+							Render::Clear(scrn.right - 260, (scrn.bottom / 2) + (16 * ayy), 260, 16, Color(0, 0, 0, 140));
+							Render::Text(scrn.right - TextSize.right - 4, (scrn.bottom / 2) + (16 * ayy), pTarget->GetIndex() == pLocal->GetIndex() ? Color(240, 70, 80, 255) : Color(255, 255, 255, 255), Render::Fonts::ESP, buf);
 							ayy++;
 						}
 					}
@@ -143,8 +135,7 @@ void CEsp::DrawPlayer(IClientEntity* pEntity, player_info_t pinfo)
 	Color Color;
 
 	// Show own team false? well gtfo teammate lol
-	if (Menu::Window.VisualsTab.FiltersEnemiesOnly.GetState() && (pEntity->GetTeamNum() == hackManager
-		.pLocal()->GetTeamNum()))
+	if (Menu::Window.VisualsTab.FiltersEnemiesOnly.GetState() && (pEntity->GetTeamNum() == hackManager.pLocal()->GetTeamNum()))
 		return;
 
 	if (GetBox(pEntity, Box))
@@ -226,10 +217,10 @@ void CEsp::DrawGlow(IClientEntity *pEntity, int r, int g, int b, int a)
 
 // Gets the 2D bounding box for the entity
 // Returns false on failure nigga don't fail me
-bool CEsp::GetBox(IClientEntity* pEntity, ESPBox& result)
+bool CEsp::GetBox(IClientEntity* pEntity, CEsp::ESPBox& result)
 {
 	// Variables
-	Vector vOrigin, min, max, sMin, sMax, sOrigin,
+	Vector  vOrigin, min, max, sMin, sMax, sOrigin,
 		flb, brt, blb, frt, frb, brb, blt, flt;
 	float left, top, right, bottom;
 
@@ -239,16 +230,14 @@ bool CEsp::GetBox(IClientEntity* pEntity, ESPBox& result)
 	max = pEntity->collisionProperty()->GetMaxs() + vOrigin;
 
 	// Points of a 3d bounding box
-	Vector points[] = {
-		Vector(min.x, min.y, min.z),
+	Vector points[] = { Vector(min.x, min.y, min.z),
 		Vector(min.x, max.y, min.z),
 		Vector(max.x, max.y, min.z),
 		Vector(max.x, min.y, min.z),
 		Vector(max.x, max.y, max.z),
 		Vector(min.x, max.y, max.z),
 		Vector(min.x, min.y, max.z),
-		Vector(max.x, min.y, max.z)
-	};
+		Vector(max.x, min.y, max.z) };
 
 	// Get screen positions
 	if (!Render::WorldToScreen(points[3], flb) || !Render::WorldToScreen(points[5], brt)
@@ -292,7 +281,7 @@ bool CEsp::GetBox(IClientEntity* pEntity, ESPBox& result)
 Color CEsp::GetPlayerColor(IClientEntity* pEntity)
 {
 	int TeamNum = pEntity->GetTeamNum();
-	bool IsVis = GameUtils::IsVisible(hackManager.pLocal(), pEntity, static_cast<int>(CSGOHitboxID::Head));
+	bool IsVis = GameUtils::IsVisible(hackManager.pLocal(), pEntity, (int)CSGOHitboxID::Head);
 
 	Color color;
 
@@ -315,11 +304,11 @@ Color CEsp::GetPlayerColor(IClientEntity* pEntity)
 }
 
 // 2D  Esp box
-void CEsp::DrawBox(ESPBox size, Color color)
+void CEsp::DrawBox(CEsp::ESPBox size, Color color)
 {
 	//if (PlayerBoxes->GetStringIndex() == 1)
 	//{
-	// Full Box
+		// Full Box
 	//Render::Clear(size.x, size.y, size.w, size.h, color);
 	//Render::Clear(size.x - 1, size.y - 1, size.w + 2, size.h + 2, Color(10, 10, 10, 150));
 	//Render::Clear(size.x + 1, size.y + 1, size.w - 2, size.h - 2, Color(10, 10, 10, 150));
@@ -327,8 +316,8 @@ void CEsp::DrawBox(ESPBox size, Color color)
 	//else
 	{
 		// Corner Box
-		int VertLine = (static_cast<float>(size.w) * (0.20f));
-		int HorzLine = (static_cast<float>(size.h) * (0.20f));
+		int VertLine = (((float)size.w) * (0.20f));
+		int HorzLine = (((float)size.h) * (0.20f));
 
 		Render::Clear(size.x, size.y - 1, VertLine, 1, Color(10, 10, 10, 150));
 		Render::Clear(size.x + size.w - VertLine, size.y - 1, VertLine, 1, Color(10, 10, 10, 150));
@@ -357,12 +346,12 @@ static wchar_t* CharToWideChar(const char* text)
 {
 	size_t size = strlen(text) + 1;
 	wchar_t* wa = new wchar_t[size];
-	mbstowcs_s(nullptr, wa, size / 4, text, size);
+	mbstowcs_s(NULL, wa, size / 4, text, size);
 	return wa;
 }
 
 // Player name
-void CEsp::DrawName(player_info_t pinfo, ESPBox size)
+void CEsp::DrawName(player_info_t pinfo, CEsp::ESPBox size)
 {
 	RECT nameSize = Render::GetTextSize(Render::Fonts::ESP, pinfo.name);
 	Render::Text(size.x + (size.w / 2) - (nameSize.right / 2), size.y - 16,
@@ -370,7 +359,7 @@ void CEsp::DrawName(player_info_t pinfo, ESPBox size)
 }
 
 // Draw a health bar. For Tf2 when a bar is bigger than max health a second bar is displayed
-void CEsp::DrawHealth(IClientEntity* pEntity, ESPBox size)
+void CEsp::DrawHealth(IClientEntity* pEntity, CEsp::ESPBox size)
 {
 	ESPBox HealthBar = size;
 	HealthBar.y += (HealthBar.h + 6);
@@ -425,16 +414,15 @@ std::string CleanItemName(std::string name)
 }
 
 // Anything else: weapons, class state? idk
-void CEsp::DrawInfo(IClientEntity* pEntity, ESPBox size)
+void CEsp::DrawInfo(IClientEntity* pEntity, CEsp::ESPBox size)
 {
 	std::vector<std::string> Info;
 
 	// Player Weapon ESP
-	IClientEntity* pWeapon = Interfaces::EntList->GetClientEntityFromHandle(
-		static_cast<HANDLE>(pEntity->GetActiveWeaponHandle()));
+	IClientEntity* pWeapon = Interfaces::EntList->GetClientEntityFromHandle((HANDLE)pEntity->GetActiveWeaponHandle());
 	if (Menu::Window.VisualsTab.OptionsWeapon.GetState() && pWeapon)
 	{
-		ClientClass* cClass = static_cast<ClientClass*>(pWeapon->GetClientClass());
+		ClientClass* cClass = (ClientClass*)pWeapon->GetClientClass();
 		if (cClass)
 		{
 			// Draw it
@@ -452,8 +440,7 @@ void CEsp::DrawInfo(IClientEntity* pEntity, ESPBox size)
 	int i = 0;
 	for (auto Text : Info)
 	{
-		Render::Text(size.x + size.w + 3, size.y + (i * (Size.bottom + 2)), Color(255, 255, 255, 255),
-			Render::Fonts::ESP, Text.c_str());
+		Render::Text(size.x + size.w + 3, size.y + (i * (Size.bottom + 2)), Color(255, 255, 255, 255), Render::Fonts::ESP, Text.c_str());
 		i++;
 	}
 }
@@ -467,10 +454,8 @@ void CEsp::DrawCross(IClientEntity* pEntity)
 	{
 		Render::Clear(screen.x - Scale, screen.y - (Scale * 2), (Scale * 2), (Scale * 4), Color(20, 20, 20, 160));
 		Render::Clear(screen.x - (Scale * 2), screen.y - Scale, (Scale * 4), (Scale * 2), Color(20, 20, 20, 160));
-		Render::Clear(screen.x - Scale - 1, screen.y - (Scale * 2) - 1, (Scale * 2) - 2, (Scale * 4) - 2,
-			Color(250, 250, 250, 160));
-		Render::Clear(screen.x - (Scale * 2) - 1, screen.y - Scale - 1, (Scale * 4) - 2, (Scale * 2) - 2,
-			Color(250, 250, 250, 160));
+		Render::Clear(screen.x - Scale - 1, screen.y - (Scale * 2) - 1, (Scale * 2) - 2, (Scale * 4) - 2, Color(250, 250, 250, 160));
+		Render::Clear(screen.x - (Scale * 2) - 1, screen.y - Scale - 1, (Scale * 4) - 2, (Scale * 2) - 2, Color(250, 250, 250, 160));
 	}
 }
 
@@ -479,7 +464,7 @@ void CEsp::DrawDrop(IClientEntity* pEntity, ClientClass* cClass)
 {
 	Vector Box;
 	CBaseCombatWeapon* Weapon = (CBaseCombatWeapon*)pEntity;
-	IClientEntity* plr = Interfaces::EntList->GetClientEntityFromHandle(static_cast<HANDLE>(Weapon->GetOwnerHandle()));
+	IClientEntity* plr = Interfaces::EntList->GetClientEntityFromHandle((HANDLE)Weapon->GetOwnerHandle());
 	if (!plr && Render::WorldToScreen(Weapon->GetOrigin(), Box))
 	{
 		if (Menu::Window.VisualsTab.OptionsBox.GetState())
@@ -492,8 +477,7 @@ void CEsp::DrawDrop(IClientEntity* pEntity, ClientClass* cClass)
 		{
 			std::string ItemName = CleanItemName(cClass->m_pNetworkName);
 			RECT TextSize = Render::GetTextSize(Render::Fonts::ESP, ItemName.c_str());
-			Render::Text(Box.x - (TextSize.right / 2), Box.y - 16, Color(255, 255, 255, 255), Render::Fonts::ESP,
-				ItemName.c_str());
+			Render::Text(Box.x - (TextSize.right / 2), Box.y - 16, Color(255, 255, 255, 255), Render::Fonts::ESP, ItemName.c_str());
 		}
 	}
 }
@@ -505,8 +489,7 @@ void CEsp::DrawChicken(IClientEntity* pEntity, ClientClass* cClass)
 
 	if (GetBox(pEntity, Box))
 	{
-		player_info_t pinfo;
-		strcpy_s(pinfo.name, "Chicken");
+		player_info_t pinfo; strcpy_s(pinfo.name, "Chicken");
 		if (Menu::Window.VisualsTab.OptionsBox.GetState())
 			DrawBox(Box, Color(255, 255, 255, 255));
 
@@ -521,8 +504,7 @@ void CEsp::DrawBombPlanted(IClientEntity* pEntity, ClientClass* cClass)
 	// Null it out incase bomb has been dropped or planted
 	BombCarrier = nullptr;
 
-	Vector vOrig;
-	Vector vScreen;
+	Vector vOrig; Vector vScreen;
 	vOrig = pEntity->GetOrigin();
 	CCSBomb* Bomb = (CCSBomb*)pEntity;
 
@@ -542,8 +524,7 @@ void CEsp::DrawBomb(IClientEntity* pEntity, ClientClass* cClass)
 	// Null it out incase bomb has been dropped or planted
 	BombCarrier = nullptr;
 	CBaseCombatWeapon* BombWeapon = (CBaseCombatWeapon*)pEntity;
-	Vector vOrig;
-	Vector vScreen;
+	Vector vOrig; Vector vScreen;
 	vOrig = pEntity->GetOrigin();
 	bool adopted = true;
 	HANDLE parent = BombWeapon->GetOwnerHandle();

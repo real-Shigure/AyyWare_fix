@@ -31,7 +31,7 @@ public:
 	DWORD_PTR GetNetVar(DWORD_PTR dwCRC32);
 	void HookProxies();
 private:
-	std::vector<netvar_info_s> vars;
+	std::vector<netvar_info_s>vars;
 };
 
 class NetvarManager
@@ -60,21 +60,20 @@ public:
 	int GetNetvarCount() { return m_netvarCount; }
 	int GetTableCount() { return m_tableCount; }
 
-	template <typename ...Args>
+	template<typename ...Args>
 	uint32_t GetOffset(const std::string& szTableName, Args&&... args)
 	{
 		return GetOffset(szTableName, { std::forward<Args>(args)... });
 	}
+private:
+	std::unique_ptr<NetvarTable>  InternalLoadTable(RecvTable* pRecvTable, uint32_t offset);
+	void                          Dump(std::ostream& output, NetvarTable& table, int level);
+	uint32_t                      GetOffset(const std::string& szTableName, const std::initializer_list<std::string>& props);
 
 private:
-	std::unique_ptr<NetvarTable> InternalLoadTable(RecvTable* pRecvTable, uint32_t offset);
-	void Dump(std::ostream& output, NetvarTable& table, int level);
-	uint32_t GetOffset(const std::string& szTableName, const std::initializer_list<std::string>& props);
-
-private:
-	std::unique_ptr<NetvarDatabase> m_pDatabase = nullptr;
-	uint32_t m_tableCount = 0;
-	uint32_t m_netvarCount = 0;
+	std::unique_ptr<NetvarDatabase>    m_pDatabase = nullptr;
+	uint32_t                           m_tableCount = 0;
+	uint32_t                           m_netvarCount = 0;
 };
 
 #ifdef DUMP_NETVARS_TO_FILE

@@ -11,9 +11,7 @@ void CVisuals::Init()
 }
 
 // Don't really need to do anything in here
-void CVisuals::Move(CUserCmd* pCmd, bool& bSendPacket)
-{
-}
+void CVisuals::Move(CUserCmd* pCmd, bool& bSendPacket) {}
 
 // Main ESP Drawing loop
 void CVisuals::Draw()

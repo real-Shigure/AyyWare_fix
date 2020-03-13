@@ -111,9 +111,7 @@ private:
 	int m_iWidth;
 	int m_iHeight;
 };
-
 extern bool m_bIsOpen;
-
 // User interface manager
 class CGUI
 {
@@ -158,8 +156,7 @@ private:
 	// Window Dragging
 	bool IsDraggingWindow;
 	CWindow* DraggingWindow;
-	int DragOffsetX;
-	int DragOffsetY;
+	int DragOffsetX; int DragOffsetY;
 
 	// Windows
 	std::vector<CWindow*> Windows;

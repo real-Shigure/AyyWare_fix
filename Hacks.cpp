@@ -169,7 +169,7 @@ void Hacks::MoveHacks(CUserCmd* pCmd, bool& bSendPacket)
 	{
 		if (!(pCmd->buttons & IN_ATTACK))
 		{
-			pCmd->tick_count = INT_MAX; //0xFFFFF or 16777216
+			pCmd->tick_count = INT_MAX;//0xFFFFF or 16777216
 		}
 	}
 

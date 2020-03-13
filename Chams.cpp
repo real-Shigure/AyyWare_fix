@@ -7,7 +7,7 @@
 
 void InitKeyValues(KeyValues* keyValues, char* name)
 {
-	DWORD dwFunction = static_cast<DWORD>(Offsets::Functions::KeyValues_KeyValues);
+	DWORD dwFunction = (DWORD)Offsets::Functions::KeyValues_KeyValues;
 	__asm
 	{
 		push name
@@ -18,7 +18,7 @@ void InitKeyValues(KeyValues* keyValues, char* name)
 
 void LoadFromBuffer(KeyValues* keyValues, char const* resourceName, const char* pBuffer)
 {
-	DWORD dwFunction = static_cast<DWORD>(Offsets::Functions::KeyValues_LoadFromBuffer);
+	DWORD dwFunction = (DWORD)Offsets::Functions::KeyValues_LoadFromBuffer;
 
 	__asm
 	{
@@ -62,7 +62,7 @@ IMaterial* CreateMaterial(bool shouldIgnoreZ, bool isLit, bool isWireframe) //cr
 	sprintf_s(name, sizeof(name), "#ayy_meme_%i.vmt", created);
 	++created;
 
-	KeyValues* keyValues = static_cast<KeyValues*>(malloc(sizeof(KeyValues)));
+	KeyValues* keyValues = (KeyValues*)malloc(sizeof(KeyValues));
 	InitKeyValues(keyValues, baseType);
 	LoadFromBuffer(keyValues, name, material);
 
@@ -96,5 +96,5 @@ void ForceMaterial(Color color, IMaterial* material, bool useColor, bool forceMa
 	if (forceMaterial)
 		Interfaces::ModelRender->ForcedMaterialOverride(material);
 	else
-		Interfaces::ModelRender->ForcedMaterialOverride(nullptr);
+		Interfaces::ModelRender->ForcedMaterialOverride(NULL);
 }

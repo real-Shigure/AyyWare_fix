@@ -20,14 +20,14 @@ public:
 	CGroupBox AimbotGroup;
 	CCheckBox AimbotEnable;
 	CCheckBox AimbotAutoFire;
-	CSlider AimbotFov;
+	CSlider	  AimbotFov;
 	CCheckBox AimbotSilentAim;
 	CCheckBox AimbotPerfectSilentAim;
 	CCheckBox AimbotAutoPistol;
 	CCheckBox AimbotAimStep;
 	CCheckBox AimbotKeyPress;
-	CKeyBind AimbotKeyBind;
-	CKeyBind AimbotStopKey;
+	CKeyBind  AimbotKeyBind;
+	CKeyBind  AimbotStopKey;
 
 	// Target Selection Settings
 	CGroupBox TargetGroup;
@@ -36,20 +36,20 @@ public:
 	CComboBox TargetHitbox;
 	CComboBox TargetHitscan;
 	CCheckBox TargetMultipoint;
-	CSlider TargetPointscale;
+	CSlider   TargetPointscale;
 
 	// Accuracy Settings
 	CGroupBox AccuracyGroup;
 	CCheckBox AccuracyRecoil;
 	CCheckBox AccuracyAutoWall;
-	CSlider AccuracyMinimumDamage;
+	CSlider	  AccuracyMinimumDamage;
 	CCheckBox AccuracyAutoStop;
 	CCheckBox AccuracyAutoCrouch;
 	CCheckBox AccuracyAutoScope;
-	CSlider AccuracyHitchance;
+	CSlider   AccuracyHitchance;
 	CComboBox AccuracyResolver;
 	CCheckBox AccuracyPositionAdjustment;
-	CSlider AccuracySmart;
+	CSlider   AccuracySmart;
 
 	// Anti-Aim Settings
 	CGroupBox AntiAimGroup;
@@ -57,7 +57,7 @@ public:
 	CComboBox AntiAimPitch;
 	CComboBox AntiAimYaw;
 	CComboBox AntiAimEdge;
-	CSlider AntiAimOffset;
+	CSlider	  AntiAimOffset;
 	CCheckBox AntiAimKnife;
 	CCheckBox AntiAimTarget;
 };
@@ -77,43 +77,43 @@ public:
 	CCheckBox AimbotAutoFire;
 	CCheckBox AimbotFriendlyFire;
 	CCheckBox AimbotKeyPress;
-	CKeyBind AimbotKeyBind;
+	CKeyBind  AimbotKeyBind;
 	CCheckBox AimbotAutoPistol;
-	CSlider AimbotInaccuracy;
-	CKeyBind AimbotDisableVis;
+	CSlider   AimbotInaccuracy;
+	CKeyBind  AimbotDisableVis;
 
 	// Main
 	CGroupBox TriggerGroup;
 	CCheckBox TriggerEnable;
 	CCheckBox TriggerKeyPress;
-	CKeyBind TriggerKeyBind;
-	CSlider TriggerDelay;
+	CKeyBind  TriggerKeyBind;
+	CSlider   TriggerDelay;
 
 	// Main
 	CGroupBox WeaponMainGroup;
-	CSlider WeaponMainSpeed;
-	CSlider WeaponMainFoV;
+	CSlider   WeaponMainSpeed;
+	CSlider   WeaponMainFoV;
 	CCheckBox WeaponMainRecoil;
 	CCheckBox WeaponMainPSilent;
-	CSlider WeaponMainInacc;
+	CSlider   WeaponMainInacc;
 	CComboBox WeaponMainHitbox;
 
 	// Pistol
 	CGroupBox WeaponPistGroup;
-	CSlider WeaponPistSpeed;
-	CSlider WeaponPistFoV;
+	CSlider   WeaponPistSpeed;
+	CSlider   WeaponPistFoV;
 	CCheckBox WeaponPistRecoil;
 	CCheckBox WeaponPistPSilent;
-	CSlider WeaponPistInacc;
+	CSlider   WeaponPistInacc;
 	CComboBox WeaponPistHitbox;
 
 	// Sniper
 	CGroupBox WeaponSnipGroup;
-	CSlider WeaponSnipSpeed;
-	CSlider WeaponSnipFoV;
+	CSlider   WeaponSnipSpeed;
+	CSlider   WeaponSnipFoV;
 	CCheckBox WeaponSnipRecoil;
 	CCheckBox WeaponSnipPSilent;
-	CSlider WeaponSnipInacc;
+	CSlider   WeaponSnipInacc;
 	CComboBox WeaponSnipHitbox;
 };
 
@@ -177,7 +177,7 @@ public:
 	CCheckBox KnifeEnable;
 	CComboBox KnifeModel;
 	CComboBox KnifeSkin;
-	CButton KnifeApply;
+	CButton   KnifeApply;
 
 	// Other Settings
 	CGroupBox OtherGroup;
@@ -187,9 +187,9 @@ public:
 	CCheckBox OtherSafeMode;
 	CComboBox OtherChatSpam;
 	CCheckBox OtherTeamChat;
-	CSlider OtherChatDelay;
-	CKeyBind OtherAirStuck;
-	CKeyBind OtherLagSwitch;
+	CSlider	  OtherChatDelay;
+	CKeyBind  OtherAirStuck;
+	CKeyBind  OtherLagSwitch;
 	CCheckBox OtherSpectators;
 	CCheckBox OtherThirdperson;
 	//CCheckBox OtherAutoAccept;
@@ -199,8 +199,8 @@ public:
 	// Fake Lag Settings
 	CGroupBox FakeLagGroup;
 	CCheckBox FakeLagEnable;
-	CSlider FakeLagChoke;
-	CSlider FakeLagSend;
+	CSlider   FakeLagChoke;
+	CSlider	  FakeLagSend;
 	CCheckBox ChokeRandomize;
 	CCheckBox SendRandomize;
 	//CCheckBox FakeLagWhileShooting;
@@ -208,7 +208,7 @@ public:
 	// Teleport shit cause we're cool
 	CGroupBox TeleportGroup;
 	CCheckBox TeleportEnable;
-	CKeyBind TeleportKey;
+	CKeyBind  TeleportKey;
 };
 
 class AyyWareWindow : public CWindow

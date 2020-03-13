@@ -8,14 +8,15 @@
 
 #include <time.h>
 
-template <class T, class U>
-T clamp(T in, U low, U high)
+template<class T, class U>
+inline T clamp(T in, U low, U high)
 {
 	if (in <= low)
 		return low;
-	if (in >= high)
+	else if (in >= high)
 		return high;
-	return in;
+	else
+		return in;
 }
 
 inline float bitsToFloat(unsigned long i)
@@ -101,24 +102,21 @@ static __declspec(naked) void __cdecl Invoke_NET_SetConVar(void* pfn, const char
 {
 	__asm
 	{
-		push ebp
-		mov ebp, esp
+		push    ebp
+		mov     ebp, esp
 		and esp, 0FFFFFFF8h
-		sub esp, 44h
-		push ebx
-		push esi
-		push edi
-		mov edi, cvar
-		mov esi, value
-		jmp pfn
+		sub     esp, 44h
+		push    ebx
+		push    esi
+		push    edi
+		mov     edi, cvar
+		mov     esi, value
+		jmp     pfn
 	}
 }
-
 void DECLSPEC_NOINLINE NET_SetConVar(const char* value, const char* cvar)
 {
-	static DWORD setaddr = Utilities::Memory::FindPattern("engine.dll",
-		(PBYTE)"\x8D\x4C\x24\x1C\xE8\x00\x00\x00\x00\x56",
-		"xxxxx????x");
+	static DWORD setaddr = Utilities::Memory::FindPattern("engine.dll", (PBYTE)"\x8D\x4C\x24\x1C\xE8\x00\x00\x00\x00\x56", "xxxxx????x");
 	if (setaddr != 0)
 	{
 		void* pvSetConVar = (char*)setaddr;
@@ -170,17 +168,14 @@ void CMiscHacks::RageStrafe(CUserCmd* pCmd)
 	IClientEntity* pLocal = hackManager.pLocal();
 
 	bool bKeysPressed = true;
-	if (GUI.GetKeyState(0x41) || GUI.GetKeyState(0x57) || GUI.GetKeyState(0x53) || GUI.GetKeyState(0x44)) bKeysPressed =
-		false;
+	if (GUI.GetKeyState(0x41) || GUI.GetKeyState(0x57) || GUI.GetKeyState(0x53) || GUI.GetKeyState(0x44)) bKeysPressed = false;
 
 	if ((GetAsyncKeyState(VK_SPACE) && !(pLocal->GetFlags() & FL_ONGROUND)) && bKeysPressed)
 	{
-		if (pCmd->mousedx > 1 || pCmd->mousedx < -1)
-		{
+		if (pCmd->mousedx > 1 || pCmd->mousedx < -1) {
 			pCmd->sidemove = pCmd->mousedx < 0.f ? -450.f : 450.f;
 		}
-		else
-		{
+		else {
 			pCmd->forwardmove = (1800.f * 4.f) / pLocal->GetVelocity().Length2D();
 			pCmd->sidemove = (pCmd->command_number % 2) == 0 ? -450.f : 450.f;
 			if (pCmd->forwardmove > 450.f)
@@ -226,7 +221,7 @@ Vector GetAutostrafeView()
 void CMiscHacks::ChatSpamInterwebz()
 {
 	static clock_t start_t = clock();
-	double timeSoFar = static_cast<double>(clock() - start_t) / CLOCKS_PER_SEC;
+	double timeSoFar = (double)(clock() - start_t) / CLOCKS_PER_SEC;
 	if (timeSoFar < 0.001)
 		return;
 
@@ -254,7 +249,7 @@ void CMiscHacks::ChatSpamInterwebz()
 void CMiscHacks::ChatSpamDisperseName()
 {
 	static clock_t start_t = clock();
-	double timeSoFar = static_cast<double>(clock() - start_t) / CLOCKS_PER_SEC;
+	double timeSoFar = (double)(clock() - start_t) / CLOCKS_PER_SEC;
 	if (timeSoFar < 0.001)
 		return;
 
@@ -272,11 +267,11 @@ void CMiscHacks::ChatSpamDisperseName()
 void CMiscHacks::ChatSpamName()
 {
 	static clock_t start_t = clock();
-	double timeSoFar = static_cast<double>(clock() - start_t) / CLOCKS_PER_SEC;
+	double timeSoFar = (double)(clock() - start_t) / CLOCKS_PER_SEC;
 	if (timeSoFar < 0.001)
 		return;
 
-	std::vector<std::string> Names;
+	std::vector < std::string > Names;
 
 	for (int i = 0; i < Interfaces::EntList->GetHighestEntityIndex(); i++)
 	{
@@ -287,10 +282,10 @@ void CMiscHacks::ChatSpamName()
 		// If it's a valid entity and isn't the player
 		if (entity && hackManager.pLocal()->GetTeamNum() == entity->GetTeamNum() && entity != hackManager.pLocal())
 		{
-			ClientClass* cClass = static_cast<ClientClass*>(entity->GetClientClass());
+			ClientClass* cClass = (ClientClass*)entity->GetClientClass();
 
 			// If entity is a player
-			if (cClass->m_ClassID == static_cast<int>(CSGOClassID::CCSPlayer))
+			if (cClass->m_ClassID == (int)CSGOClassID::CCSPlayer)
 			{
 				if (Interfaces::Engine->GetPlayerInfo(i, &pInfo))
 				{
@@ -325,7 +320,7 @@ void CMiscHacks::ChatSpamRegular()
 	// Don't spam it too fast so you can still do stuff
 	static clock_t start_t = clock();
 	int spamtime = Menu::Window.MiscTab.OtherChatDelay.GetValue();
-	double timeSoFar = static_cast<double>(clock() - start_t) / CLOCKS_PER_SEC;
+	double timeSoFar = (double)(clock() - start_t) / CLOCKS_PER_SEC;
 	if (timeSoFar < spamtime)
 		return;
 
